@@ -45,8 +45,8 @@
 
 #ifndef HAVE_FIPS /* avoid redefinition of structs */
 
-#ifdef WOLFSSL_PIC32MZ_HASH
-    #include "port/pic32/pic32mz-crypt.h"
+#ifdef WOLFSSL_MICROCHIP_PIC32MZ
+    #include <wolfssl/wolfcrypt/port/pic32/pic32mz-crypt.h>
 #endif
 #ifdef WOLFSSL_ASYNC_CRYPT
     #include <wolfssl/wolfcrypt/async.h>
@@ -97,6 +97,10 @@ WOLFSSL_API void wc_Sha256Free(Sha256*);
 
 WOLFSSL_API int wc_Sha256GetHash(Sha256*, byte*);
 WOLFSSL_API int wc_Sha256Copy(Sha256* src, Sha256* dst);
+
+#ifdef WOLFSSL_PIC32MZ_HASH
+WOLFSSL_API void wc_Sha256SizeSet(Sha256*, word32);
+#endif
 
 #ifdef WOLFSSL_SHA224
 

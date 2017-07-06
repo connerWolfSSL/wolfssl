@@ -42,8 +42,8 @@
 
 #ifndef HAVE_FIPS /* avoid redefining structs */
 
-#ifdef WOLFSSL_PIC32MZ_HASH
-    #include "port/pic32/pic32mz-crypt.h"
+#ifdef WOLFSSL_MICROCHIP_PIC32MZ
+    #include <wolfssl/wolfcrypt/port/pic32/pic32mz-crypt.h>
 #endif
 #ifdef WOLFSSL_ASYNC_CRYPT
     #include <wolfssl/wolfcrypt/async.h>
@@ -74,12 +74,11 @@ typedef struct Sha {
     #ifndef WOLFSSL_PIC32MZ_HASH
         word32  digest[SHA_DIGEST_SIZE / sizeof(word32)];
     #else
-        word32  digest[PIC32_HASH_SIZE / sizeof(word32)];
-    #endif
-        void*   heap;
-    #ifdef WOLFSSL_PIC32MZ_HASH
+        /* PIC32 requires 32 bytes for digest */
+        word32  digest[PIC32_DIGEST_SIZE / sizeof(word32)];
         pic32mz_desc desc; /* Crypt Engine descriptor */
     #endif
+        void*   heap;
     #ifdef WOLFSSL_ASYNC_CRYPT
         WC_ASYNC_DEV asyncDev;
     #endif /* WOLFSSL_ASYNC_CRYPT */
@@ -101,6 +100,10 @@ WOLFSSL_API void wc_ShaFree(Sha*);
 
 WOLFSSL_API int wc_ShaGetHash(Sha*, byte*);
 WOLFSSL_API int wc_ShaCopy(Sha*, Sha*);
+
+#ifdef WOLFSSL_PIC32MZ_HASH
+WOLFSSL_API void wc_ShaSizeSet(Sha* sha, word32 len);
+#endif
 
 #ifdef __cplusplus
     } /* extern "C" */

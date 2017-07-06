@@ -1228,10 +1228,11 @@ int wc_GenerateSeed(OS_Seed* os, byte* output, word32 sz)
         #if !defined(WOLFSSL_MICROCHIP_PIC32MZ)
             #include <peripheral/timer.h>
         #endif
+        extern word32 ReadCoreTimer(void);
         #define PIC32_SEED_COUNT ReadCoreTimer
     #endif
 
-    #ifdef WOLFSSL_MIC32MZ_RNG
+    #ifdef WOLFSSL_PIC32MZ_RNG
         #include "xc.h"
         int wc_GenerateSeed(OS_Seed* os, byte* output, word32 sz)
         {
@@ -1246,15 +1247,14 @@ int wc_GenerateSeed(OS_Seed* os, byte* output, word32 sz)
             RNGPOLY1 = ReadCoreTimer();
             RNGPOLY2 = ReadCoreTimer();
             RNGNUMGEN2 = ReadCoreTimer();
-        #ifdef DEBUG_WOLFSSL
-            printf("GenerateSeed::Seed=%08x, %08x\n", RNGNUMGEN1, RNGNUMGEN2);
-        #endif
+
             RNGCONbits.PLEN = 0x40;
             RNGCONbits.PRNGEN = 1;
-            for(i=0; i<5; i++) { /* wait for RNGNUMGEN ready */
+            for (i=0; i<5; i++) { /* wait for RNGNUMGEN ready */
                 volatile int x;
                 x = RNGNUMGEN1;
                 x = RNGNUMGEN2;
+                (void)x;
             }
             do {
                 rnd32[0] = RNGNUMGEN1;
@@ -1268,7 +1268,7 @@ int wc_GenerateSeed(OS_Seed* os, byte* output, word32 sz)
             } while(size);
             return 0;
         }
-    #else  /* WOLFSSL_MIC32MZ_RNG */
+    #else  /* WOLFSSL_PIC32MZ_RNG */
         /* uses the core timer, in nanoseconds to seed srand */
         int wc_GenerateSeed(OS_Seed* os, byte* output, word32 sz)
         {
@@ -1282,7 +1282,7 @@ int wc_GenerateSeed(OS_Seed* os, byte* output, word32 sz)
             }
             return 0;
         }
-    #endif /* WOLFSSL_MIC32MZ_RNG */
+    #endif /* WOLFSSL_PIC32MZ_RNG */
 
 #elif defined(FREESCALE_MQX) || defined(FREESCALE_KSDK_MQX) || \
       defined(FREESCALE_KSDK_BM) || defined(FREESCALE_FREE_RTOS)

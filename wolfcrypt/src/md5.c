@@ -36,6 +36,7 @@
 
 #include <wolfssl/wolfcrypt/md5.h>
 #include <wolfssl/wolfcrypt/error-crypt.h>
+#include <wolfssl/wolfcrypt/logging.h>
 
 #ifdef NO_INLINE
     #include <wolfssl/wolfcrypt/misc.h>
@@ -168,7 +169,7 @@
 
 #elif defined(FREESCALE_MMCAU_SHA)
     #include "cau_api.h"
-    #define XTRANSFORM(S,B)  Transform((S), (B))
+    #define XTRANSFORM(S,B,F)  Transform((S), (B))
 
     static int Transform(Md5* md5, byte* data)
     {
@@ -185,11 +186,8 @@
     }
 
 #elif defined(WOLFSSL_PIC32MZ_HASH)
-    #define wc_InitMd5   wc_InitMd5_sw
-    #define wc_Md5Update wc_Md5Update_sw
-    #define wc_Md5Final  wc_Md5Final_sw
-
-    #define NEED_SOFT_MD5
+    #include <wolfssl/wolfcrypt/port/pic32/pic32mz-crypt.h>
+    #define HAVE_MD5_CUST_API
 
 #else
     #define NEED_SOFT_MD5
@@ -199,7 +197,7 @@
 
 #ifdef NEED_SOFT_MD5
 
-    #define XTRANSFORM(S,B)  Transform((S))
+    #define XTRANSFORM(S,B,F)  Transform((S))
 
     #define F1(x, y, z) (z ^ (x & (y ^ z)))
     #define F2(x, y, z) F1(z, x, y)
@@ -379,7 +377,7 @@ int wc_Md5Update(Md5* md5, const byte* data, word32 len)
         #if defined(BIG_ENDIAN_ORDER) && !defined(FREESCALE_MMCAU_SHA)
             ByteReverseWords(md5->buffer, md5->buffer, MD5_BLOCK_SIZE);
         #endif
-            XTRANSFORM(md5, local);
+            XTRANSFORM(md5, local, 0);
             AddMd5Length(md5, MD5_BLOCK_SIZE);
             md5->buffLen = 0;
         }
@@ -416,10 +414,14 @@ int wc_Md5Final(Md5* md5, byte* hash)
     #if defined(BIG_ENDIAN_ORDER) && !defined(FREESCALE_MMCAU_SHA)
         ByteReverseWords(md5->buffer, md5->buffer, MD5_BLOCK_SIZE);
     #endif
-        XTRANSFORM(md5, local);
+        XTRANSFORM(md5, local, 0);
         md5->buffLen = 0;
     }
     XMEMSET(&local[md5->buffLen], 0, MD5_PAD_SIZE - md5->buffLen);
+
+#if defined(BIG_ENDIAN_ORDER) && !defined(FREESCALE_MMCAU_SHA)
+    ByteReverseWords(md5->buffer, md5->buffer, MD5_BLOCK_SIZE);
+#endif
 
     /* put lengths in bits */
     md5->hiLen = (md5->loLen >> (8*sizeof(md5->loLen) - 3)) +
@@ -427,14 +429,12 @@ int wc_Md5Final(Md5* md5, byte* hash)
     md5->loLen = md5->loLen << 3;
 
     /* store lengths */
-#if defined(BIG_ENDIAN_ORDER) && !defined(FREESCALE_MMCAU_SHA)
-    ByteReverseWords(md5->buffer, md5->buffer, MD5_BLOCK_SIZE);
-#endif
     /* ! length ordering dependent on digest endian type ! */
     XMEMCPY(&local[MD5_PAD_SIZE], &md5->loLen, sizeof(word32));
     XMEMCPY(&local[MD5_PAD_SIZE + sizeof(word32)], &md5->hiLen, sizeof(word32));
 
-    XTRANSFORM(md5, local);
+    /* final transform and result to hash */
+    XTRANSFORM(md5, local, 1);
 #ifdef BIG_ENDIAN_ORDER
     ByteReverseWords(md5->digest, md5->digest, MD5_DIGEST_SIZE);
 #endif
