@@ -2737,7 +2737,7 @@ exit_rsa_pub:
 #endif
 
     /* capture resulting encrypt length */
-    idx = RSA_BUF_SIZE; /* fixed at 2048 bit */
+    idx = rsaKeySz/8;
 
     /* begin private async RSA */
     bench_stats_start(&count, &start);
