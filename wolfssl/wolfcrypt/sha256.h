@@ -74,9 +74,6 @@ typedef struct Sha256 {
     word32  loLen;     /* length in bytes   */
     word32  hiLen;     /* length in bytes   */
     void*   heap;
-#ifdef WOLFSSL_PIC32MZ_HASH
-    pic32mz_desc desc; /* Crypt Engine descriptor */
-#endif
 #ifdef WOLFSSL_ASYNC_CRYPT
     WC_ASYNC_DEV asyncDev;
 #endif /* WOLFSSL_ASYNC_CRYPT */

@@ -225,10 +225,7 @@
 #ifdef WOLFSSL_MICROCHIP_PIC32MZ
     #define WOLFSSL_PIC32MZ_CRYPT
     #define WOLFSSL_PIC32MZ_RNG
-    #ifdef MICROCHIP_MPLAB_HARMONY
-        /* Harmony Hash support works */
-        #define WOLFSSL_PIC32MZ_HASH
-    #endif
+    #define WOLFSSL_PIC32MZ_HASH
 #endif
 
 #ifdef MICROCHIP_TCPIP_V5

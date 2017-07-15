@@ -76,7 +76,6 @@ typedef struct Sha {
     #else
         /* PIC32 requires 32 bytes for digest */
         word32  digest[PIC32_DIGEST_SIZE / sizeof(word32)];
-        pic32mz_desc desc; /* Crypt Engine descriptor */
     #endif
         void*   heap;
     #ifdef WOLFSSL_ASYNC_CRYPT

@@ -176,20 +176,6 @@ typedef struct bufferDescriptor {
     #define PIC32MZ_MAX_BD   2
 #endif
 
-#ifdef WOLFSSL_PIC32MZ_HASH
-/* Crypt Engine descriptor */
-typedef struct {
-    int currBd;
-    int err;
-    unsigned int msgSize;
-    uint32_t processed;
-    uint32_t dbPtr;
-    int engine_ready;
-    volatile bufferDescriptor   bd[PIC32MZ_MAX_BD] __attribute__((aligned (8)));
-    securityAssociation         sa                 __attribute__((aligned (8)));
-} pic32mz_desc;
-#endif
-
 
 #ifndef NO_AES
 int wc_Pic32AesCrypt(word32 *key, int keyLen, word32 *iv, int ivLen,

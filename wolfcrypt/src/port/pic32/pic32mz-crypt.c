@@ -45,6 +45,12 @@
 #include <wolfssl/wolfcrypt/des3.h>
 #endif
 
+#ifdef WOLFSSL_PIC32MZ_HASH
+#include <wolfssl/wolfcrypt/md5.h>
+#include <wolfssl/wolfcrypt/sha.h>
+#include <wolfssl/wolfcrypt/sha256.h>
+#endif
+
 
 #if defined(WOLFSSL_PIC32MZ_CRYPT) || defined(WOLFSSL_PIC32MZ_HASH)
 
@@ -78,7 +84,7 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
     int ret = 0;
     int blockSize = Pic32GetBlockSize(algo);
     volatile bufferDescriptor bd __attribute__((aligned (8)));
-    volatile securityAssociation sa __attribute__((aligned (8)));
+    securityAssociation sa __attribute__((aligned (8)));
     securityAssociation *sa_p;
     bufferDescriptor *bd_p;
     byte *in_p;
@@ -112,10 +118,10 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
     sa_p->SA_CTRL.ALGO = algo;
     sa_p->SA_CTRL.LNC = 1;
     sa_p->SA_CTRL.FB = 1;
-    sa_p->SA_CTRL.ENCTYPE = dir;
-    sa_p->SA_CTRL.CRYPTOALGO = cryptoalgo;
-
     if (key) {
+        sa_p->SA_CTRL.ENCTYPE = dir;
+        sa_p->SA_CTRL.CRYPTOALGO = cryptoalgo;
+
         /* crypto */
         switch (keyLen) {
             case 32:
@@ -261,9 +267,121 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
 #ifdef WOLFSSL_PIC32MZ_HASH
 int wc_Pic32Hash(const byte* in, int inLen, word32* out, int outLen, int algo)
 {
-    return Pic32Crypto(in, inLen, out, outLen, PIC32_ENCRYPTION, algo, 0,
-        NULL, 0, NULL, 0);
+    return Pic32Crypto(in, inLen, out, outLen, 0, algo, 0, NULL, 0, NULL, 0);
 }
+
+#ifndef NO_MD5
+int wc_InitMd5_ex(Md5* md5, void* heap, int devId)
+{
+    if (md5 == NULL)
+        return BAD_FUNC_ARG;
+
+    XMEMSET(md5, 0, sizeof(Md5));
+    md5->heap = heap;
+    (void)devId;
+    return 0;
+}
+
+int wc_Md5Update(Md5* md5, const byte* data, word32 len)
+{
+    return wc_Pic32Hash(data, len, md5->digest, MD5_DIGEST_SIZE, PIC32_ALGO_MD5);
+}
+
+int wc_Md5Final(Md5* md5, byte* hash)
+{
+    int ret;
+
+    ret = wc_Pic32Hash(NULL, 0, md5->digest, MD5_DIGEST_SIZE, PIC32_ALGO_MD5);
+    if (ret == 0) {
+        XMEMCPY(hash, md5->digest, MD5_DIGEST_SIZE);
+
+        ret = wc_InitMd5_ex(md5, md5->heap, INVALID_DEVID);  /* reset state */
+    }
+    return ret;
+}
+
+void wc_Md5SizeSet(Md5* md5, word32 len)
+{
+    (void)md5;
+    (void)len;
+}
+#endif /* !NO_MD5 */
+
+#ifndef NO_SHA
+int wc_InitSha_ex(Sha* sha, void* heap, int devId)
+{
+    if (sha == NULL)
+        return BAD_FUNC_ARG;
+
+    XMEMSET(sha, 0, sizeof(Sha));
+    sha->heap = heap;
+    (void)devId;
+    return 0;
+}
+
+int wc_ShaUpdate(Sha* sha, const byte* data, word32 len)
+{
+    return wc_Pic32Hash(data, len, sha->digest, SHA_DIGEST_SIZE, PIC32_ALGO_SHA1);
+}
+
+int wc_ShaFinal(Sha* sha, byte* hash)
+{
+    int ret;
+
+    ret = wc_Pic32Hash(NULL, 0, sha->digest, SHA_DIGEST_SIZE, PIC32_ALGO_SHA1);
+    if (ret == 0) {
+        XMEMCPY(hash, sha->digest, SHA_DIGEST_SIZE);
+
+        ret = wc_InitSha_ex(sha, sha->heap, INVALID_DEVID);  /* reset state */
+    }
+
+    return ret;
+}
+
+void wc_ShaSizeSet(Sha* sha, word32 len)
+{
+    (void)sha;
+    (void)len;
+}
+#endif /* !NO_SHA */
+
+#ifndef NO_SHA256
+int wc_InitSha256_ex(Sha256* sha256, void* heap, int devId)
+{
+    if (sha256 == NULL)
+        return BAD_FUNC_ARG;
+
+    XMEMSET(sha256, 0, sizeof(Sha256));
+    sha256->heap = heap;
+    (void)devId;
+    return 0;
+}
+
+int wc_Sha256Update(Sha256* sha256, const byte* data, word32 len)
+{
+    return wc_Pic32Hash(data, len, sha256->digest, SHA256_DIGEST_SIZE, PIC32_ALGO_SHA256);
+}
+
+int wc_Sha256Final(Sha256* sha256, byte* hash)
+{
+    int ret;
+
+    ret = wc_Pic32Hash(NULL, 0, sha256->digest, SHA256_DIGEST_SIZE, PIC32_ALGO_SHA256);
+    if (ret == 0) {
+        XMEMCPY(hash, sha256->digest, SHA256_DIGEST_SIZE);
+
+        ret = wc_InitSha256_ex(sha256, sha256->heap, INVALID_DEVID);  /* reset state */
+    }
+    return ret;
+}
+
+void wc_Sha256SizeSet(Sha256* sha256, word32 len)
+{
+    (void)sha256;
+    (void)len;
+}
+
+#endif /* !NO_SHA256 */
 #endif
 
 
