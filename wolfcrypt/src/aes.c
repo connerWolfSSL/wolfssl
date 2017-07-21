@@ -586,6 +586,8 @@
 
     #include <wolfssl/wolfcrypt/port/pic32/pic32mz-crypt.h>
 
+    #if defined(HAVE_AESGCM) || defined(WOLFSSL_AES_DIRECT)
+
     static int wc_AesEncrypt(Aes* aes, const byte* inBlock, byte* outBlock)
     {
         return wc_Pic32AesCrypt(aes->key_ce, aes->keylen, NULL, 0,
@@ -601,6 +603,7 @@
             PIC32_DECRYPTION, PIC32_ALGO_AES, PIC32_CRYPTOALGO_RECB);
     }
     #endif /* HAVE_AES_DECRYPT */
+    #endif
 
 #elif defined(WOLFSSL_NRF51_AES)
     /* Use built-in AES hardware - AES 128 ECB Encrypt Only */
@@ -3216,7 +3219,7 @@ int wc_AesEcbDecrypt(Aes* aes, byte* out, const byte* in, word32 sz)
                 aes->left += odd;
             }
 
-            return 0;
+            return ret;
         }
 
     #elif defined(HAVE_COLDFIRE_SEC)

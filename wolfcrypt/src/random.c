@@ -1241,12 +1241,23 @@ int wc_GenerateSeed(OS_Seed* os, byte* output, word32 sz)
             word32 *rnd32 = (word32 *)rnd;
             word32 size = sz;
             byte* op = output;
-
-            /* This part has to be replaced with better random seed */
-            RNGNUMGEN1 = ReadCoreTimer();
-            RNGPOLY1 = ReadCoreTimer();
-            RNGPOLY2 = ReadCoreTimer();
-            RNGNUMGEN2 = ReadCoreTimer();
+            
+#if ((__PIC32_FEATURE_SET0 == 'E') && (__PIC32_FEATURE_SET1 == 'C'))
+            RNGNUMGEN1 = _CP0_GET_COUNT();
+            RNGPOLY1 = _CP0_GET_COUNT();
+            RNGPOLY2 = _CP0_GET_COUNT();
+            RNGNUMGEN2 = _CP0_GET_COUNT();
+#else
+            // All others can be seeded from the TRNG
+            RNGCONbits.TRNGMODE = 1;
+            RNGCONbits.TRNGEN = 1;
+            while (RNGCNT < 64);
+            RNGCONbits.LOAD = 1;
+            while (RNGCONbits.LOAD == 1);
+            while (RNGCNT < 64);
+            RNGPOLY2 = RNGSEED2;
+            RNGPOLY1 = RNGSEED1;
+#endif
 
             RNGCONbits.PLEN = 0x40;
             RNGCONbits.PRNGEN = 1;

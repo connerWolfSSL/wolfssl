@@ -93,24 +93,27 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
     int timeout = 0xFFFFFF;
 
     /* check args */
-    if (in == NULL || inLen <= 0 || out == NULL || blockSize == 0) {
+    if ((in == NULL && inLen > 0) || out == NULL || outLen <= 0 || blockSize == 0) {
         return BAD_FUNC_ARG;
     }
 
     /* check pointer alignment - must be word aligned */
-    if (((size_t)in % sizeof(word32)) || ((size_t)out % sizeof(word32))) {
+    if ((in != NULL && ((size_t)in % sizeof(word32))) || ((size_t)out % sizeof(word32))) {
         return BUFFER_E; /* buffer is not aligned */
     }
 
     /* get uncached address */
     sa_p = KVA0_TO_KVA1(&sa);
     bd_p = KVA0_TO_KVA1(&bd);
-    in_p = KVA0_TO_KVA1(in);
     out_p= KVA0_TO_KVA1(out);
-
-    /* Sync cache if in physical memory (not flash) */
-    if (PIC32MZ_IF_RAM(in_p)) {
-        XMEMCPY(in_p, in, inLen);
+    
+    if (in) {
+        in_p = KVA0_TO_KVA1(in);
+        
+        /* Sync cache if in physical memory (not flash) */
+        if (PIC32MZ_IF_RAM(in_p)) {
+            XMEMCPY(in_p, in, inLen);
+        }
     }
 
     /* Set up the Security Association */
@@ -150,7 +153,7 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
     }
     else {
         /* hashing */
-        if (outLen > 0)
+        if (in == NULL)
             sa_p->SA_CTRL.IRFLAG = 1;
     }
 

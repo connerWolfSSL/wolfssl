@@ -99,7 +99,7 @@
     #define HAVE_INTEL_RORX
 #endif
 
-
+#ifndef WOLFSSL_PIC32MZ_HASH
 static int InitSha256(Sha256* sha256)
 {
     int ret = 0;
@@ -122,6 +122,7 @@ static int InitSha256(Sha256* sha256)
 
     return ret;
 }
+#endif
 
 
 /* Hardware Acceleration */
