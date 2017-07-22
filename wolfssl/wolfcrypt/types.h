@@ -305,10 +305,14 @@
 	    #define XSTRNSTR(s1,s2,n) mystrnstr((s1),(s2),(n))
 	    #define XSTRNCMP(s1,s2,n) strncmp((s1),(s2),(n))
 	    #define XSTRNCAT(s1,s2,n) strncat((s1),(s2),(n))
-	    #ifndef USE_WINDOWS_API
-	        #define XSTRNCASECMP(s1,s2,n) strncasecmp((s1),(s2),(n))
-	    #else
+
+        #ifdef MICROCHIP_PIC32
+            /* XC32 does not support strncasecmp, so use case sensitive one */
+            #define XSTRNCASECMP(s1,s2,n) strncmp((s1),(s2),(n))
+        #elif defined(USE_WINDOWS_API)
 	        #define XSTRNCASECMP(s1,s2,n) _strnicmp((s1),(s2),(n))
+        #else
+	        #define XSTRNCASECMP(s1,s2,n) strncasecmp((s1),(s2),(n))
 	    #endif
 
         /* snprintf is used in asn.c for GetTimeString and PKCS7 test */
