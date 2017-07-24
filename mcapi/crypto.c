@@ -24,9 +24,11 @@
 #ifdef HAVE_CONFIG_H
     #include "config.h"
 #endif
-#include "system_config.h"
+#ifdef MICROCHIP_MPLAB_HARMONY
+    #include "system_config.h"
+#endif
 
-#include "crypto/crypto.h"
+#include "crypto.h"
 
 #include <wolfssl/wolfcrypt/settings.h>
 
@@ -274,7 +276,7 @@ int CRYPT_HUFFMAN_Compress(unsigned char* out, unsigned int outSz,
     if (out == NULL || in == NULL)
         return BAD_FUNC_ARG;
 
-    return Compress(out, outSz, in, inSz, flags);
+    return wc_Compress(out, outSz, in, inSz, flags);
 }
 
 
@@ -286,7 +288,7 @@ int CRYPT_HUFFMAN_DeCompress(unsigned char* out, unsigned int outSz,
     if (out == NULL || in == NULL)
         return BAD_FUNC_ARG;
 
-    return DeCompress(out, outSz, in, inSz);
+    return wc_DeCompress(out, outSz, in, inSz);
 }
 
 #endif
