@@ -50,7 +50,6 @@
         <itemPath>../../wolfcrypt/src/sha512.c</itemPath>
         <itemPath>../../wolfcrypt/src/tfm.c</itemPath>
         <itemPath>../../wolfcrypt/src/wc_port.c</itemPath>
-        <itemPath>../../wolfcrypt/src/port/pic32/pic32mz-hash.c</itemPath>
         <itemPath>../../wolfcrypt/src/port/pic32/pic32mz-crypt.c</itemPath>
         <itemPath>../../wolfcrypt/src/hash.c</itemPath>
         <itemPath>../../wolfcrypt/src/chacha20_poly1305.c</itemPath>
