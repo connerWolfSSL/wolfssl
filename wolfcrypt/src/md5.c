@@ -187,7 +187,13 @@
 
 #elif defined(WOLFSSL_PIC32MZ_HASH)
     #include <wolfssl/wolfcrypt/port/pic32/pic32mz-crypt.h>
-    #define HAVE_MD5_CUST_API
+    #define XTRANSFORM(S,B,F)  Transform((S), (B), (F))
+
+    static int Transform(Md5* md5, byte* data, int isFinal)
+    {
+        return wc_Pic32Hash(data, MD5_BLOCK_SIZE, md5->digest,
+            isFinal ? MD5_DIGEST_SIZE : 0, PIC32_ALGO_MD5);
+    }
 
 #else
     #define NEED_SOFT_MD5

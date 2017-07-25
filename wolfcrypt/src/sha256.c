@@ -99,7 +99,6 @@
     #define HAVE_INTEL_RORX
 #endif
 
-#ifndef WOLFSSL_PIC32MZ_HASH
 static int InitSha256(Sha256* sha256)
 {
     int ret = 0;
@@ -122,7 +121,6 @@ static int InitSha256(Sha256* sha256)
 
     return ret;
 }
-#endif
 
 
 /* Hardware Acceleration */
@@ -327,6 +325,25 @@ static int InitSha256(Sha256* sha256)
 
 #elif defined(WOLFSSL_PIC32MZ_HASH)
     #include <wolfssl/wolfcrypt/port/pic32/pic32mz-crypt.h>
+
+    #define XTRANSFORM(S, B, F)  Transform((S), (B), (F))
+
+    int wc_InitSha256_ex(Sha256* sha256, void* heap, int devId)
+    {
+        if (sha256 == NULL)
+            return BAD_FUNC_ARG;
+
+        (void)devId;
+        sha256->heap = heap;
+
+        return InitSha256(sha256);
+    }
+
+    static int Transform(Sha256* sha256, byte* buf, int isFinal)
+    {
+        return wc_Pic32Hash(buf, SHA256_BLOCK_SIZE, sha256->digest,
+            isFinal ? SHA256_DIGEST_SIZE : 0, PIC32_ALGO_SHA256);
+    }
 
 #else
     #define NEED_SOFT_SHA256

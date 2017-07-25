@@ -93,7 +93,7 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
     int timeout = 0xFFFFFF;
 
     /* check args */
-    if ((in == NULL && inLen > 0) || out == NULL || outLen <= 0 || blockSize == 0) {
+    if (in == NULL || inLen <= 0 || out == NULL || blockSize == 0) {
         return BAD_FUNC_ARG;
     }
 
@@ -106,10 +106,10 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
     sa_p = KVA0_TO_KVA1(&sa);
     bd_p = KVA0_TO_KVA1(&bd);
     out_p= KVA0_TO_KVA1(out);
-    
+
     if (in) {
         in_p = KVA0_TO_KVA1(in);
-        
+
         /* Sync cache if in physical memory (not flash) */
         if (PIC32MZ_IF_RAM(in_p)) {
             XMEMCPY(in_p, in, inLen);
@@ -119,9 +119,10 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
     /* Set up the Security Association */
     XMEMSET(sa_p, 0, sizeof(sa));
     sa_p->SA_CTRL.ALGO = algo;
-    sa_p->SA_CTRL.LNC = 1;
-    sa_p->SA_CTRL.FB = 1;
+    sa_p->SA_CTRL.LNC = 1; /* Load new set of keys */
+    sa_p->SA_CTRL.LOADIV = 1;
     if (key) {
+        sa_p->SA_CTRL.FB = 1; /* first block */
         sa_p->SA_CTRL.ENCTYPE = dir;
         sa_p->SA_CTRL.CRYPTOALGO = cryptoalgo;
 
@@ -144,23 +145,19 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
         ByteReverseWords(dst, key, keyLen);
 
         if (iv && ivLen > 0) {
-            sa_p->SA_CTRL.LOADIV = 1;
-
             dst = (word32*)KVA0_TO_KVA1(sa.SA_ENCIV +
                 (sizeof(sa.SA_ENCIV)/sizeof(word32)) - (ivLen/sizeof(word32)));
             ByteReverseWords(dst, iv, ivLen);
         }
     }
     else {
-        /* hashing */
-        if (in == NULL)
-            sa_p->SA_CTRL.IRFLAG = 1;
+        sa_p->SA_CTRL.FB = 1; /* first block */
+        sa_p->SA_CTRL.IRFLAG = 1; /* immediate result for hashing */
     }
 
     /* Set up the Buffer Descriptor */
     XMEMSET(bd_p, 0, sizeof(bd));
     bd_p->BD_CTRL.BUFLEN = inLen;
-    bd_p->BD_CTRL.UPD_RES = 1;
     bd_p->BD_CTRL.SA_FETCH_EN = 1; /* Fetch the security association */
     bd_p->BD_CTRL.PKT_INT_EN = 1;  /* enable interrupt */
     bd_p->BD_CTRL.LAST_BD = 1;     /* last buffer desc in chain */
@@ -270,120 +267,31 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
 #ifdef WOLFSSL_PIC32MZ_HASH
 int wc_Pic32Hash(const byte* in, int inLen, word32* out, int outLen, int algo)
 {
-    return Pic32Crypto(in, inLen, out, outLen, 0, algo, 0, NULL, 0, NULL, 0);
+    return Pic32Crypto(in, inLen, out, outLen, PIC32_ENCRYPTION, algo, 0,
+        NULL, 0, NULL, 0);
 }
 
+/* API's for compatability with Harmony wrappers - not used */
 #ifndef NO_MD5
-int wc_InitMd5_ex(Md5* md5, void* heap, int devId)
-{
-    if (md5 == NULL)
-        return BAD_FUNC_ARG;
-
-    XMEMSET(md5, 0, sizeof(Md5));
-    md5->heap = heap;
-    (void)devId;
-    return 0;
-}
-
-int wc_Md5Update(Md5* md5, const byte* data, word32 len)
-{
-    return wc_Pic32Hash(data, len, md5->digest, MD5_DIGEST_SIZE, PIC32_ALGO_MD5);
-}
-
-int wc_Md5Final(Md5* md5, byte* hash)
-{
-    int ret;
-
-    ret = wc_Pic32Hash(NULL, 0, md5->digest, MD5_DIGEST_SIZE, PIC32_ALGO_MD5);
-    if (ret == 0) {
-        XMEMCPY(hash, md5->digest, MD5_DIGEST_SIZE);
-
-        ret = wc_InitMd5_ex(md5, md5->heap, INVALID_DEVID);  /* reset state */
+    void wc_Md5SizeSet(Md5* md5, word32 len)
+    {
+        (void)md5;
+        (void)len;
     }
-    return ret;
-}
-
-void wc_Md5SizeSet(Md5* md5, word32 len)
-{
-    (void)md5;
-    (void)len;
-}
 #endif /* !NO_MD5 */
-
 #ifndef NO_SHA
-int wc_InitSha_ex(Sha* sha, void* heap, int devId)
-{
-    if (sha == NULL)
-        return BAD_FUNC_ARG;
-
-    XMEMSET(sha, 0, sizeof(Sha));
-    sha->heap = heap;
-    (void)devId;
-    return 0;
-}
-
-int wc_ShaUpdate(Sha* sha, const byte* data, word32 len)
-{
-    return wc_Pic32Hash(data, len, sha->digest, SHA_DIGEST_SIZE, PIC32_ALGO_SHA1);
-}
-
-int wc_ShaFinal(Sha* sha, byte* hash)
-{
-    int ret;
-
-    ret = wc_Pic32Hash(NULL, 0, sha->digest, SHA_DIGEST_SIZE, PIC32_ALGO_SHA1);
-    if (ret == 0) {
-        XMEMCPY(hash, sha->digest, SHA_DIGEST_SIZE);
-
-        ret = wc_InitSha_ex(sha, sha->heap, INVALID_DEVID);  /* reset state */
+    void wc_ShaSizeSet(Sha* sha, word32 len)
+    {
+        (void)sha;
+        (void)len;
     }
-
-    return ret;
-}
-
-void wc_ShaSizeSet(Sha* sha, word32 len)
-{
-    (void)sha;
-    (void)len;
-}
 #endif /* !NO_SHA */
-
 #ifndef NO_SHA256
-int wc_InitSha256_ex(Sha256* sha256, void* heap, int devId)
-{
-    if (sha256 == NULL)
-        return BAD_FUNC_ARG;
-
-    XMEMSET(sha256, 0, sizeof(Sha256));
-    sha256->heap = heap;
-    (void)devId;
-    return 0;
-}
-
-int wc_Sha256Update(Sha256* sha256, const byte* data, word32 len)
-{
-    return wc_Pic32Hash(data, len, sha256->digest, SHA256_DIGEST_SIZE, PIC32_ALGO_SHA256);
-}
-
-int wc_Sha256Final(Sha256* sha256, byte* hash)
-{
-    int ret;
-
-    ret = wc_Pic32Hash(NULL, 0, sha256->digest, SHA256_DIGEST_SIZE, PIC32_ALGO_SHA256);
-    if (ret == 0) {
-        XMEMCPY(hash, sha256->digest, SHA256_DIGEST_SIZE);
-
-        ret = wc_InitSha256_ex(sha256, sha256->heap, INVALID_DEVID);  /* reset state */
+    void wc_Sha256SizeSet(Sha256* sha256, word32 len)
+    {
+        (void)sha256;
+        (void)len;
     }
-    return ret;
-}
-
-void wc_Sha256SizeSet(Sha256* sha256, word32 len)
-{
-    (void)sha256;
-    (void)len;
-}
-
 #endif /* !NO_SHA256 */
 #endif
 

@@ -92,6 +92,31 @@
 #if defined(WOLFSSL_PIC32MZ_HASH)
     #include <wolfssl/wolfcrypt/port/pic32/pic32mz-crypt.h>
 
+    #define USE_SHA_SOFTWARE_IMPL /* Only for API's, init and transform here */
+    #define XTRANSFORM(S,B,F)   Transform((S),(B),(F))
+
+    static int InitSha(Sha* sha)
+    {
+        sha->digest[0] = 0x67452301L;
+        sha->digest[1] = 0xEFCDAB89L;
+        sha->digest[2] = 0x98BADCFEL;
+        sha->digest[3] = 0x10325476L;
+        sha->digest[4] = 0xC3D2E1F0L;
+
+        sha->buffLen = 0;
+        sha->loLen   = 0;
+        sha->hiLen   = 0;
+
+        return 0;
+    }
+
+    static int Transform(Sha* sha, byte* data, int isFinal)
+    {
+        return wc_Pic32Hash(data, SHA_BLOCK_SIZE, sha->digest,
+            isFinal ? SHA_DIGEST_SIZE : 0, PIC32_ALGO_SHA1);
+    }
+
+
 #elif defined(STM32F2_HASH) || defined(STM32F4_HASH)
 
     /*
