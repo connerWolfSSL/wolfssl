@@ -106,6 +106,7 @@ static int InitSha256(Sha256* sha256)
     if (sha256 == NULL)
         return BAD_FUNC_ARG;
 
+    XMEMSET(sha256->digest, 0, sizeof(sha256->digest));
     sha256->digest[0] = 0x6A09E667L;
     sha256->digest[1] = 0xBB67AE85L;
     sha256->digest[2] = 0x3C6EF372L;
@@ -341,8 +342,9 @@ static int InitSha256(Sha256* sha256)
 
     static int Transform(Sha256* sha256, byte* buf, int isFinal)
     {
+        (void)isFinal;
         return wc_Pic32Hash(buf, SHA256_BLOCK_SIZE, sha256->digest,
-            isFinal ? SHA256_DIGEST_SIZE : 0, PIC32_ALGO_SHA256);
+            SHA256_DIGEST_SIZE, PIC32_ALGO_SHA256);
     }
 
 #else

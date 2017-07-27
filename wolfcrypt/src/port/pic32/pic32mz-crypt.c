@@ -98,7 +98,7 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
     }
 
     /* check pointer alignment - must be word aligned */
-    if ((in != NULL && ((size_t)in % sizeof(word32))) || ((size_t)out % sizeof(word32))) {
+    if (((size_t)in % sizeof(word32)) || ((size_t)out % sizeof(word32))) {
         return BUFFER_E; /* buffer is not aligned */
     }
 
@@ -119,14 +119,13 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
     /* Set up the Security Association */
     XMEMSET(sa_p, 0, sizeof(sa));
     sa_p->SA_CTRL.ALGO = algo;
+    sa_p->SA_CTRL.ENCTYPE = dir;
+    sa_p->SA_CTRL.CRYPTOALGO = cryptoalgo;
     sa_p->SA_CTRL.LNC = 1; /* Load new set of keys */
     sa_p->SA_CTRL.LOADIV = 1;
+    sa_p->SA_CTRL.FB = 1; /* first block */
     if (key) {
-        sa_p->SA_CTRL.FB = 1; /* first block */
-        sa_p->SA_CTRL.ENCTYPE = dir;
-        sa_p->SA_CTRL.CRYPTOALGO = cryptoalgo;
-
-        /* crypto */
+        /* cipher */
         switch (keyLen) {
             case 32:
                 sa_p->SA_CTRL.KEYSIZE = PIC32_KEYSIZE_256;
@@ -151,13 +150,13 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
         }
     }
     else {
-        sa_p->SA_CTRL.FB = 1; /* first block */
+        /* hashing */
         sa_p->SA_CTRL.IRFLAG = 1; /* immediate result for hashing */
     }
 
     /* Set up the Buffer Descriptor */
     XMEMSET(bd_p, 0, sizeof(bd));
-    bd_p->BD_CTRL.BUFLEN = inLen;
+    bd_p->BD_CTRL.BUFLEN = inLen + (4 - (inLen % 4)); /* aligned buffer size */
     bd_p->BD_CTRL.SA_FETCH_EN = 1; /* Fetch the security association */
     bd_p->BD_CTRL.PKT_INT_EN = 1;  /* enable interrupt */
     bd_p->BD_CTRL.LAST_BD = 1;     /* last buffer desc in chain */
@@ -165,20 +164,18 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
     bd_p->SA_ADDR = (unsigned int)KVA_TO_PA(&sa);
     bd_p->SRCADDR = (unsigned int)KVA_TO_PA(in);
     if (key) {
-        /* crypto */
+        /* cipher */
         if (in != (byte*)out)
             XMEMSET(out_p, 0, outLen); /* clear output buffer */
         bd_p->DSTADDR = (unsigned int)KVA_TO_PA(out);
     }
     else {
         /* hashing */
-
-        /* digest for hash goes into UPDPTR */
-        XMEMCPY(out_p, out, PIC32_DIGEST_SIZE); /* sync cache */
+        /* digest result returned in UPDPTR */
         bd_p->UPDPTR = (unsigned int)KVA_TO_PA(out);
     }
     bd_p->NXTPTR = (unsigned int)KVA_TO_PA(&bd);
-    bd_p->MSGLEN = inLen;
+    bd_p->MSGLEN = inLen;          /* actual message size */
     bd_p->BD_CTRL.DESC_EN = 1;     /* enable this descriptor */
 
     /* begin access to hardware */
@@ -206,10 +203,10 @@ static int Pic32Crypto(const byte* in, int inLen, word32* out, int outLen,
         CEINTSRC = 0xF;
 
         /* check for errors */
-        if (CESTATbits.ERROP && timeout <= 0) {
-        #if 0
-            printf("PIC32 Crypto: ERROP %x, ERRPHASE %x\n",
-                CESTATbits.ERROP, CESTATbits.ERRPHASE);
+        if (CESTATbits.ERROP || timeout <= 0) {
+        #if 1
+            printf("PIC32 Crypto: ERROP %x, ERRPHASE %x, TIMEOUT %d\n",
+                CESTATbits.ERROP, CESTATbits.ERRPHASE, timeout);
         #endif
             ret = ASYNC_OP_E;
         }
@@ -269,10 +266,78 @@ int wc_Pic32Hash(const byte* in, int inLen, word32* out, int outLen, int algo)
 {
     return Pic32Crypto(in, inLen, out, outLen, PIC32_ENCRYPTION, algo, 0,
         NULL, 0, NULL, 0);
+
+
+static int wc_Pic32HashUpdate(byte** tmpBuf, word32* tmpLen, const byte* data, word32 len)
+{
+    /* cache updates */
+    word32 newLen, newLenPad;
+    byte* newBuf;
+
+    /* buffer must be 4-byte aligned for hashing */
+    newLen = *tmpLen + len;
+    newLenPad = newLen + (sizeof(word32) - (newLen % sizeof(word32)));
+
+    newBuf = (byte*)XMALLOC(newLenPad, NULL, DYNAMIC_TYPE_HASH_TMP);
+    if (newBuf == NULL) {
+        return MEMORY_E;
+    }
+    if (*tmpBuf && *tmpLen > 0) {
+        XMEMCPY(newBuf, *tmpBuf, *tmpLen);
+        XFREE(*tmpBuf, NULL, DYNAMIC_TYPE_HASH_TMP);
+    }
+    XMEMCPY(newBuf + *tmpLen, data, len);
+
+    *tmpBuf = newBuf;
+    *tmpLen = newLen;
+
+    return 0;
+}
+
+static int wc_Pic32HashFinal(byte** tmpBuf, word32* tmpLen, byte* hash,
+    int digestSz, int algo)
+{
+    int ret;
+    word32 digest[PIC32_DIGEST_SIZE / sizeof(word32)] = {0};
+
+    ret = wc_Pic32Hash(*tmpBuf, *tmpLen, digest, digestSz, algo);
+    if (ret == 0) {
+        XMEMCPY(hash, digest, digestSz);
+    }
+    XFREE(*tmpBuf, NULL, DYNAMIC_TYPE_HASH_TMP);
+    *tmpBuf = NULL;
+    *tmpLen = 0;
+
+    return ret;
 }
 
 /* API's for compatability with Harmony wrappers - not used */
 #ifndef NO_MD5
+    int wc_InitMd5_ex(Md5* md5, void* heap, int devId)
+    {
+        if (md5 == NULL)
+            return BAD_FUNC_ARG;
+
+        XMEMSET(md5, 0, sizeof(Md5));
+        md5->heap = heap;
+        (void)devId;
+        return 0;
+    }
+
+    int wc_Md5Update(Md5* md5, const byte* data, word32 len)
+    {
+        return wc_Pic32HashUpdate(&md5->tmpBuf, &md5->tmpLen, data, len);
+    }
+
+    int wc_Md5Final(Md5* md5, byte* hash)
+    {
+        int ret;
+        ret = wc_Pic32HashFinal(&md5->tmpBuf, &md5->tmpLen, hash,
+            MD5_DIGEST_SIZE, PIC32_ALGO_MD5);
+        wc_InitMd5_ex(md5, md5->heap, INVALID_DEVID);  /* reset state */
+        return ret;
+    }
+
     void wc_Md5SizeSet(Md5* md5, word32 len)
     {
         (void)md5;

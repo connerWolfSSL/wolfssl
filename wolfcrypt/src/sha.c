@@ -97,6 +97,7 @@
 
     static int InitSha(Sha* sha)
     {
+        XMEMSET(sha->digest, 0, sizeof(sha->digest));
         sha->digest[0] = 0x67452301L;
         sha->digest[1] = 0xEFCDAB89L;
         sha->digest[2] = 0x98BADCFEL;
@@ -112,8 +113,9 @@
 
     static int Transform(Sha* sha, byte* data, int isFinal)
     {
-        return wc_Pic32Hash(data, SHA_BLOCK_SIZE, sha->digest,
-            isFinal ? SHA_DIGEST_SIZE : 0, PIC32_ALGO_SHA1);
+        (void)isFinal;
+        return wc_Pic32Hash(data, SHA_BLOCK_SIZE, sha->digest, SHA_DIGEST_SIZE,
+            PIC32_ALGO_SHA1);
     }
 
 

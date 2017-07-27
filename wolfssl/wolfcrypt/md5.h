@@ -66,11 +66,10 @@ typedef struct Md5 {
     word32  loLen;     /* length in bytes   */
     word32  hiLen;     /* length in bytes   */
     word32  buffer[MD5_BLOCK_SIZE  / sizeof(word32)];
-#ifndef WOLFSSL_PIC32MZ_HASH
     word32  digest[MD5_DIGEST_SIZE / sizeof(word32)];
-#else
-    /* PIC32 requires 32 bytes for digest */
-    word32  digest[PIC32_DIGEST_SIZE / sizeof(word32)];
+#ifdef WOLFSSL_PIC32MZ_HASH
+    byte*   tmpBuf; /* cache for updates */
+    word32  tmpLen;
 #endif
     void*   heap;
 #ifdef WOLFSSL_ASYNC_CRYPT
