@@ -9006,8 +9006,71 @@ enum {
     WOLFSSL_SNI_HOST_NAME = 0
 };
 
+/*!
+    \brief This function enables the use of Server Name Indication in the SSL object passed in the 'ssl' parameter. It means that the SNI extension will be sent on ClientHello by wolfSSL client and wolfSSL server will respond ClientHello + SNI with either ServerHello + blank SNI or alert fatal in case of SNI mismatch.
+    
+    \return SSL_SUCCESS upon success.
+    \return BAD_FUNC_ARG is the error that will be returned in one of these cases: ssl is NULL, data is NULL, type is a unknown value. (see below)
+    \return MEMORY_E is the error returned when there is not enough memory.
+    
+    \param ssl pointer to a SSL object, created with wolfSSL_new().
+    \param type indicates which type of server name is been passed in data. The known types are: enum { WOLFSSL_SNI_HOST_NAME = 0 };
+    \param data pointer to the server name data.
+    \param size size of the server name data.
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    WOLFSSL* ssl = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+        // context creation failed
+    }
+    ssl = wolfSSL_new(ctx);
+    if (ssl == NULL) {
+        // ssl creation failed
+    }
+    ret = wolfSSL_UseSNI(ssl, WOLFSSL_SNI_HOST_NAME, "www.yassl.com", strlen("www.yassl.com"));
+    if (ret != 0) {
+        // sni usage failed
+    }
+    \endcode
+    
+    \sa wolfSSL_new
+    \sa wolfSSL_CTX_UseSNI
+*/
 WOLFSSL_API int wolfSSL_UseSNI(WOLFSSL* ssl, unsigned char type,
                                          const void* data, unsigned short size);
+/*!
+    \brief This function enables the use of Server Name Indication for SSL objects created from the SSL context passed in the 'ctx' parameter. It means that the SNI extension will be sent on ClientHello by wolfSSL clients and wolfSSL servers will respond ClientHello + SNI with either ServerHello + blank SNI or alert fatal in case of SNI mismatch.
+    
+    \return SSL_SUCCESS upon success.
+    \return BAD_FUNC_ARG is the error that will be returned in one of these cases: ctx is NULL, data is NULL, type is a unknown value. (see below)
+    \return MEMORY_E is the error returned when there is not enough memory.
+    
+    \param ctx pointer to a SSL context, created with wolfSSL_CTX_new().
+    \param type indicates which type of server name is been passed in data. The known types are: enum { WOLFSSL_SNI_HOST_NAME = 0 };
+    \param data pointer to the server name data.
+    \param size size of the server name data.
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+        // context creation failed
+    }
+    ret = wolfSSL_CTX_UseSNI(ctx, WOLFSSL_SNI_HOST_NAME, "www.yassl.com", strlen("www.yassl.com"));
+    if (ret != 0) {
+        // sni usage failed
+    }
+    \endcode
+    
+    \sa wolfSSL_CTX_new
+    \sa wolfSSL_UseSNI
+*/
 WOLFSSL_API int wolfSSL_CTX_UseSNI(WOLFSSL_CTX* ctx, unsigned char type,
                                          const void* data, unsigned short size);
 
@@ -9026,8 +9089,73 @@ enum {
     WOLFSSL_SNI_ABORT_ON_ABSENCE     = 0x04,
 };
 
+/*!
+    \brief This function is called on the server side to configure the behavior of the SSL session using Server Name Indication in the SSL object passed in the 'ssl' parameter. The options are explained below.
+    
+    \return none No returns.
+    
+    \param ssl pointer to a SSL object, created with wolfSSL_new().
+    \param type indicates which type of server name is been passed in data. The known types are: enum { WOLFSSL_SNI_HOST_NAME = 0 };
+    \param options a bitwise semaphore with the chosen options. The available options are: enum { WOLFSSL_SNI_CONTINUE_ON_MISMATCH = 0x01, WOLFSSL_SNI_ANSWER_ON_MISMATCH = 0x02 }; Normally the server will abort the handshake by sending a fatal-level unrecognized_name(112) alert if the hostname provided by the client mismatch with the servers.
+    \param WOLFSSL_SNI_CONTINUE_ON_MISMATCH With this option set, the server will not send a SNI response instead of aborting the session.
+    \param WOLFSSL_SNI_ANSWER_ON_MISMATCH - With this option set, the server will send a SNI response as if the host names match instead of aborting the session.
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    WOLFSSL* ssl = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+        // context creation failed
+    }
+    ssl = wolfSSL_new(ctx);
+    if (ssl == NULL) {
+        // ssl creation failed
+    }
+    ret = wolfSSL_UseSNI(ssl, 0, "www.yassl.com", strlen("www.yassl.com"));
+    if (ret != 0) {
+        // sni usage failed
+    }
+    wolfSSL_SNI_SetOptions(ssl, WOLFSSL_SNI_HOST_NAME, WOLFSSL_SNI_CONTINUE_ON_MISMATCH);
+    \endcode
+    
+    \sa wolfSSL_new
+    \sa wolfSSL_UseSNI
+    \sa wolfSSL_CTX_SNI_SetOptions
+*/
 WOLFSSL_API void wolfSSL_SNI_SetOptions(WOLFSSL* ssl, unsigned char type,
                                                          unsigned char options);
+/*!
+    \brief This function is called on the server side to configure the behavior of the SSL sessions using Server Name Indication for SSL objects created from the SSL context passed in the 'ctx' parameter. The options are explained below.
+    
+    \return none No returns.
+    
+    \param ctx pointer to a SSL context, created with wolfSSL_CTX_new().
+    \param type indicates which type of server name is been passed in data. The known types are: enum { WOLFSSL_SNI_HOST_NAME = 0 };
+    \param options a bitwise semaphore with the chosen options. The available options are: enum { WOLFSSL_SNI_CONTINUE_ON_MISMATCH = 0x01, WOLFSSL_SNI_ANSWER_ON_MISMATCH = 0x02 }; Normally the server will abort the handshake by sending a fatal-level unrecognized_name(112) alert if the hostname provided by the client mismatch with the servers.
+    \param WOLFSSL_SNI_CONTINUE_ON_MISMATCH With this option set, the server will not send a SNI response instead of aborting the session.
+    \param WOLFSSL_SNI_ANSWER_ON_MISMATCH With this option set, the server will send a SNI response as if the host names match instead of aborting the session.
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+       // context creation failed
+    }
+    ret = wolfSSL_CTX_UseSNI(ctx, 0, "www.yassl.com", strlen("www.yassl.com"));
+    if (ret != 0) {
+        // sni usage failed
+    }
+    wolfSSL_CTX_SNI_SetOptions(ctx, WOLFSSL_SNI_HOST_NAME, WOLFSSL_SNI_CONTINUE_ON_MISMATCH);
+    \endocde
+    
+    \sa wolfSSL_CTX_new
+    \sa wolfSSL_CTX_UseSNI
+    \sa wolfSSL_SNI_SetOptions
+*/
 WOLFSSL_API void wolfSSL_CTX_SNI_SetOptions(WOLFSSL_CTX* ctx,
                                      unsigned char type, unsigned char options);
 
@@ -9067,8 +9195,73 @@ enum {
 */
 WOLFSSL_API unsigned char wolfSSL_SNI_Status(WOLFSSL* ssl, unsigned char type);
 
+/*!
+    \brief This function is called on the server side to retrieve the Server Name Indication provided by the client in a SSL session.
+    
+    \return size the size of the provided SNI data.
+    
+    \param ssl pointer to a SSL object, created with wolfSSL_new().
+    \param type indicates which type of server name is been retrieved in data. The known types are: enum { WOLFSSL_SNI_HOST_NAME = 0 };
+    \param data pointer to the data provided by the client.
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    WOLFSSL* ssl = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+        // context creation failed
+    }
+    ssl = wolfSSL_new(ctx);
+    if (ssl == NULL) {
+        // ssl creation failed
+    }
+    ret = wolfSSL_UseSNI(ssl, 0, "www.yassl.com", strlen("www.yassl.com"));
+    if (ret != 0) {
+        // sni usage failed
+    }
+    if (wolfSSL_accept(ssl) == SSL_SUCCESS) {
+        void *data = NULL;
+        unsigned short size = wolfSSL_SNI_GetRequest(ssl, 0, &data);
+    }
+    \endcode
+    
+    \sa wolfSSL_UseSNI
+    \sa wolfSSL_CTX_UseSNI
+*/
 WOLFSSL_API unsigned short wolfSSL_SNI_GetRequest(WOLFSSL *ssl,
                                                unsigned char type, void** data);
+/*!
+    \brief This function is called on the server side to retrieve the Server Name Indication provided by the client from the Client Hello message sent by the client to start a session. It does not requires context or session setup to retrieve the SNI.
+    
+    \return SSL_SUCCESS upon success.
+    \return BAD_FUNC_ARG is the error that will be returned in one of this cases: buffer is NULL, bufferSz <= 0, sni is NULL, inOutSz is NULL or <= 0
+    \return BUFFER_ERROR is the error returned when there is a malformed Client Hello message.
+    \return INCOMPLETE_DATA is the error returned when there is not enough data to complete the extraction.
+    
+    \param buffer pointer to the data provided by the client (Client Hello).
+    \param bufferSz size of the Client Hello message.
+    \param type indicates which type of server name is been retrieved from the buffer. The known types are: enum { WOLFSSL_SNI_HOST_NAME = 0 };
+    \param sni pointer to where the output is going to be stored.
+    \param inOutSz pointer to the output size, this value will be updated to MIN("SNI's length", inOutSz).
+    
+    _Example_
+    \code
+    unsigned char buffer[1024] = {0};
+    unsigned char result[32]   = {0};
+    int           length       = 32;
+    // read Client Hello to buffer...
+    ret = wolfSSL_SNI_GetFromBuffer(buffer, sizeof(buffer), 0, result, &length));
+    if (ret != SSL_SUCCESS) {
+        // sni retrieve failed
+    }
+    \endcode
+    
+    \sa wolfSSL_UseSNI
+    \sa wolfSSL_CTX_UseSNI
+    \sa wolfSSL_SNI_GetRequest
+*/
 WOLFSSL_API int wolfSSL_SNI_GetFromBuffer(
                  const unsigned char* clientHello, unsigned int helloSz,
                  unsigned char type, unsigned char* sni, unsigned int* inOutSz);
@@ -9218,7 +9411,66 @@ enum {
 
 #ifndef NO_WOLFSSL_CLIENT
 
+/*!
+    \brief This function is called on the client side to enable the use of Maximum Fragment Length in the SSL object passed in the 'ssl' parameter. It means that the Maximum Fragment Length extension will be sent on ClientHello by wolfSSL clients.
+    
+    \return SSL_SUCCESS upon success.
+    \return BAD_FUNC_ARG is the error that will be returned in one of these cases: ssl is NULL, mfl is out of range.
+    \return MEMORY_E is the error returned when there is not enough memory.
+    
+    \param ssl pointer to a SSL object, created with wolfSSL_new().
+    \param mfl indicates witch is the Maximum Fragment Length requested for the session. The available options are: enum { WOLFSSL_MFL_2_9  = 1, /*  512 bytes WOLFSSL_MFL_2_10 = 2, /* 1024 bytes WOLFSSL_MFL_2_11 = 3, /* 2048 bytes WOLFSSL_MFL_2_12 = 4, /* 4096 bytes WOLFSSL_MFL_2_13 = 5  /* 8192 bytes /* wolfSSL ONLY!!! };
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    WOLFSSL* ssl = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+        // context creation failed
+    }
+    ssl = wolfSSL_new(ctx);
+    if (ssl == NULL) {
+        // ssl creation failed
+    }
+    ret = wolfSSL_UseMaxFragment(ssl, WOLFSSL_MFL_2_11);
+    if (ret != 0) {
+        // max fragment usage failed
+    }
+    \endcode
+    
+    \sa wolfSSL_new
+    \sa wolfSSL_CTX_UseMaxFragment
+*/
 WOLFSSL_API int wolfSSL_UseMaxFragment(WOLFSSL* ssl, unsigned char mfl);
+/*!
+    \brief This function is called on the client side to enable the use of Maximum Fragment Length for SSL objects created from the SSL context passed in the 'ctx' parameter. It means that the Maximum Fragment Length extension will be sent on ClientHello by wolfSSL clients.
+    
+    \return SSL_SUCCESS upon success.
+    \return BAD_FUNC_ARG is the error that will be returned in one of these cases: ctx is NULL, mfl is out of range.
+    \return MEMORY_E is the error returned when there is not enough memory.
+    
+    \param ctx pointer to a SSL context, created with wolfSSL_CTX_new().
+    \param mfl indicates which is the Maximum Fragment Length requested for the session. The available options are: enum { WOLFSSL_MFL_2_9  = 1, /* 512 bytes WOLFSSL_MFL_2_10 = 2, /* 1024 bytes WOLFSSL_MFL_2_11 = 3, /* 2048 bytes WOLFSSL_MFL_2_12 = 4, /* 4096 bytes WOLFSSL_MFL_2_13 = 5  /* 8192 bytes/* wolfSSL ONLY!!! };
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+        // context creation failed
+    }
+    ret = wolfSSL_CTX_UseMaxFragment(ctx, WOLFSSL_MFL_2_11);
+    if (ret != 0) {
+        // max fragment usage failed
+    }
+    \endcode
+    
+    \sa wolfSSL_CTX_new
+    \sa wolfSSL_UseMaxFragment
+*/
 WOLFSSL_API int wolfSSL_CTX_UseMaxFragment(WOLFSSL_CTX* ctx, unsigned char mfl);
 
 #endif
@@ -9228,7 +9480,64 @@ WOLFSSL_API int wolfSSL_CTX_UseMaxFragment(WOLFSSL_CTX* ctx, unsigned char mfl);
 #ifdef HAVE_TRUNCATED_HMAC
 #ifndef NO_WOLFSSL_CLIENT
 
+/*!
+    \brief This function is called on the client side to enable the use of Truncated HMAC in the SSL object passed in the 'ssl' parameter. It means that the Truncated HMAC extension will be sent on ClientHello by wolfSSL clients.
+    
+    \return SSL_SUCCESS upon success.
+    \return BAD_FUNC_ARG is the error that will be returned in one of these cases: ssl is NULL
+    \return MEMORY_E is the error returned when there is not enough memory.
+    
+    \param ssl pointer to a SSL object, created with wolfSSL_new()
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    WOLFSSL* ssl = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+        // context creation failed
+    }
+    ssl = wolfSSL_new(ctx);
+    if (ssl == NULL) {
+        // ssl creation failed
+    }
+    ret = wolfSSL_UseTruncatedHMAC(ssl);
+    if (ret != 0) {
+        // truncated HMAC usage failed
+    }
+    \endcode
+    
+    \sa wolfSSL_new
+    \sa wolfSSL_CTX_UseMaxFragment
+*/
 WOLFSSL_API int wolfSSL_UseTruncatedHMAC(WOLFSSL* ssl);
+/*!
+    \brief This function is called on the client side to enable the use of Truncated HMAC for SSL objects created from the SSL context passed in the 'ctx' parameter. It means that the Truncated HMAC extension will be sent on ClientHello by wolfSSL clients.
+    
+    \return SSL_SUCCESS upon success.
+    \return BAD_FUNC_ARG is the error that will be returned in one of these cases: ctx is NULL
+    \return MEMORY_E is the error returned when there is not enough memory.
+    
+    \param ctx pointer to a SSL context, created with wolfSSL_CTX_new().
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+        // context creation failed
+    }
+    ret = wolfSSL_CTX_UseTruncatedHMAC(ctx);
+    if (ret != 0) {
+        // truncated HMAC usage failed
+    }
+    \endcode
+    
+    \sa wolfSSL_CTX_new
+    \sa wolfSSL_UseMaxFragment
+*/
 WOLFSSL_API int wolfSSL_CTX_UseTruncatedHMAC(WOLFSSL_CTX* ctx);
 
 #endif
@@ -9433,7 +9742,66 @@ enum {
 #ifdef HAVE_SUPPORTED_CURVES
 #ifndef NO_WOLFSSL_CLIENT
 
+/*!
+    \brief This function is called on the client side to enable the use of Supported Elliptic Curves Extension in the SSL object passed in the 'ssl' parameter. It means that the supported curves enabled will be sent on ClientHello by wolfSSL clients. This function can be called more than one time to enable multiple curves.
+    
+    \return SSL_SUCCESS upon success.
+    \return BAD_FUNC_ARG is the error that will be returned in one of these cases: ssl is NULL, name is a unknown value. (see below)
+    \return MEMORY_E is the error returned when there is not enough memory.
+    
+    \param ssl pointer to a SSL object, created with wolfSSL_new().
+    \param name indicates which curve will be supported for the session. The available options are: enum { WOLFSSL_ECC_SECP160R1 = 0x10, WOLFSSL_ECC_SECP192R1 = 0x13, WOLFSSL_ECC_SECP224R1 = 0x15, WOLFSSL_ECC_SECP256R1 = 0x17, WOLFSSL_ECC_SECP384R1 = 0x18, WOLFSSL_ECC_SECP521R1 = 0x19 };
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    WOLFSSL* ssl = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+        // context creation failed
+    }
+    ssl = wolfSSL_new(ctx);
+    if (ssl == NULL) {
+        // ssl creation failed
+    }
+    ret = wolfSSL_UseSupportedCurve(ssl, WOLFSSL_ECC_SECP256R1);
+    if (ret != 0) {
+        // Elliptic Curve Extension usage failed
+    }
+    \endcode
+    
+    \sa wolfSSL_CTX_new
+    \sa wolfSSL_CTX_UseSupportedCurve
+*/
 WOLFSSL_API int wolfSSL_UseSupportedCurve(WOLFSSL* ssl, unsigned short name);
+/*!
+    \brief This function is called on the client side to enable the use of Supported Elliptic Curves Extension for SSL objects created from the SSL context passed in the 'ctx' parameter. It means that the supported curves enabled will be sent on ClientHello by wolfSSL clients. This function can be called more than one time to enable multiple curves.
+    
+    \return SSL_SUCCESS upon success.
+    \return BAD_FUNC_ARG is the error that will be returned in one of these cases: ctx is NULL, name is a unknown value. (see below)
+    \return MEMORY_E is the error returned when there is not enough memory.
+    
+    \param ctx pointer to a SSL context, created with wolfSSL_CTX_new().
+    \param name indicates which curve will be supported for the session. The available options are: enum { WOLFSSL_ECC_SECP160R1 = 0x10, WOLFSSL_ECC_SECP192R1 = 0x13, WOLFSSL_ECC_SECP224R1 = 0x15, WOLFSSL_ECC_SECP256R1 = 0x17, WOLFSSL_ECC_SECP384R1 = 0x18, WOLFSSL_ECC_SECP521R1 = 0x19 };
+    
+    _Example_
+    \code
+    int ret = 0;
+    WOLFSSL_CTX* ctx = 0;
+    ctx = wolfSSL_CTX_new(method);
+    if (ctx == NULL) {
+        // context creation failed
+    }
+    ret = wolfSSL_CTX_UseSupportedCurve(ctx, WOLFSSL_ECC_SECP256R1);
+    if (ret != 0) {
+        // Elliptic Curve Extension usage failed
+    }
+    \endcode
+    
+    \sa wolfSSL_CTX_new
+    \sa wolfSSL_UseSupportedCurve
+*/
 WOLFSSL_API int wolfSSL_CTX_UseSupportedCurve(WOLFSSL_CTX* ctx,
                                                            unsigned short name);
 
