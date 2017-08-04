@@ -848,6 +848,33 @@ WOLFSSL_API int wc_SetSubjectKeyIdFromNtruPublicKey(Cert *cert, byte *ntruKey,
  *
  * nonRepudiation and contentCommitment are for the same usage.
  */
+ /*!
+    \ingroup wolfCrypt
+    
+    \brief This function allows you to set the key usage using a comma delimited string of tokens. Accepted tokens are: digitalSignature, nonRepudiation, contentCommitment, keyCertSign, cRLSign, dataEncipherment, keyAgreement, keyEncipherment, encipherOnly, decipherOnly. Example: "digitalSignature,nonRepudiation" nonRepudiation and contentCommitment are for the same usage.
+    
+    \return 0 Success
+    \return BAD_FUNC_ARG Returned when either arg is null.
+    \return MEMORY_E Returned when there is an error allocating memory.
+    \return KEYUSAGE_E Returned if an unrecognized token is entered.
+    
+    \param cert Pointer to initialized Cert structure.
+    \param value Comma delimited string of tokens to set usage.
+    
+    _Example_
+    \code
+    Cert cert;
+    wc_InitCert(&cert);
+
+    if(wc_SetKeyUsage(&cert, "cRLSign,keyCertSign") != 0)
+    {
+        // Handle error
+    }
+    \endcode
+    
+    \sa wc_InitCert
+    \sa wc_MakeRsaKey
+ */
 WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
 
 #endif /* WOLFSSL_CERT_EXT */

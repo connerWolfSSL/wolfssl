@@ -243,6 +243,27 @@ WOLFSSL_API int wc_ShaHash(const byte*data, word32 len, byte*hash)
     return hashHash(data, len, hash, SHAMD5_ALGO_SHA1, SHA_DIGEST_SIZE);
 }
 
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Used to clean up memory used by an initialized Sha struct.    Note: this is only supported if you have WOLFSSL_TI_HASH defined.
+    
+    \return No returns.
+    
+    \param sha Pointer to the Sha struct to free.
+    
+    _Example_
+    \code
+    Sha sha;
+    wc_InitSha(&sha);
+    // Use sha
+    wc_ShaFree(&sha);
+    \endcode
+    
+    \sa wc_InitSha
+    \sa wc_ShaUpdate
+    \sa wc_ShaFinal
+*/
 WOLFSSL_API void wc_ShaFree(Sha* sha)
 {
     hashFree((wolfssl_TI_Hash *)sha);

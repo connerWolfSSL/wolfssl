@@ -119,11 +119,53 @@ WOLFSSL_API int wc_Md5Hash(const byte* data, word32 len, byte* hash);
 
 #ifndef NO_SHA
 #include <wolfssl/wolfcrypt/sha.h>
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Convenience function, handles all the hashing and places the result into hash.
+    
+    \return 0 Returned upon successfully ….
+    \return Memory_E memory error, unable to allocate memory. This is only possible with the small stack option enabled.
+    
+    \param data the data to hash
+    \param len the length of data
+    \param hash Byte array to hold hash value.
+    
+    _Example_
+    \code
+    none
+    \endcode
+    
+    \sa wc_ShaHash
+    \sa wc_ShaFinal
+    \sa wc_InitSha
+*/
 WOLFSSL_API int wc_ShaHash(const byte*, word32, byte*);
 #endif
 
 #ifndef NO_SHA256
 #include <wolfssl/wolfcrypt/sha256.h>
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Convenience function, handles all the hashing and places the result into hash.
+    
+    \return 0 Returned upon successfully …
+    \return Memory_E memory error, unable to allocate memory. This is only possible with the small stack option enabled.
+    
+    \param data the data to hash
+    \param len the length of data
+    \param hash Byte array to hold hash value.
+    
+    _Example_
+    \code
+    none
+    \endcode
+    
+    \sa wc_Sha256Hash
+    \sa wc_Sha256Final
+    \sa wc_InitSha256
+*/
 WOLFSSL_API int wc_Sha256Hash(const byte*, word32, byte*);
 
     #if defined(WOLFSSL_SHA224)

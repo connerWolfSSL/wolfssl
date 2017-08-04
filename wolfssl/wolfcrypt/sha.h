@@ -93,12 +93,122 @@ typedef struct Sha {
 
 #endif /* HAVE_FIPS */
 
+/*!
+    \ingroup wolfCrypt
+    
+    \brief This function initializes SHA. This is automatically called by wc_ShaHash.
+    
+    \return 0 Returned upon successfully initializing
+    
+    \param sha pointer to the sha structure to use for encryption
+    
+    _Example_
+    \code
+    Sha sha[1];
+    if ((ret = wc_InitSha(sha)) != 0) {
+       WOLFSSL_MSG("wc_InitSha failed");
+    }
+    else {
+       wc_ShaUpdate(sha, data, len);
+       wc_ShaFinal(sha, hash);
+    }
+    \endcode
+    
+    \sa wc_ShaHash
+    \sa wc_ShaUpdate
+    \sa wc_ShaFinal
+*/
 WOLFSSL_API int wc_InitSha(Sha*);
 WOLFSSL_API int wc_InitSha_ex(Sha* sha, void* heap, int devId);
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Can be called to continually hash the provided byte array of length len.
+    
+    \return 0 Returned upon successfully adding the data to the digest.
+    
+    \param sha pointer to the sha structure to use for encryption
+    \param data the data to be hashed
+    \param len length of data to be hashed
+    
+    _Example_
+    \code
+    Sha sha[1];
+    byte data[] = { // Data to be hashed };
+    word32 len = sizeof(data);
+
+    if ((ret = wc_InitSha(sha)) != 0) {
+       WOLFSSL_MSG("wc_InitSha failed");
+    }
+    else {
+       wc_ShaUpdate(sha, data, len);
+       wc_ShaFinal(sha, hash);
+    }
+    \endcode
+    
+    \sa wc_ShaHash
+    \sa wc_ShaFinal
+    \sa wc_InitSha
+*/
 WOLFSSL_API int wc_ShaUpdate(Sha*, const byte*, word32);
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Finalizes hashing of data. Result is placed into hash.  Resets state of sha struct.
+    
+    \return 0 Returned upon successfully finalizing.
+    
+    \param sha pointer to the sha structure to use for encryption
+    \param hash Byte array to hold hash value.
+    
+    _Example_
+    \code
+    Sha sha[1];
+    byte data[] = { /* Data to be hashed };
+    word32 len = sizeof(data);
+
+    if ((ret = wc_InitSha(sha)) != 0) {
+       WOLFSSL_MSG("wc_InitSha failed");
+    }
+    else {
+       wc_ShaUpdate(sha, data, len);
+       wc_ShaFinal(sha, hash);
+    }
+    \endcode
+    
+    \sa wc_ShaHash
+    \sa wc_InitSha
+    \sa wc_ShaGetHash
+*/
 WOLFSSL_API int wc_ShaFinal(Sha*, byte*);
 WOLFSSL_API void wc_ShaFree(Sha*);
 
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Gets hash data. Result is placed into hash.  Does not reset state of sha struct.
+    
+    \return 0 Returned upon successfully finalizing.
+    
+    \param sha pointer to the sha structure to use for encryption
+    \param hash Byte array to hold hash value.
+    
+    _Example_
+    \code
+    Sha sha[1];
+    if ((ret = wc_InitSha(sha)) != 0) {
+    WOLFSSL_MSG("wc_InitSha failed");
+    }
+    else {
+        wc_ShaUpdate(sha, data, len);
+        wc_ShaGetHash(sha, hash);
+    }
+    \endcode
+    
+    \sa wc_ShaHash
+    \sa wc_ShaFinal
+    \sa wc_InitSha
+*/
 WOLFSSL_API int wc_ShaGetHash(Sha*, byte*);
 WOLFSSL_API int wc_ShaCopy(Sha*, Sha*);
 
