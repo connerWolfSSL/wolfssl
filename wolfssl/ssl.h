@@ -20,13 +20,12 @@
  */
 
 /*!
-    \file ssl.h
+    \file wolfssl/wolfssl/ssl.h
+    
     \brief Header file containing key wolfSSL API
-*/
-/*!
+    
     \defgroup CertManager A seperate group for CertManager API
-*/
-/*!
+    
     \defgroup openSSL
 */
 

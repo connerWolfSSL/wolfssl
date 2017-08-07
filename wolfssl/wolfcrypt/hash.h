@@ -99,6 +99,28 @@ typedef union {
 WOLFSSL_API int wc_HashGetOID(enum wc_HashType hash_type);
 #endif
 
+/*!
+    \ingroup wolfCrypt
+    
+    \brief This function returns the size of the digest (output) for a hash_type. The returns size is used to make sure the output buffer provided to wc_Hash is large enough.
+    
+    \return Success A positive return value indicates the digest size for the hash.
+    \return Error Returns HASH_TYPE_E if hash_type is not supported. 
+    \return Failure Returns BAD_FUNC_ARG if an invalid hash_type was used.
+    
+    \param hash_type A hash type from the “enum  wc_HashType” such as “WC_HASH_TYPE_SHA256”.
+    
+    _Example_
+    \code
+    int hash_len = wc_HashGetDigestSize(hash_type);
+    if (hash_len <= 0) {
+    WOLFSSL_MSG("Invalid hash type/len");
+    return BAD_FUNC_ARG;
+    }
+    \endcode
+    
+    \sa wc_Hash
+*/
 WOLFSSL_API int wc_HashGetDigestSize(enum wc_HashType hash_type);
 WOLFSSL_API int wc_Hash(enum wc_HashType hash_type,
     const byte* data, word32 data_len,
@@ -114,6 +136,35 @@ WOLFSSL_API int wc_HashFinal(wc_HashAlg* hash, enum wc_HashType type,
 
 #ifndef NO_MD5
 #include <wolfssl/wolfcrypt/md5.h>
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Convenience function, handles all the hashing and places the result into hash.
+    
+    \return 0 Returned upon successfully hashing the data.
+    \return Memory_E memory error, unable to allocate memory. This is only possible with the small stack option enabled.
+    
+    \param data the data to hash
+    \param len the length of data
+    \param hash Byte array to hold hash value.
+
+    _Example_
+    \code
+    const byte* data;
+    word32 data_len;
+    byte* hash;
+    int ret;
+    ... 
+    ret = wc_Md5Hash(data, data_len, hash);
+    if (ret != 0) {
+         // Md5 Hash Failure Case.
+    }
+    \endcode
+    
+    \sa wc_Md5Hash
+    \sa wc_Md5Final
+    \sa wc_InitMd5
+*/
 WOLFSSL_API int wc_Md5Hash(const byte* data, word32 len, byte* hash);
 #endif
 
@@ -175,9 +226,51 @@ WOLFSSL_API int wc_Sha256Hash(const byte*, word32, byte*);
 
 #ifdef WOLFSSL_SHA512
 #include <wolfssl/wolfcrypt/sha512.h>
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Convenience function, handles all the hashing and places the result into hash.
+    
+    \return 0 Returned upon successfully hashing the inputted data
+    \return Memory_E memory error, unable to allocate memory. This is only possible with the small stack option enabled.
+    
+    \param data the data to hash
+    \param len the length of data
+    \param hash Byte array to hold hash value.
+
+    _Example_
+    \code
+    none
+    \endcode
+    
+    \sa wc_Sha512Hash
+    \sa wc_Sha512Final
+    \sa wc_InitSha512
+*/
 WOLFSSL_API int wc_Sha512Hash(const byte*, word32, byte*);
 
     #if defined(WOLFSSL_SHA384)
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Convenience function, handles all the hashing and places the result into hash.
+    
+    \return 0 Returned upon successfully hashing the data
+    \return Memory_E memory error, unable to allocate memory. This is only possible with the small stack option enabled.
+
+    \param data the data to hash
+    \param len the length of data
+    \param hash Byte array to hold hash value.
+    
+    _Example_
+    \code
+    none
+    \endcode
+
+    \sa wc_Sha384Hash
+    \sa wc_Sha384Final
+    \sa wc_InitSha384
+*/
         WOLFSSL_API int wc_Sha384Hash(const byte*, word32, byte*);
     #endif /* defined(WOLFSSL_SHA384) */
 #endif /* WOLFSSL_SHA512 */
