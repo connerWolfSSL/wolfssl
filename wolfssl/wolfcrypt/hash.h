@@ -96,6 +96,29 @@ typedef union {
 #endif
 
 #if !defined(NO_ASN) || !defined(NO_DH) || defined(HAVE_ECC)
+/*!
+    \ingroup wolfCrypt
+    
+    \brief This function will return the OID for the wc_HashType provided.
+    
+    \return OID returns value greater than 0
+    \return HASH_TYPE_E hash type not supported.
+    \return BAD_FUNC_ARG one of the provided arguments is incorrect.
+    
+    \param hash_type A hash type from the “enum  wc_HashType” such as “WC_HASH_TYPE_SHA256”.
+    
+    _Example_
+    \code
+    enum wc_HashType hash_type = WC_HASH_TYPE_SHA256;
+    int oid = wc_HashGetOID(hash_type);
+    if (oid > 0) {
+    	// Success
+    }
+    \endcode
+    
+    \sa wc_HashGetDigestSize
+    \sa wc_Hash
+*/
 WOLFSSL_API int wc_HashGetOID(enum wc_HashType hash_type);
 #endif
 
@@ -122,6 +145,33 @@ WOLFSSL_API int wc_HashGetOID(enum wc_HashType hash_type);
     \sa wc_Hash
 */
 WOLFSSL_API int wc_HashGetDigestSize(enum wc_HashType hash_type);
+/*!
+    \ingroup wolfCrypt
+    
+    \brief This function performs a hash on the provided data buffer and returns it in the hash buffer provided.
+    
+    \return 0 Success, else error (such as BAD_FUNC_ARG or BUFFER_E).
+    
+    \param hash_type A hash type from the “enum  wc_HashType” such as “WC_HASH_TYPE_SHA256”.
+    \param data Pointer to buffer containing the data to hash.
+    \param data_len Length of the data buffer.
+    \param hash Pointer to buffer used to output the final hash to.
+    \param hash_len Length of the hash buffer.
+    
+    _Example_
+    \code
+    enum wc_HashType hash_type = WC_HASH_TYPE_SHA256;
+    int hash_len = wc_HashGetDigestSize(hash_type);
+    if (hash_len > 0) {
+        int ret = wc_Hash(hash_type, data, data_len, hash_data, hash_len);
+        if(ret == 0) {
+		    // Success
+        }
+    }
+    \endcode
+    
+    \sa wc_HashGetDigestSize
+*/
 WOLFSSL_API int wc_Hash(enum wc_HashType hash_type,
     const byte* data, word32 data_len,
     byte* hash, word32 hash_len);

@@ -925,11 +925,67 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
     #ifndef WOLFSSL_PEMPUBKEY_TODER_DEFINED
         #ifndef NO_FILESYSTEM
         /* forward from wolfssl */
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Loads a PEM key from a file and converts to a DER encoded buffer.
+    
+    \return 0 Success
+    \return <0 Error
+    \return SSL_BAD_FILE There is a problem with opening the file.
+    \return MEMORY_E There is an error allocating memory for the file buffer.
+    \return BUFFER_E derBuf is not large enough to hold the converted key.
+
+    \param fileName Name of the file to load.
+    \param derBuf Buffer for DER encoded key.
+    \param derSz Size of DER buffer.
+
+    _Example_
+    \code
+    char* some_file = "filename";
+    unsigned char der[];
+
+    if(wolfSSL_PemPubKeyToDer(some_file, der, sizeof(der)) != 0)
+    {
+        /* Handle Error
+    }
+    \endcode
+    
+    \sa wolfSSL_PubKeyPemToDer
+*/
         WOLFSSL_API int wolfSSL_PemPubKeyToDer(const char* fileName,
                                                unsigned char* derBuf, int derSz);
         #endif
 
         /* forward from wolfssl */
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Convert a PEM encoded public key to DER.  Returns the number of bytes written to the buffer or a negative value for an error.
+
+    \return >0 Success, number of bytes written.
+    \return BAD_FUNC_ARG Returns if pem, buff, or buffSz are null
+    \return <0 An error occurred in the function.
+    
+    \param pem PEM encoded key
+    \param pemSz Size of pem
+    \param buff Pointer to buffer for output.
+    \param buffSz Size of buffer.
+    
+    _Example_
+    \code
+    byte some_pem[] = { /* Initialize with PEM key }
+    unsigned char out_buffer[1024]; // Ensure buffer is large enough to fit DER
+
+    if(wolfSSL_PubKeyPemToDer(some_pem, sizeof(some_pem), out_buffer, 
+    sizeof(out_buffer)) < 0)
+    {
+        // Handle error
+    }
+    \endcode
+
+    \sa wolfSSL_PemPubKeyToDer
+*/
         WOLFSSL_API int wolfSSL_PubKeyPemToDer(const unsigned char*, int,
                                                unsigned char*, int);
         #define WOLFSSL_PEMPUBKEY_TODER_DEFINED

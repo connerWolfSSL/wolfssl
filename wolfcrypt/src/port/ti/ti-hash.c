@@ -280,16 +280,101 @@ WOLFSSL_API int wc_InitSha224_ex(Sha224* sha224, void* heap, int devId)
     (void)devId;
     return hashInit((wolfssl_TI_Hash *)sha224);
 }
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Used to initialize a Sha224 struct.
+    
+    \return 0 Success
+    \return 1 Error returned because sha224 is null.
+    
+    \param sha224 Pointer to a Sha224 struct to initialize.
+    
+    _Example_
+    \code
+    Sha224 sha224;
+    if(wc_InitSha224(&sha224) != 0)
+    {
+        // Handle error
+    }
+    \endcode
+    
+    \sa wc_Sha224Hash
+    \sa wc_Sha224Update
+    \sa wc_Sha224Final
+*/
 WOLFSSL_API int wc_InitSha224(Sha224* sha224)
 {
     return wc_InitSha224_ex(sha224, NULL, INVALID_DEVID);
 }
 
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Can be called to continually hash the provided byte array of length len.
+    
+    \return 0 Success
+    \return 1 Error returned if function fails.
+    \return BAD_FUNC_ARG Error returned if sha224 or data is null.
+
+    \param sha224 Pointer to the Sha224 structure to use for encryption.
+    \param data Data to be hashed.
+    \param len Length of data to be hashed.
+
+    _Example_
+    \code
+    Sha224 sha224;
+    byte data[] = { /* Data to be hashed };
+    word32 len = sizeof(data);
+
+    if ((ret = wc_InitSha224(&sha224)) != 0) {
+       WOLFSSL_MSG("wc_InitSha224 failed");
+    }
+    else {
+      wc_Sha224Update(&sha224, data, len);
+      wc_Sha224Final(&sha224, hash);
+    }
+    \endcode
+    
+    \sa wc_InitSha224
+    \sa wc_Sha224Final
+    \sa wc_Sha224Hash
+*/
 WOLFSSL_API int wc_Sha224Update(Sha224* sha224, const byte* data, word32 len)
 {
     return hashUpdate((wolfssl_TI_Hash *)sha224, data, len);
 }
 
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Finalizes hashing of data. Result is placed into hash.  Resets state of sha224 struct.
+    
+    \return 0 Success
+    \return <0 Error
+    
+    \param sha224 pointer to the sha224 structure to use for encryption
+    \param hash Byte array to hold hash value.
+    
+    _Example_
+    \code
+    Sha224 sha224;
+    byte data[] = { /* Data to be hashed };
+    word32 len = sizeof(data);
+
+    if ((ret = wc_InitSha224(&sha224)) != 0) {
+        WOLFSSL_MSG("wc_InitSha224 failed");
+    }
+    else {
+        wc_Sha256Update(&sha224, data, len);
+        wc_Sha256Final(&sha224, hash);
+    }
+    \endcode
+    
+    \sa wc_InitSha224
+    \sa wc_Sha224Hash
+    \sa wc_Sha224Update
+*/
 WOLFSSL_API int wc_Sha224Final(Sha224* sha224, byte* hash)
 {
     return hashFinal((wolfssl_TI_Hash *)sha224, hash, SHAMD5_ALGO_SHA224, SHA224_DIGEST_SIZE);
