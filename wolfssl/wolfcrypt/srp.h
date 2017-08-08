@@ -167,7 +167,7 @@ WOLFSSL_API int wc_SrpInit(Srp* srp, SrpType type, SrpSide side);
  * @param[in,out] srp    the Srp structure to be terminated.
  */
 /*!
-    \ingroup wolfCryptReleases the Srp struct resources after usage.
+    \ingroup wolfCrypt
     
     \brief Releases the Srp struct resources after usage.
     

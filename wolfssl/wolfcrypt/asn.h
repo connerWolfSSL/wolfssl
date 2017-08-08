@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup asn
+*/
 
 #ifndef WOLF_CRYPT_ASN_H
 #define WOLF_CRYPT_ASN_H
@@ -829,7 +832,7 @@ enum cert_enums {
 #ifndef NO_FILESYSTEM
 /* forward from wolfSSL */
 /*!
-    \ingroup wolfCrypt
+    \ingroup asn
     
     \brief This function converts a pem certificate to a der certificate, and places the resulting certificate in the derBuf buffer provided.
     

@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup compression
+*/
 
 #ifndef WOLF_CRYPT_COMPRESS_H
 #define WOLF_CRYPT_COMPRESS_H
@@ -36,7 +39,7 @@
 
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup compression
     
     \brief This function compresses the given input data using Huffman coding and stores the output in out. Note that the output buffer should still be larger than the input buffer because there exists a certain input for which there will be no compression possible, which will still require a lookup table. It is recommended that one allocate srcSz + 0.1% + 12 for the output buffer.
     
@@ -65,7 +68,7 @@
 */
 WOLFSSL_API int wc_Compress(byte*, word32, const byte*, word32, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup compression
     
     \brief This function decompresses the given compressed data using Huffman coding and stores the output in out.
     

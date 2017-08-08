@@ -35,7 +35,7 @@ WOLFSSL_API int  wc_AesCbcEncryptWithKey(byte* out, const byte* in, word32 inSz,
                                          const byte* key, word32 keySz,
                                          const byte* iv);
 /*!
-    \ingroup wolfCrypt
+    \ingroup aes
     \brief Decrypts a cipher from the input buffer in, and places the resulting plain text in the output buffer out using cipher block chaining with AES. This function does not require an AES structure to be initialized. Instead, it takes in a key and an iv (initialization vector) and uses these to initialize an AES object and then decrypt the cipher text.
     
     \return 0 On successfully decrypting message
@@ -75,7 +75,9 @@ WOLFSSL_API int  wc_AesCbcDecryptWithKey(byte* out, const byte* in, word32 inSz,
 
 #ifndef NO_DES3
 /*!
-    \ingroup wolfCrypt This function decrypts the input ciphertext, in, and stores the resulting plaintext in the output buffer, out. It uses DES encryption with cipher block chaining (CBC) mode. This function is a substitute for wc_Des_CbcDecrypt, allowing the user to decrypt a message without directly instantiating a Des structure.
+    \ingroup des3 
+    
+    \brief This function decrypts the input ciphertext, in, and stores the resulting plaintext in the output buffer, out. It uses DES encryption with cipher block chaining (CBC) mode. This function is a substitute for wc_Des_CbcDecrypt, allowing the user to decrypt a message without directly instantiating a Des structure.
     
     \return 0 Returned upon successfully decrypting the given ciphertext
     \return MEMORY_E Returned if there is an error allocating space for a Des structure
@@ -106,7 +108,7 @@ WOLFSSL_API int  wc_Des_CbcDecryptWithKey(byte* out,
                                           const byte* in, word32 sz,
                                           const byte* key, const byte* iv);
 /*!
-    \ingroup wolfCrypt
+    \ingroup des3
     
     \brief This function encrypts the input plaintext, in, and stores the resulting ciphertext in the output buffer, out. It uses DES encryption with cipher block chaining (CBC) mode. This function is a substitute for wc_Des_CbcEncrypt, allowing the user to encrypt a message without directly instantiating a Des structure.
     
@@ -139,7 +141,7 @@ WOLFSSL_API int  wc_Des_CbcEncryptWithKey(byte* out,
                                           const byte* in, word32 sz,
                                           const byte* key, const byte* iv);
 /*!
-    \ingroup wolfCrypt
+    \ingroup des3
     
     \brief This function encrypts the input plaintext, in, and stores the resulting ciphertext in the output buffer, out. It uses Triple DES (3DES) encryption with cipher block chaining (CBC) mode. This function is a substitute for wc_Des3_CbcEncrypt, allowing the user to encrypt a message without directly instantiating a Des3 structure.
     
@@ -175,7 +177,7 @@ WOLFSSL_API int  wc_Des3_CbcEncryptWithKey(byte* out,
                                            const byte* in, word32 sz,
                                            const byte* key, const byte* iv);
 /*!
-    \ingroup wolfCrypt
+    \ingroup des3
     
     \brief This function decrypts the input ciphertext, in, and stores the resulting plaintext in the output buffer, out. It uses Triple Des (3DES) encryption with cipher block chaining (CBC) mode. This function is a substitute for wc_Des3_CbcDecrypt, allowing the user to decrypt a message without directly instantiating a Des3 structure.
     

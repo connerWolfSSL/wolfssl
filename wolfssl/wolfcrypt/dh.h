@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup diffie-hellman
+*/
 
 #ifndef WOLF_CRYPT_DH_H
 #define WOLF_CRYPT_DH_H
@@ -71,7 +74,7 @@ WOLFSSL_API const DhParams* wc_Dh_ffdhe8192_Get(void);
 #endif
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup diffie-hellman
     
     \brief This function initializes a Diffie-Hellman key for use in negotiating a secure secret key with the Diffie-Hellman exchange protocol.
     
@@ -91,7 +94,7 @@ WOLFSSL_API const DhParams* wc_Dh_ffdhe8192_Get(void);
 WOLFSSL_API int wc_InitDhKey(DhKey* key);
 WOLFSSL_API int wc_InitDhKey_ex(DhKey* key, void* heap, int devId);
 /*!
-    \ingroup wolfCrypt
+    \ingroup diffie-hellman
     
     \brief This function frees a Diffie-Hellman key after it has been used to negotiate a secure secret key with the Diffie-Hellman exchange protocol.
     
@@ -112,7 +115,7 @@ WOLFSSL_API int wc_InitDhKey_ex(DhKey* key, void* heap, int devId);
 WOLFSSL_API void wc_FreeDhKey(DhKey* key);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup diffie-hellman
     
     \brief This function generates a public/private key pair based on the Diffie-Hellman public parameters, storing the private key in priv and the public key in pub. It takes an initialized Diffie-Hellman key and an initialized rng structure.
     
@@ -152,7 +155,7 @@ WOLFSSL_API void wc_FreeDhKey(DhKey* key);
 WOLFSSL_API int wc_DhGenerateKeyPair(DhKey* key, WC_RNG* rng, byte* priv,
                                  word32* privSz, byte* pub, word32* pubSz);
 /*!
-    \ingroup wolfCrypt
+    \ingroup diffie-hellman
     
     \brief This function generates an agreed upon secret key based on a local private key and a received public key. If completed on both sides of an exchange, this function generates an agreed upon secret key for symmetric communication. On successfully generating a shared secret key, the size of the secret key written will be stored in agreeSz.
     
@@ -194,7 +197,7 @@ WOLFSSL_API int wc_DhAgree(DhKey* key, byte* agree, word32* agreeSz,
                        word32 pubSz);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup diffie-hellman
     
     \brief This function decodes a Diffie-Hellman key from the given input buffer containing the key in DER format. It stores the result in the DhKey structure.
     
@@ -227,7 +230,7 @@ WOLFSSL_API int wc_DhAgree(DhKey* key, byte* agree, word32* agreeSz,
 WOLFSSL_API int wc_DhKeyDecode(const byte* input, word32* inOutIdx, DhKey* key,
                            word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup diffie-hellman
     
     \brief This function sets the key for a DhKey structure using the input private key parameters. Unlike wc_DhKeyDecode, this function does not require that the input key be formatted in DER format, and instead simply accepts the parsed input parameters p (prime) and g (base).
     
@@ -261,7 +264,7 @@ WOLFSSL_API int wc_DhKeyDecode(const byte* input, word32* inOutIdx, DhKey* key,
 WOLFSSL_API int wc_DhSetKey(DhKey* key, const byte* p, word32 pSz, const byte* g,
                         word32 gSz);
 /*!
-    \ingroup wolfCrypt
+    \ingroup diffie-hellman
     
     \brief This function loads the Diffie-Hellman parameters, p (prime) and g (base) out of the given input buffer, DER formatted.
     

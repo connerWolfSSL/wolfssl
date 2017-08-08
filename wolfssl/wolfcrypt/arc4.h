@@ -19,7 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-
+/*!
+    \defgroup arc4
+*/
 
 #ifndef WOLF_CRYPT_ARC4_H
 #define WOLF_CRYPT_ARC4_H
@@ -50,7 +52,7 @@ typedef struct Arc4 {
     void* heap;
 } Arc4;
 /*!
-    \ingroup wolfCrypt
+    \ingroup arc4
     \brief This function encrypts an input message from the buffer in, placing the ciphertext in the output buffer out, or decrypts a ciphertext from the buffer in, placing the plaintext in the output buffer out, using ARC4 encryption. This function is used for both encryption and decryption. Before this method may be called, one must first initialize the ARC4 structure using wc_Arc4SetKey.
     
     \return none
@@ -78,7 +80,8 @@ typedef struct Arc4 {
 */
 WOLFSSL_API int wc_Arc4Process(Arc4*, byte*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup arc4
+    
     \brief This function sets the key for a ARC4 object, initializing it for use as a cipher. It should be called before using it for encryption with wc_Arc4Process.
     
     \return none

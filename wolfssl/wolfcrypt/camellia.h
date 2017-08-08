@@ -46,6 +46,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup camellia
+*/
 
 #ifndef WOLF_CRYPT_CAMELLIA_H
 #define WOLF_CRYPT_CAMELLIA_H
@@ -75,7 +78,7 @@ typedef struct Camellia {
 } Camellia;
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup camellia
     
     \brief This function sets the key and initialization vector for a camellia object, initializing it for use as a cipher.
     
@@ -108,7 +111,7 @@ typedef struct Camellia {
 WOLFSSL_API int  wc_CamelliaSetKey(Camellia* cam,
                                    const byte* key, word32 len, const byte* iv);
 /*!
-    \ingroup wolfCrypt
+    \ingroup camellia
     
     \brief This function sets the initialization vector for a camellia object.
     
@@ -132,7 +135,7 @@ WOLFSSL_API int  wc_CamelliaSetKey(Camellia* cam,
     */
 WOLFSSL_API int  wc_CamelliaSetIV(Camellia* cam, const byte* iv);
 /*!
-    \ingroup wolfCrypt
+    \ingroup camellia
     
     \brief This function does a one-block encrypt using the provided camellia object. It parses the first 16 byte block from the buffer in and stores the encrypted result in the buffer out. Before using this function, one should initialize the camellia object using wc_CamelliaSetKey. 
     
@@ -157,7 +160,7 @@ WOLFSSL_API int  wc_CamelliaSetIV(Camellia* cam, const byte* iv);
 WOLFSSL_API int  wc_CamelliaEncryptDirect(Camellia* cam, byte* out,
                                                                 const byte* in);
 /*!
-    \ingroup wolfCrypt
+    \ingroup camellia
     
     \brief This function does a one-block decrypt using the provided camellia object. It parses the first 16 byte block from the buffer in, decrypts it, and stores the result in the buffer out. Before using this function, one should initialize the camellia object using wc_CamelliaSetKey.
     
@@ -182,7 +185,7 @@ WOLFSSL_API int  wc_CamelliaEncryptDirect(Camellia* cam, byte* out,
 WOLFSSL_API int  wc_CamelliaDecryptDirect(Camellia* cam, byte* out,
                                                                 const byte* in);
 /*!
-    \ingroup wolfCrypt
+    \ingroup camellia
     
     \brief This function encrypts the plaintext from the buffer in and stores the output in the buffer out. It performs this encryption using Camellia with Cipher Block Chaining (CBC).
     
@@ -208,7 +211,9 @@ WOLFSSL_API int  wc_CamelliaDecryptDirect(Camellia* cam, byte* out,
 WOLFSSL_API int wc_CamelliaCbcEncrypt(Camellia* cam,
                                           byte* out, const byte* in, word32 sz);
 /*!
-    \ingroup This function decrypts the ciphertext from the buffer in and stores the output in the buffer out. It performs this decryption using Camellia with Cipher Block Chaining (CBC).
+    \ingroup camellia    
+    
+    \brief This function decrypts the ciphertext from the buffer in and stores the output in the buffer out. It performs this decryption using Camellia with Cipher Block Chaining (CBC).
     
     \return none No returns.
     
