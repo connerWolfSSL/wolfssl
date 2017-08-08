@@ -71,7 +71,7 @@ typedef struct Sha512 {
 #endif /* HAVE_FIPS */
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief This function initializes SHA512. This is automatically called by wc_Sha512Hash.
     
@@ -98,7 +98,7 @@ typedef struct Sha512 {
 WOLFSSL_API int wc_InitSha512(Sha512*);
 WOLFSSL_API int wc_InitSha512_ex(Sha512*, void*, int);
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Can be called to continually hash the provided byte array of length len.
     
@@ -129,7 +129,7 @@ WOLFSSL_API int wc_InitSha512_ex(Sha512*, void*, int);
 */
 WOLFSSL_API int wc_Sha512Update(Sha512*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Finalizes hashing of data. Result is placed into hash.
     
@@ -178,7 +178,7 @@ typedef Sha512 Sha384;
 #endif /* HAVE_FIPS */
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief This function initializes SHA384. This is automatically called by wc_Sha384Hash.
     
@@ -205,7 +205,7 @@ typedef Sha512 Sha384;
 WOLFSSL_API int wc_InitSha384(Sha384*);
 WOLFSSL_API int wc_InitSha384_ex(Sha384*, void*, int);
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Can be called to continually hash the provided byte array of length len.
     
@@ -236,7 +236,7 @@ WOLFSSL_API int wc_InitSha384_ex(Sha384*, void*, int);
 */
 WOLFSSL_API int wc_Sha384Update(Sha384*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Finalizes hashing of data. Result is placed into hash.
     

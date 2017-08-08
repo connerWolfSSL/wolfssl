@@ -19,7 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-
+/*!
+    \defgroup Keys
+*/
 
 #ifndef WOLF_CRYPT_ASN_PUBLIC_H
 #define WOLF_CRYPT_ASN_PUBLIC_H
@@ -849,7 +851,7 @@ WOLFSSL_API int wc_SetSubjectKeyIdFromNtruPublicKey(Cert *cert, byte *ntruKey,
  * nonRepudiation and contentCommitment are for the same usage.
  */
  /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function allows you to set the key usage using a comma delimited string of tokens. Accepted tokens are: digitalSignature, nonRepudiation, contentCommitment, keyCertSign, cRLSign, dataEncipherment, keyAgreement, keyEncipherment, encipherOnly, decipherOnly. Example: "digitalSignature,nonRepudiation" nonRepudiation and contentCommitment are for the same usage.
     
@@ -926,7 +928,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
         #ifndef NO_FILESYSTEM
         /* forward from wolfssl */
 /*!
-    \ingroup wolfCrypt
+    \ingroup Keys
     
     \brief Loads a PEM key from a file and converts to a DER encoded buffer.
     
@@ -959,7 +961,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
 
         /* forward from wolfssl */
 /*!
-    \ingroup wolfCrypt
+    \ingroup Keys
     
     \brief Convert a PEM encoded public key to DER.  Returns the number of bytes written to the buffer or a negative value for an error.
 

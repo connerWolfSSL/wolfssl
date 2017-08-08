@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup PKCS7
+*/
 
 #ifndef WOLF_CRYPT_PKCS7_H
 #define WOLF_CRYPT_PKCS7_H
@@ -132,7 +135,7 @@ typedef struct PKCS7 {
 
 WOLFSSL_API int  wc_PKCS7_Init(PKCS7* pkcs7, void* heap, int devId);
 /*!
-    \ingroup wolfCrypt
+    \ingroup PKCS7
     
     \brief This function initializes a PKCS7 structure with a DER-formatted certificate. To initialize an empty PKCS7 structure, one can pass in a NULL cert and 0 for certSz. 
     
@@ -172,7 +175,7 @@ WOLFSSL_API int  wc_PKCS7_Init(PKCS7* pkcs7, void* heap, int devId);
 */
 WOLFSSL_API int  wc_PKCS7_InitWithCert(PKCS7* pkcs7, byte* cert, word32 certSz);
 /*!
-    \ingroup wolfCrypt
+    \ingroup PKCS7
     
     \brief This function releases any memory allocated by a PKCS7 initializer.
     
@@ -192,7 +195,7 @@ WOLFSSL_API int  wc_PKCS7_InitWithCert(PKCS7* pkcs7, byte* cert, word32 certSz);
 */
 WOLFSSL_API void wc_PKCS7_Free(PKCS7* pkcs7);
 /*!
-    \ingroup wolfCrypt
+    \ingroup PKCS7
     
     \brief This function builds the PKCS7 data content type, encoding the PKCS7 structure into a buffer containing a parsable PKCS7 data packet.
     
@@ -230,7 +233,7 @@ WOLFSSL_API void wc_PKCS7_Free(PKCS7* pkcs7);
 WOLFSSL_API int  wc_PKCS7_EncodeData(PKCS7* pkcs7, byte* output,
                                        word32 outputSz);
 /*!
-    \ingroup wolfCrypt
+    \ingroup PKCS7
     
     \brief This function builds the PKCS7 signed data content type, encoding the PKCS7 structure into a buffer containing a parsable PKCS7 signed data packet.
     
@@ -284,7 +287,7 @@ WOLFSSL_API int  wc_PKCS7_EncodeData(PKCS7* pkcs7, byte* output,
 WOLFSSL_API int  wc_PKCS7_EncodeSignedData(PKCS7* pkcs7,
                                        byte* output, word32 outputSz);
 /*!
-    \ingroup wolfCrypt
+    \ingroup PKCS7
     
     \brief This function takes in a transmitted PKCS7 signed data message, extracts the certificate list and certificate revocation list, and then verifies the signature. It stores the extracted content in the given PKCS7 structure.
     
@@ -341,7 +344,7 @@ WOLFSSL_API int  wc_PKCS7_EncodeSignedData(PKCS7* pkcs7,
 WOLFSSL_API int  wc_PKCS7_VerifySignedData(PKCS7* pkcs7,
                                        byte* pkiMsg, word32 pkiMsgSz);
 /*!
-    \ingroup wolfCrypt
+    \ingroup PKCS7
     
     \brief This function builds the PKCS7 enveloped data content type, encoding the PKCS7 structure into a buffer containing a parsable PKCS7 enveloped data packet.
     
@@ -385,7 +388,7 @@ WOLFSSL_API int  wc_PKCS7_VerifySignedData(PKCS7* pkcs7,
 WOLFSSL_API int  wc_PKCS7_EncodeEnvelopedData(PKCS7* pkcs7,
                                           byte* output, word32 outputSz);
 /*!
-    \ingroup wolfCrypt
+    \ingroup PKCS7
     
     \brief This function unwraps and decrypts a PKCS7 enveloped data content type, decoding the message into output. It uses the private key of the PKCS7 object passed in to decrypt the message.
     

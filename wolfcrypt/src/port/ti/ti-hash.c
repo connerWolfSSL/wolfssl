@@ -20,7 +20,6 @@
  */
 
 
-
 #ifdef HAVE_CONFIG_H
     #include <config.h>
 #endif
@@ -244,7 +243,7 @@ WOLFSSL_API int wc_ShaHash(const byte*data, word32 len, byte*hash)
 }
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Used to clean up memory used by an initialized Sha struct.    Note: this is only supported if you have WOLFSSL_TI_HASH defined.
     
@@ -281,7 +280,7 @@ WOLFSSL_API int wc_InitSha224_ex(Sha224* sha224, void* heap, int devId)
     return hashInit((wolfssl_TI_Hash *)sha224);
 }
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Used to initialize a Sha224 struct.
     
@@ -309,7 +308,7 @@ WOLFSSL_API int wc_InitSha224(Sha224* sha224)
 }
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Can be called to continually hash the provided byte array of length len.
     
@@ -346,7 +345,7 @@ WOLFSSL_API int wc_Sha224Update(Sha224* sha224, const byte* data, word32 len)
 }
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Finalizes hashing of data. Result is placed into hash.  Resets state of sha224 struct.
     
@@ -385,6 +384,27 @@ WOLFSSL_API int wc_Sha224GetHash(Sha224* sha224, byte* hash)
     return hashGetHash(sha224, hash, SHAMD5_ALGO_SHA224, SHA224_DIGEST_SIZE);
 }
 
+/*!
+    \ingroup SHA
+    
+    \brief Convenience function, handles all the hashing and places the result into hash.
+    
+    \return 0 Success
+    \return <0 negative return values indicated an error.
+    
+    \param data the data to hash
+    \param len the length of data
+    \param hash Byte array to hold hash value.
+    
+    _Example_
+    \code
+    none
+    \endcode
+    
+    \sa wc_InitSha224
+    \sa wc_Sha224Update
+    \sa wc_Sha224Final
+*/
 WOLFSSL_API int wc_Sha224Hash(const byte* data, word32 len, byte*hash)
 {
     return hashHash(data, len, hash, SHAMD5_ALGO_SHA224, SHA224_DIGEST_SIZE);

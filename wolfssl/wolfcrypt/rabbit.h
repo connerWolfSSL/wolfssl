@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup Rabbit
+*/
 
 #ifndef WOLF_CRYPT_RABBIT_H
 #define WOLF_CRYPT_RABBIT_H
@@ -56,7 +59,7 @@ typedef struct Rabbit {
 
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup Rabbit
     
     \brief This function encrypts or decrypts a message of any size, storing the result in output. It requires that the Rabbit ctx structure be initialized with a key and an iv before encryption.
 
@@ -88,7 +91,7 @@ typedef struct Rabbit {
 */
 WOLFSSL_API int wc_RabbitProcess(Rabbit*, byte*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup Rabbit
     
     \brief This function initializes a Rabbit context for use with encryption or decryption by setting its iv and key.
     

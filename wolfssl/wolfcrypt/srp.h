@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup SRP
+*/
 
 #ifdef WOLFCRYPT_HAVE_SRP
 
@@ -130,7 +133,7 @@ typedef struct Srp {
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Initializes the Srp struct for usage.
     
@@ -167,7 +170,7 @@ WOLFSSL_API int wc_SrpInit(Srp* srp, SrpType type, SrpSide side);
  * @param[in,out] srp    the Srp structure to be terminated.
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Releases the Srp struct resources after usage.
     
@@ -199,7 +202,7 @@ WOLFSSL_API void wc_SrpTerm(Srp* srp);
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Sets the username. This function MUST be called after wc_SrpInit.
     
@@ -249,7 +252,7 @@ WOLFSSL_API int wc_SrpSetUsername(Srp* srp, const byte* username, word32 size);
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Sets the srp parameters based on the username..  Must be called after wc_SrpSetUsername.
     
@@ -311,7 +314,7 @@ WOLFSSL_API int wc_SrpSetParams(Srp* srp, const byte* N,    word32 nSz,
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Sets the password. Setting the password does not persists the clear password data in the srp structure. The client calculates x = H(salt + H(user:pswd)) and stores it in the auth field. This function MUST be called after wc_SrpSetParams and is CLIENT SIDE ONLY.
     
@@ -366,7 +369,7 @@ WOLFSSL_API int wc_SrpSetPassword(Srp* srp, const byte* password, word32 size);
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Sets the verifier. This function MUST be called after wc_SrpSetParams and is SERVER SIDE ONLY.
     
@@ -420,7 +423,7 @@ WOLFSSL_API int wc_SrpSetVerifier(Srp* srp, const byte* verifier, word32 size);
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Gets the verifier. The client calculates the verifier with v = g ^ x % N.  This function MAY be called after wc_SrpSetPassword and is CLIENT SIDE ONLY.
         
@@ -482,7 +485,7 @@ WOLFSSL_API int wc_SrpGetVerifier(Srp* srp, byte* verifier, word32* size);
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Sets the private ephemeral value. The private ephemeral value is known as:
     a at the client side. a = random()
@@ -542,7 +545,7 @@ WOLFSSL_API int wc_SrpSetPrivate(Srp* srp, const byte* priv, word32 size);
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Gets the public ephemeral value.  The public ephemeral value is known as:
     A at the client side. A = g ^ a % N
@@ -607,7 +610,7 @@ WOLFSSL_API int wc_SrpGetPublic(Srp* srp, byte* pub, word32* size);
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Computes the session key.  The key can be accessed at srp->key after success.
     
@@ -669,7 +672,7 @@ WOLFSSL_API int wc_SrpComputeKey(Srp* srp,
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup
+    \ingroup SRP
     
     \brief Gets the proof. This function MUST be called after wc_SrpComputeKey.
     
@@ -712,7 +715,7 @@ WOLFSSL_API int wc_SrpGetProof(Srp* srp, byte* proof, word32* size);
  * @return 0 on success, {@literal <} 0 on error. @see error-crypt.h
  */
 /*!
-    \ingroup wolfCrypt
+    \ingroup SRP
     
     \brief Verifies the peers proof. This function MUST be called before wc_SrpGetSessionKey.
     

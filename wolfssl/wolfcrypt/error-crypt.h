@@ -19,7 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-
+/*!
+    \defgroup error_handling
+*/
 
 #ifndef WOLF_CRYPT_ERROR_H
 #define WOLF_CRYPT_ERROR_H
@@ -198,7 +200,7 @@ enum {
 
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup error_handling
     
     \brief This function stores the error string for a particular error code in the given buffer.
     
@@ -221,7 +223,7 @@ enum {
 */
 WOLFSSL_API void wc_ErrorString(int err, char* buff);
 /*!
-    \ingroup wolfCrypt
+    \ingroup error_handling
     
     \brief This function returns the error string for a particular error code.
     

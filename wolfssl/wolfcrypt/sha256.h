@@ -90,7 +90,7 @@ typedef struct Sha256 {
 #endif /* HAVE_FIPS */
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief This function initializes SHA256. This is automatically called by wc_Sha256Hash.
     
@@ -117,7 +117,7 @@ typedef struct Sha256 {
 WOLFSSL_API int wc_InitSha256(Sha256*);
 WOLFSSL_API int wc_InitSha256_ex(Sha256*, void*, int);
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Can be called to continually hash the provided byte array of length len.
     
@@ -148,7 +148,7 @@ WOLFSSL_API int wc_InitSha256_ex(Sha256*, void*, int);
 */
 WOLFSSL_API int wc_Sha256Update(Sha256*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Finalizes hashing of data. Result is placed into hash. Resets state of sha256 struct.
     
@@ -178,7 +178,7 @@ WOLFSSL_API int wc_Sha256Update(Sha256*, const byte*, word32);
 */
 WOLFSSL_API int wc_Sha256Final(Sha256*, byte*);
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Resets the Sha256 structure.  Note: this is only supported if you have WOLFSSL_TI_HASH defined.
     
@@ -209,7 +209,7 @@ WOLFSSL_API int wc_Sha256Final(Sha256*, byte*);
 WOLFSSL_API void wc_Sha256Free(Sha256*);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Gets hash data. Result is placed into hash.  Does not reset state of sha256 struct.
     
@@ -233,7 +233,7 @@ WOLFSSL_API void wc_Sha256Free(Sha256*);
     \sa wc_Sha256Hash
     \sa wc_Sha256Final
     \sa wc_InitSha256
-*
+*/
 WOLFSSL_API int wc_Sha256GetHash(Sha256*, byte*);
 WOLFSSL_API int wc_Sha256Copy(Sha256* src, Sha256* dst);
 

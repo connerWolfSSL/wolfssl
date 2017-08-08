@@ -187,7 +187,7 @@ WOLFSSL_API int wc_HashFinal(wc_HashAlg* hash, enum wc_HashType type,
 #ifndef NO_MD5
 #include <wolfssl/wolfcrypt/md5.h>
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD5
     
     \brief Convenience function, handles all the hashing and places the result into hash.
     
@@ -221,7 +221,7 @@ WOLFSSL_API int wc_Md5Hash(const byte* data, word32 len, byte* hash);
 #ifndef NO_SHA
 #include <wolfssl/wolfcrypt/sha.h>
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Convenience function, handles all the hashing and places the result into hash.
     
@@ -247,7 +247,7 @@ WOLFSSL_API int wc_ShaHash(const byte*, word32, byte*);
 #ifndef NO_SHA256
 #include <wolfssl/wolfcrypt/sha256.h>
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Convenience function, handles all the hashing and places the result into hash.
     
@@ -277,7 +277,7 @@ WOLFSSL_API int wc_Sha256Hash(const byte*, word32, byte*);
 #ifdef WOLFSSL_SHA512
 #include <wolfssl/wolfcrypt/sha512.h>
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Convenience function, handles all the hashing and places the result into hash.
     
@@ -301,7 +301,7 @@ WOLFSSL_API int wc_Sha512Hash(const byte*, word32, byte*);
 
     #if defined(WOLFSSL_SHA384)
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Convenience function, handles all the hashing and places the result into hash.
     

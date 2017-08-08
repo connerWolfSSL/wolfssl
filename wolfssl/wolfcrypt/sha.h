@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup SHA
+*/
 
 #ifndef WOLF_CRYPT_SHA_H
 #define WOLF_CRYPT_SHA_H
@@ -94,7 +97,7 @@ typedef struct Sha {
 #endif /* HAVE_FIPS */
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief This function initializes SHA. This is automatically called by wc_ShaHash.
     
@@ -121,7 +124,7 @@ typedef struct Sha {
 WOLFSSL_API int wc_InitSha(Sha*);
 WOLFSSL_API int wc_InitSha_ex(Sha* sha, void* heap, int devId);
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Can be called to continually hash the provided byte array of length len.
     
@@ -152,7 +155,7 @@ WOLFSSL_API int wc_InitSha_ex(Sha* sha, void* heap, int devId);
 */
 WOLFSSL_API int wc_ShaUpdate(Sha*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Finalizes hashing of data. Result is placed into hash.  Resets state of sha struct.
     
@@ -184,7 +187,7 @@ WOLFSSL_API int wc_ShaFinal(Sha*, byte*);
 WOLFSSL_API void wc_ShaFree(Sha*);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup SHA
     
     \brief Gets hash data. Result is placed into hash.  Does not reset state of sha struct.
     

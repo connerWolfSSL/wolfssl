@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup ed25519
+*/
 
 #ifndef WOLF_CRYPT_ED25519_H
 #define WOLF_CRYPT_ED25519_H
@@ -80,7 +83,7 @@ struct ed25519_key {
 
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function generates a new ed25519_key and stores it in key.
     
@@ -106,7 +109,7 @@ struct ed25519_key {
 WOLFSSL_API
 int wc_ed25519_make_key(WC_RNG* rng, int keysize, ed25519_key* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function signs a message digest using an ed25519_key object to guarantee authenticity.
     
@@ -145,7 +148,7 @@ WOLFSSL_API
 int wc_ed25519_sign_msg(const byte* in, word32 inlen, byte* out,
                         word32 *outlen, ed25519_key* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function verifies the ed25519 signature of a message to ensure authenticity. It returns the answer through stat, with 1 corresponding to a valid signature, and 0 corresponding to an invalid signature.
     
@@ -183,7 +186,7 @@ WOLFSSL_API
 int wc_ed25519_verify_msg(const byte* sig, word32 siglen, const byte* msg,
                           word32 msglen, int* stat, ed25519_key* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function initializes an ed25519_key object for future use with message verification.
     
@@ -204,7 +207,7 @@ int wc_ed25519_verify_msg(const byte* sig, word32 siglen, const byte* msg,
 WOLFSSL_API
 int wc_ed25519_init(ed25519_key* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function frees an ed25519 object after it has been used.
     
@@ -225,7 +228,7 @@ int wc_ed25519_init(ed25519_key* key);
 WOLFSSL_API
 void wc_ed25519_free(ed25519_key* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function imports a public ed25519_key pair from a buffer containing the public key. This function will handle both compressed and uncompressed keys.
     
@@ -258,7 +261,7 @@ WOLFSSL_API
 int wc_ed25519_import_private_only(const byte* priv, word32 privSz,
                                                               ed25519_key* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function imports a public/private ed25519 key pair from a pair of buffers. This function will handle both compressed and uncompressed keys.
     
@@ -292,7 +295,7 @@ WOLFSSL_API
 int wc_ed25519_import_private_key(const byte* priv, word32 privSz,
                                const byte* pub, word32 pubSz, ed25519_key* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function exports the private key from an ed25519_key structure. It stores the public key in the buffer out, and sets the bytes written to this buffer in outLen.
     
@@ -325,7 +328,7 @@ int wc_ed25519_import_private_key(const byte* priv, word32 privSz,
 WOLFSSL_API
 int wc_ed25519_export_public(ed25519_key*, byte* out, word32* outLen);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function exports only the private key from an ed25519_key structure. It stores the private key in the buffer out, and sets the bytes written to this buffer in outLen.
     
@@ -357,7 +360,7 @@ int wc_ed25519_export_public(ed25519_key*, byte* out, word32* outLen);
 WOLFSSL_API
 int wc_ed25519_export_private_only(ed25519_key* key, byte* out, word32* outLen);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief Export the private key, including public part.
 
@@ -393,7 +396,7 @@ int wc_ed25519_export_private_only(ed25519_key* key, byte* out, word32* outLen);
 WOLFSSL_API
 int wc_ed25519_export_private(ed25519_key* key, byte* out, word32* outLen);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief Export full private key and public key.
     
@@ -436,7 +439,7 @@ int wc_ed25519_check_key(ed25519_key* key);
 
 /* size helper */
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function returns the key size of an ed25519_key structure, or 32 bytes.
     
@@ -461,7 +464,7 @@ int wc_ed25519_check_key(ed25519_key* key);
 WOLFSSL_API
 int wc_ed25519_size(ed25519_key* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief Returns the private key size (secret + public) in bytes.
     
@@ -487,7 +490,7 @@ int wc_ed25519_size(ed25519_key* key);
 WOLFSSL_API
 int wc_ed25519_priv_size(ed25519_key* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief Returns the compressed key size in bytes (public key).
     
@@ -512,7 +515,7 @@ int wc_ed25519_priv_size(ed25519_key* key);
 WOLFSSL_API
 int wc_ed25519_pub_size(ed25519_key* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ed25519
     
     \brief This function returns the size of an ed25519 signature (64 in bytes).
     

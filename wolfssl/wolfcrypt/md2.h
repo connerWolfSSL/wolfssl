@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup MD2
+*/
 
 #ifndef WOLF_CRYPT_MD2_H
 #define WOLF_CRYPT_MD2_H
@@ -51,7 +54,7 @@ typedef struct Md2 {
 
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD2
     
     \brief This function initializes md2. This is automatically called by wc_Md2Hash.
     
@@ -77,7 +80,7 @@ typedef struct Md2 {
 */
 WOLFSSL_API void wc_InitMd2(Md2*);
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD2
     
     \brief Can be called to continually hash the provided byte array of length len.
     
@@ -108,7 +111,7 @@ WOLFSSL_API void wc_InitMd2(Md2*);
 */
 WOLFSSL_API void wc_Md2Update(Md2*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD2
     
     \brief Finalizes hashing of data. Result is placed into hash.
     
@@ -138,7 +141,7 @@ WOLFSSL_API void wc_Md2Update(Md2*, const byte*, word32);
 */
 WOLFSSL_API void wc_Md2Final(Md2*, byte*);
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD2
     
     \brief Convenience function, handles all the hashing and places the result into hash.
     

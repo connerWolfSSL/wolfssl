@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup types
+*/
 
 
 #ifndef WOLF_CRYPT_TYPES_H
@@ -193,7 +196,7 @@
 	/* XFREE on some embeded systems doesn't like free(0) so test  */
 	#if defined(HAVE_IO_POOL)
 /*!
-    \ingroup wolfCrypt
+    \ingroup types
     
     \brief This is not actually a function, but rather a preprocessor macro, which allows the user to substitute in their own malloc, realloc, and free functions in place of the standard C memory functions.
 To use external memory functions, define XMALLOC_USER. This will cause the memory functions to be replaced by external functions of the form:
@@ -233,7 +236,7 @@ If none of these options are selected, the system will default to use the wolfSS
 */
 		WOLFSSL_API void* XMALLOC(size_t n, void* heap, int type);
 /*!
-    \ingroup wolfCrypt
+    \ingroup types
     
     \brief This is not actually a function, but rather a preprocessor macro, which allows the user to substitute in their own malloc, realloc, and free functions in place of the standard C memory functions.
 To use external memory functions, define XMALLOC_USER. This will cause the memory functions to be replaced by external functions of the form:
@@ -269,7 +272,9 @@ If none of these options are selected, the system will default to use the wolfSS
 */
 		WOLFSSL_API void* XREALLOC(void *p, size_t n, void* heap, int type);
 /*!
-\brief This is not actually a function, but rather a preprocessor macro, which allows the user to substitute in their own malloc, realloc, and free functions in place of the standard C memory functions.
+    \ingroup types
+    
+    \brief This is not actually a function, but rather a preprocessor macro, which allows the user to substitute in their own malloc, realloc, and free functions in place of the standard C memory functions.
 To use external memory functions, define XMALLOC_USER. This will cause the memory functions to be replaced by external functions of the form:
 extern void *XMALLOC(size_t n, void* heap, int type);
 extern void *XREALLOC(void *p, size_t n, void* heap, int type);
@@ -584,7 +589,7 @@ If none of these options are selected, the system will default to use the wolfSS
 
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup types
     
     \brief This function checks the compile time class settings. It is important when a user is using a wolfCrypt library independently, as the settings must match between libraries for math to work correctly. This check is defined as CheckCtcSettings(), which simply compares CheckRunTimeSettings and CTC_SETTINGS, returning 0 if there is a mismatch, or 1 if they match.
     

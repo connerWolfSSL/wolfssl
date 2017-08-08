@@ -20,7 +20,7 @@
  */
 
 /*!
-    \degroup curve25519
+    \defgroup curve25519
 */
 
 #ifndef WOLF_CRYPT_CURVE25519_H

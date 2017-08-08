@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup logging
+*/
 
 /* submitted by eof */
 
@@ -45,7 +48,7 @@ typedef void (*wolfSSL_Logging_cb)(const int logLevel,
                                   const char *const logMessage);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup logging
     
     \brief This function registers a logging callback that will be used to handle the wolfSSL log message. By default, if the system supports it fprintf() to stderr is used but by using this function anything can be done by the user.
     

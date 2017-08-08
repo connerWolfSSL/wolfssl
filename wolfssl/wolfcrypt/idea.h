@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup IDEA
+*/
 
 #ifndef WOLF_CRYPT_IDEA_H
 #define WOLF_CRYPT_IDEA_H
@@ -52,7 +55,7 @@ typedef struct Idea {
 } Idea;
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup IDEA
     
     \brief Generate the 52, 16-bit key sub-blocks from the 128 key.
     
@@ -81,7 +84,7 @@ typedef struct Idea {
 WOLFSSL_API int wc_IdeaSetKey(Idea *idea, const byte* key, word16 keySz,
                               const byte *iv, int dir);
 /*!
-    \ingroup wolfCrypt
+    \ingroup IDEA
     
     \brief Sets the IV in an Idea key structure.
 
@@ -108,7 +111,7 @@ WOLFSSL_API int wc_IdeaSetKey(Idea *idea, const byte* key, word16 keySz,
 */
 WOLFSSL_API int wc_IdeaSetIV(Idea *idea, const byte* iv);
 /*!
-    \ingroup wolfCrypt
+    \ingroup IDEA
     
     \brief Encryption or decryption for a block (64 bits).
     
@@ -140,7 +143,7 @@ WOLFSSL_API int wc_IdeaSetIV(Idea *idea, const byte* iv);
 */
 WOLFSSL_API int wc_IdeaCipher(Idea *idea, byte* out, const byte* in);
 /*!
-    \ingroup wolfCrypt
+    \ingroup IDEA
     
     \brief Encrypt data using IDEA CBC mode.
     
@@ -175,7 +178,7 @@ WOLFSSL_API int wc_IdeaCipher(Idea *idea, byte* out, const byte* in);
 WOLFSSL_API int wc_IdeaCbcEncrypt(Idea *idea, byte* out,
                                   const byte* in, word32 len);
 /*!
-    \ingroup wolfCrypt
+    \ingroup IDEA
     
     \brief Decrypt data using IDEA CBC mode.
 

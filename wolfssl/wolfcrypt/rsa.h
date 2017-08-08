@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup RSA
+*/
 
 #ifndef WOLF_CRYPT_RSA_H
 #define WOLF_CRYPT_RSA_H
@@ -110,7 +113,7 @@ struct RsaKey {
 #endif /*HAVE_FIPS */
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function initializes a provided RsaKey struct. It also takes in a heap identifier, for use with user defined memory overrides (see XMALLOC, XFREE, XREALLOC).
     
@@ -136,7 +139,7 @@ struct RsaKey {
 WOLFSSL_API int  wc_InitRsaKey(RsaKey* key, void* heap);
 WOLFSSL_API int  wc_InitRsaKey_ex(RsaKey* key, void* heap, int devId);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function frees a provided RsaKey struct using mp_clear.
     
@@ -161,7 +164,7 @@ WOLFSSL_LOCAL int wc_RsaFunction(const byte* in, word32 inLen, byte* out,
                            word32* outLen, int type, RsaKey* key, WC_RNG* rng);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function encrypts a message from in and stores the result in out. It requires an initialized public key and a random number generator. As a side effect, this function will return the bytes written to out in outLen.
     
@@ -213,7 +216,7 @@ WOLFSSL_LOCAL int wc_RsaFunction(const byte* in, word32 inLen, byte* out,
 WOLFSSL_API int  wc_RsaPublicEncrypt(const byte* in, word32 inLen, byte* out,
                                  word32 outLen, RsaKey* key, WC_RNG* rng);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This functions is utilized by the wc_RsaPrivateDecrypt function for decrypting.
     
@@ -235,7 +238,7 @@ WOLFSSL_API int  wc_RsaPublicEncrypt(const byte* in, word32 inLen, byte* out,
 WOLFSSL_API int  wc_RsaPrivateDecryptInline(byte* in, word32 inLen, byte** out,
                                         RsaKey* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This functions provides private RSA decryption.
     
@@ -268,7 +271,7 @@ WOLFSSL_API int  wc_RsaPrivateDecryptInline(byte* in, word32 inLen, byte** out,
 WOLFSSL_API int  wc_RsaPrivateDecrypt(const byte* in, word32 inLen, byte* out,
                                   word32 outLen, RsaKey* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief Signs the provided array with the private key.
     
@@ -302,7 +305,7 @@ WOLFSSL_API int  wc_RsaPSS_Sign(const byte* in, word32 inLen, byte* out,
                                 word32 outLen, enum wc_HashType hash, int mgf,
                                 RsaKey* key, WC_RNG* rng);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief Used to verify that the message was signed by RSA key.  The output uses the same byte array as the input.
     
@@ -338,7 +341,7 @@ WOLFSSL_API int  wc_RsaPSS_Sign(const byte* in, word32 inLen, byte* out,
 WOLFSSL_API int  wc_RsaSSL_VerifyInline(byte* in, word32 inLen, byte** out,
                                     RsaKey* key);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief Used to verify that the message was signed by key.
     
@@ -376,7 +379,7 @@ WOLFSSL_API int  wc_RsaPSS_CheckPadding(const byte* in, word32 inLen, byte* sig,
                                         enum wc_HashType hashType);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief Returns the encryption size for the provided key structure.
     
@@ -398,7 +401,7 @@ WOLFSSL_API int  wc_RsaEncryptSize(RsaKey* key);
 
 #ifndef HAVE_FIPS /* to avoid asn duplicate symbols @wc_fips */
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function parses a DER-formatted RSA private key, extracts the private key and stores it in the given RsaKey structure. It also sets the distance parsed in idx.
 
@@ -431,7 +434,7 @@ WOLFSSL_API int  wc_RsaEncryptSize(RsaKey* key);
 WOLFSSL_API int  wc_RsaPrivateKeyDecode(const byte* input, word32* inOutIdx,
                                                                RsaKey*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function parses a DER-formatted RSA public key, extracts the public key and stores it in the given RsaKey structure. It also sets the distance parsed in idx.
     
@@ -466,7 +469,7 @@ WOLFSSL_API int  wc_RsaPrivateKeyDecode(const byte* input, word32* inOutIdx,
 WOLFSSL_API int  wc_RsaPublicKeyDecode(const byte* input, word32* inOutIdx,
                                                                RsaKey*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function decodes the raw elements of an RSA public key, taking in the public modulus (n) and exponent (e). It stores these raw elements in the provided RsaKey structure, allowing one to use them in the encryption/decryption process.
     
@@ -501,7 +504,7 @@ WOLFSSL_API int  wc_RsaPublicKeyDecodeRaw(const byte* n, word32 nSz,
                                         const byte* e, word32 eSz, RsaKey* key);
 #ifdef WOLFSSL_KEY_GEN
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function converts an RsaKey key to DER format.  The result is written to output and it returns the number of bytes written.
     
@@ -558,7 +561,7 @@ WOLFSSL_API int wc_RsaSetRNG(RsaKey* key, WC_RNG* rng);
 #define WC_RSA_PSS_PAD     2
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function performs RSA encrypt while allowing the choice of which padding to use.
     
@@ -599,7 +602,7 @@ WOLFSSL_API int  wc_RsaPublicEncrypt_ex(const byte* in, word32 inLen, byte* out,
                    word32 outLen, RsaKey* key, WC_RNG* rng, int type,
                    enum wc_HashType hash, int mgf, byte* label, word32 lableSz);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function uses RSA to decrypt a message and gives the option of what padding type.
     
@@ -645,7 +648,7 @@ WOLFSSL_API int  wc_RsaPrivateDecrypt_ex(const byte* in, word32 inLen,
                    byte* out, word32 outLen, RsaKey* key, int type,
                    enum wc_HashType hash, int mgf, byte* label, word32 lableSz);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function uses RSA to decrypt a message inline and gives the option of what padding type. The in buffer will contain the decrypted message after being called and the out byte pointer will point to the location in the “in” buffer where the plain text is.
     
@@ -694,7 +697,7 @@ WOLFSSL_API int  wc_RsaPrivateDecryptInline_ex(byte* in, word32 inLen,
                       int mgf, byte* label, word32 lableSz);
 #endif /* HAVE_FIPS*/
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief Flattens the RsaKey structure into individual elements (e, n) used for the RSA algorithm.
     
@@ -735,7 +738,7 @@ WOLFSSL_API int  wc_RsaFlattenPublicKey(RsaKey*, byte*, word32*, byte*,
 
 #ifdef WOLFSSL_KEY_GEN
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief Convert Rsa Public key to DER format.  Writes to output, and returns count of bytes written.
     
@@ -768,7 +771,7 @@ WOLFSSL_API int  wc_RsaFlattenPublicKey(RsaKey*, byte*, word32*, byte*,
 */
     WOLFSSL_API int wc_RsaKeyToPublicDer(RsaKey*, byte* output, word32 inLen);
 /*!
-    \ingroup wolfCrypt
+    \ingroup RSA
     
     \brief This function generates a RSA private key of length size (in bits) and given exponent (e). It then stores this key in the provided RsaKey structure, so that it may be used for encryption/decryption. A secure number to use for e is 65537. size is required to be greater than RSA_MIN_SIZE and less than RSA_MAX_SIZE. For this function to be available, the option WOLFSSL_KEY_GEN must be enabled at compile time. This can be accomplished with --enable-keygen if using ./configure.
 

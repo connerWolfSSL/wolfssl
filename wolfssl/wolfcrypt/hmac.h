@@ -19,7 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-
+/*!
+    \defgroup hmac
+*/
 
 #ifndef NO_HMAC
 
@@ -169,7 +171,7 @@ typedef struct Hmac {
 
 /* does init */
 /*!
-    \ingroup wolfCrypt
+    \ingroup hmac
     
     \brief This function initializes an Hmac object, setting its encryption type, key and HMAC length.
     
@@ -197,7 +199,7 @@ typedef struct Hmac {
 */
 WOLFSSL_API int wc_HmacSetKey(Hmac*, int type, const byte* key, word32 keySz);
 /*!
-    \ingroup wolfCrypt
+    \ingroup hmac
     
     \brief This function updates the message to authenticate using HMAC. It should be called after the Hmac object has been initialized with wc_HmacSetKey. This function may be called multiple times to update the message to hash. After calling wc_HmacUpdate as desired, one should call wc_HmacFinal to obtain the final authenticated message tag. 
     
@@ -227,7 +229,7 @@ WOLFSSL_API int wc_HmacSetKey(Hmac*, int type, const byte* key, word32 keySz);
 */
 WOLFSSL_API int wc_HmacUpdate(Hmac*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup hmac
     
     \brief This function computes the final hash of an Hmac object's message.
     
@@ -259,7 +261,7 @@ WOLFSSL_API int wc_HmacInit(Hmac* hmac, void* heap, int devId);
 WOLFSSL_API void wc_HmacFree(Hmac*);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup hmac
     
     \brief This function returns the largest HMAC digest size available based on the configured cipher suites.
     
@@ -285,7 +287,7 @@ WOLFSSL_API int wc_HKDF_Expand(int type, const byte* inKey, word32 inKeySz,
                                byte* out,        word32 outSz);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup hmac
     
     \brief This function provides access to a HMAC Key Derivation Function (HKDF). It utilizes HMAC to convert inKey, with an optional salt and optional info into a derived key, which it stores in out. The hash type defaults to MD5 if 0 or NULL is given.
     

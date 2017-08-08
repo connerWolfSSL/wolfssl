@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup hc128
+*/
 
 #ifndef WOLF_CRYPT_HC128_H
 #define WOLF_CRYPT_HC128_H
@@ -50,7 +53,7 @@ typedef struct HC128 {
 
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup hc128
     
     \brief This function encrypts or decrypts a message of any size from the input buffer input, and stores the resulting plaintext/ciphertext in the output buffer output.
     
@@ -82,7 +85,7 @@ typedef struct HC128 {
 */
 WOLFSSL_API int wc_Hc128_Process(HC128*, byte*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup hc128
     
     \brief This function initializes an HC128 context object by setting its key and iv.
     

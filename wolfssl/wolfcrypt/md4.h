@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup MD4
+*/
 
 #ifndef WOLF_CRYPT_MD4_H
 #define WOLF_CRYPT_MD4_H
@@ -50,7 +53,7 @@ typedef struct Md4 {
 
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD4
     
     \brief This function initializes md4. This is automatically called by wc_Md4Hash.
     
@@ -76,7 +79,7 @@ typedef struct Md4 {
 */
 WOLFSSL_API void wc_InitMd4(Md4*);
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD4
     
     \brief Can be called to continually hash the provided byte array of length len.
     
@@ -107,7 +110,7 @@ WOLFSSL_API void wc_InitMd4(Md4*);
 */
 WOLFSSL_API void wc_Md4Update(Md4*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD4
     
     \brief Finalizes hashing of data. Result is placed into hash.
     

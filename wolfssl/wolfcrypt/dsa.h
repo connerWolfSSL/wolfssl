@@ -20,7 +20,7 @@
  */
 
 /*!
-    \defground dsa
+    \defgroup dsa
 */
 
 #ifndef WOLF_CRYPT_DSA_H

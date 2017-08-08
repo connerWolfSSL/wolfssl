@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup ripemd
+*/
 
 #ifndef WOLF_CRYPT_RIPEMD_H
 #define WOLF_CRYPT_RIPEMD_H
@@ -52,7 +55,7 @@ typedef struct RipeMd {
 
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup ripemd
     
     \brief This function initializes a ripemd structure by initializing ripemd’s digest, buffer, loLen and hiLen.
     
@@ -76,7 +79,7 @@ typedef struct RipeMd {
 */
 WOLFSSL_API int wc_InitRipeMd(RipeMd*);
 /*!
-    \ingroup wolfCrypt
+    \ingroup ripemd
     
     \brief This function generates the RipeMd digest of the data input and stores the result in the ripemd->digest buffer. After running wc_RipeMdUpdate, one should compare the generated ripemd->digest to a known authentication tag to verify the authenticity of a message.
     
@@ -105,7 +108,7 @@ WOLFSSL_API int wc_InitRipeMd(RipeMd*);
 */
 WOLFSSL_API int wc_RipeMdUpdate(RipeMd*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt 
+    \ingroup ripemd 
     
     \brief This function copies the computed digest into hash.  If there is a partial unhashed block, this method will pad the block with 0s, and include that block’s round in the digest before copying to hash. State of ripemd is reset.
     

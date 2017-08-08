@@ -19,6 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+/*!
+    \defgroup MD5
+*/
 
 #ifndef WOLF_CRYPT_MD5_H
 #define WOLF_CRYPT_MD5_H
@@ -81,7 +84,7 @@ typedef struct Md5 {
 #endif /* WOLFSSL_TI_HASH */
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD5
     
     \brief This function initializes md5. This is automatically called by wc_Md5Hash.
     
@@ -116,7 +119,7 @@ typedef struct Md5 {
 WOLFSSL_API int wc_InitMd5(Md5*);
 WOLFSSL_API int wc_InitMd5_ex(Md5*, void*, int);
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD5
     
     \brief Can be called to continually hash the provided byte array of length len.
     
@@ -154,7 +157,7 @@ WOLFSSL_API int wc_InitMd5_ex(Md5*, void*, int);
 */
 WOLFSSL_API int wc_Md5Update(Md5*, const byte*, word32);
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD5
     
     \brief Finalizes hashing of data. Result is placed into hash. Md5 Struct is reset. Note: This function will also return the result of calling IntelQaSymMd5() in the case that HAVE_INTEL_QA is defined.
     
@@ -191,7 +194,7 @@ WOLFSSL_API int wc_Md5Update(Md5*, const byte*, word32);
 */
 WOLFSSL_API int wc_Md5Final(Md5*, byte*);
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD5
     
     \brief Resets the Md5 structure.  Note: this is only supported if you have WOLFSSL_TI_HASH defined.
 
@@ -222,7 +225,7 @@ WOLFSSL_API int wc_Md5Final(Md5*, byte*);
 WOLFSSL_API void wc_Md5Free(Md5*);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup MD5
     
     \brief Gets hash data. Result is placed into hash.  Md5 struct is not reset.
     
