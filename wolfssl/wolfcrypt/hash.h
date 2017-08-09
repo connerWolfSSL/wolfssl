@@ -270,6 +270,27 @@ WOLFSSL_API int wc_ShaHash(const byte*, word32, byte*);
 WOLFSSL_API int wc_Sha256Hash(const byte*, word32, byte*);
 
     #if defined(WOLFSSL_SHA224)
+/*!
+    \ingroup SHA
+    
+    \brief Convenience function, handles all the hashing and places the result into hash.
+    
+    \return 0 Success
+    \return <0 Error
+    
+    \param data the data to hash
+    \param len the length of data
+    \param hash Byte array to hold hash value.
+    
+    _Example_
+    \code
+    none
+    \endcode
+    
+    \sa wc_InitSha224
+    \sa wc_Sha224Update
+    \sa wc_Sha224Final
+*/
         WOLFSSL_API int wc_Sha224Hash(const byte*, word32, byte*);
     #endif /* defined(WOLFSSL_SHA224) */
 #endif

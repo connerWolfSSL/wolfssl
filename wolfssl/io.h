@@ -21,8 +21,6 @@
 
 /*!
     \file io.h
-    
-    \defgroup TEST_GROUP
 */
 
 #ifndef WOLFSSL_IO_H
