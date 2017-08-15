@@ -18,12 +18,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
-
-/*!
-    \defgroup blake2
-*/
-
-
+ 
 #ifndef WOLF_CRYPT_BLAKE2_H
 #define WOLF_CRYPT_BLAKE2_H
 
@@ -60,7 +55,7 @@ typedef struct Blake2b {
 
 
 /*!
-    \ingroup blake2
+    \ingroup BLAKE2
     
     \brief This function initializes a Blake2b structure for use with the Blake2 hash function.
     
@@ -79,7 +74,7 @@ typedef struct Blake2b {
 */
 WOLFSSL_API int wc_InitBlake2b(Blake2b*, word32);
 /*!
-    \ingroup blake2
+    \ingroup BLAKE2
     
     \brief This function updates the Blake2b hash with the given input data. This function should be called after wc_InitBlake2b, and repeated until one is ready for the final hash: wc_Blake2bFinal.
     
@@ -109,7 +104,7 @@ WOLFSSL_API int wc_InitBlake2b(Blake2b*, word32);
 */
 WOLFSSL_API int wc_Blake2bUpdate(Blake2b*, const byte*, word32);
 /*!
-    \ingroup blake2
+    \ingroup BLAKE2
     
     \brief This function computes the Blake2b hash of the previously supplied input data. The output hash will be of length requestSz, or, if requestSz==0, the digestSz of the b2b structure. This function should be called after wc_InitBlake2b and wc_Blake2bUpdate has been processed for each piece of input data desired.
     

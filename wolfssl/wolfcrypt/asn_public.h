@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup Keys
-*/
-
 #ifndef WOLF_CRYPT_ASN_PUBLIC_H
 #define WOLF_CRYPT_ASN_PUBLIC_H
 
@@ -183,7 +179,7 @@ typedef struct Cert {
    keyType    = RSA_KEY (default)
 */
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function initializes a default cert, with the default options: version = 3 (0x2), serial = 0, sigType = SHA_WITH_RSA, issuer = blank, daysValid = 500, selfSigned = 1 (true) use subject as issuer, subject = blank
     
@@ -204,7 +200,7 @@ WOLFSSL_API int wc_InitCert(Cert*);
 WOLFSSL_API int  wc_MakeCert_ex(Cert* cert, byte* derBuffer, word32 derSz,
                                 int keyType, void* key, WC_RNG* rng);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief Used to make CA signed certs. Called after the subject information has been entered. This function makes an x509 Certificate v3 RSA or ECC from a cert input. It then writes this cert to derBuffer. It takes in either an rsaKey or an eccKey to generate the certificate.  The certificate must be initialized with wc_InitCert before this method is called.
     
@@ -242,7 +238,7 @@ WOLFSSL_API int  wc_MakeCert(Cert*, byte* derBuffer, word32 derSz, RsaKey*,
     WOLFSSL_API int  wc_MakeCertReq_ex(Cert*, byte* derBuffer, word32 derSz,
                                        int, void*);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function makes a certificate signing request using the input certificate and writes the output to derBuffer. It takes in either an rsaKey or an eccKey to generate the certificate request. wc_SignCert() will need to be called after this function to sign the certificate request.  Please see the wolfCrypt test application (./wolfcrypt/test/test.c) for an example usage of this function.
     
@@ -279,7 +275,7 @@ WOLFSSL_API int  wc_SignCert_ex(int requestSz, int sType, byte* buffer,
                                 word32 buffSz, int keyType, void* key,
                                 WC_RNG* rng);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function signs buffer and adds the signature to the end of buffer. It takes in a signature type. Must be called after wc_MakeCert() or wc_MakeCertReq() if creating a CA signed cert.
     
@@ -317,7 +313,7 @@ WOLFSSL_API int  wc_SignCert_ex(int requestSz, int sType, byte* buffer,
 WOLFSSL_API int  wc_SignCert(int requestSz, int sigType, byte* derBuffer,
                              word32 derSz, RsaKey*, ecc_key*, WC_RNG*);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function is a combination of the previous two functions, wc_MakeCert and wc_SignCert for self signing (the previous functions may be used for CA requests). It makes a certificate, and then signs it, generating a self-signed certificate.
     
@@ -353,7 +349,7 @@ WOLFSSL_API int  wc_SignCert(int requestSz, int sigType, byte* derBuffer,
 WOLFSSL_API int  wc_MakeSelfCert(Cert*, byte* derBuffer, word32 derSz, RsaKey*,
                              WC_RNG*);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function sets the issuer for a certificate to the issuer in the provided pem issuerFile. It also changes the certificate’s self-signed attribute to false.  The issuer specified in issuerFile is verified prior to setting the cert issuer.  This method is used to set fields prior to signing.
     
@@ -394,7 +390,7 @@ WOLFSSL_API int  wc_MakeSelfCert(Cert*, byte* derBuffer, word32 derSz, RsaKey*,
 */
 WOLFSSL_API int  wc_SetIssuer(Cert*, const char*);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function sets the subject for a certificate to the subject in the provided pem subjectFile.  This method is used to set fields prior to signing.
     
@@ -435,7 +431,7 @@ WOLFSSL_API int  wc_SetIssuer(Cert*, const char*);
 WOLFSSL_API int  wc_SetSubject(Cert*, const char*);
 #ifdef WOLFSSL_ALT_NAMES
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function sets the alternate names for a certificate to the alternate names in the provided pem file. This is useful in the case that one wishes to secure multiple domains with the same certificate. This method is used to set fields prior to signing.
     
@@ -476,7 +472,7 @@ WOLFSSL_API int  wc_SetSubject(Cert*, const char*);
     WOLFSSL_API int  wc_SetAltNames(Cert*, const char*);
 #endif
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function sets the issuer for a certificate from the issuer in the provided der buffer. It also changes the certificate’s self-signed attribute to false.  This method is used to set fields prior to signing.
     
@@ -520,7 +516,7 @@ WOLFSSL_API int  wc_SetSubject(Cert*, const char*);
 */
 WOLFSSL_API int  wc_SetIssuerBuffer(Cert*, const byte*, int);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function sets the subject for a certificate from the subject in the provided der buffer. This method is used to set fields prior to signing.
     
@@ -564,7 +560,7 @@ WOLFSSL_API int  wc_SetIssuerBuffer(Cert*, const byte*, int);
 */
 WOLFSSL_API int  wc_SetSubjectBuffer(Cert*, const byte*, int);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function sets the alternate names for a certificate from the alternate names in the provided der buffer. This is useful in the case that one wishes to secure multiple domains with the same certificate.  This method is used to set fields prior to signing.
     
@@ -608,7 +604,7 @@ WOLFSSL_API int  wc_SetSubjectBuffer(Cert*, const byte*, int);
 */
 WOLFSSL_API int  wc_SetAltNamesBuffer(Cert*, const byte*, int);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function sets the dates for a certificate from the date range in the provided der buffer. This method is used to set fields prior to signing.
     
@@ -655,7 +651,7 @@ WOLFSSL_API int  wc_SetDatesBuffer(Cert*, const byte*, int);
 WOLFSSL_API int wc_SetAuthKeyIdFromPublicKey_ex(Cert *cert, int keyType,
                                                 void* key);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief Set AKID from either an RSA or ECC public key. note: Only set one of rsakey or eckey, not both.
     
@@ -688,7 +684,7 @@ WOLFSSL_API int wc_SetAuthKeyIdFromPublicKey_ex(Cert *cert, int keyType,
 WOLFSSL_API int wc_SetAuthKeyIdFromPublicKey(Cert *cert, RsaKey *rsakey,
                                              ecc_key *eckey);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief Set AKID from from DER encoded certificate.
     
@@ -717,7 +713,7 @@ WOLFSSL_API int wc_SetAuthKeyIdFromPublicKey(Cert *cert, RsaKey *rsakey,
 */
 WOLFSSL_API int wc_SetAuthKeyIdFromCert(Cert *cert, const byte *der, int derSz);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief Set AKID from certificate file in PEM format.
     
@@ -747,7 +743,7 @@ WOLFSSL_API int wc_SetAuthKeyId(Cert *cert, const char* file);
 WOLFSSL_API int wc_SetSubjectKeyIdFromPublicKey_ex(Cert *cert, int keyType,
                                                    void* key);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief Set SKID from RSA or ECC public key.
     
@@ -779,7 +775,7 @@ WOLFSSL_API int wc_SetSubjectKeyIdFromPublicKey_ex(Cert *cert, int keyType,
 WOLFSSL_API int wc_SetSubjectKeyIdFromPublicKey(Cert *cert, RsaKey *rsakey,
                                                 ecc_key *eckey);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief Set SKID from public key file in PEM format.  Both arguments are required.
     
@@ -810,7 +806,7 @@ WOLFSSL_API int wc_SetSubjectKeyId(Cert *cert, const char* file);
 
 #ifdef HAVE_NTRU
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief Set SKID from NTRU public key.
     
@@ -883,7 +879,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
 
     #ifdef HAVE_NTRU
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief Used to make CA signed certs.  Called after the subject information has been entered. This function makes an NTRU Certificate from a cert input. It then writes this cert to derBuffer. It takes in an ntruKey and a rng to generate the certificate.  The certificate must be initialized with wc_InitCert before this method is called.
     
@@ -997,7 +993,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
 #if defined(WOLFSSL_KEY_GEN) || defined(WOLFSSL_CERT_GEN) || !defined(NO_DSA) \
                              || defined(OPENSSL_EXTRA)
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function converts a der formatted input certificate, contained in the der buffer, into a pem formatted output certificate, contained in the output buffer. It should be noted that this is not an in place conversion, and a separate buffer must be utilized to store the pem formatted output.
     
@@ -1028,7 +1024,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
     WOLFSSL_API int wc_DerToPem(const byte* der, word32 derSz, byte* output,
                                 word32 outputSz, int type);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function converts a der formatted input certificate, contained in the der buffer, into a pem formatted output certificate, contained in the output buffer. It should be noted that this is not an in place conversion, and a separate buffer must be utilized to store the pem formatted output.  Allows setting cipher info.
     
@@ -1065,7 +1061,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
 #ifdef HAVE_ECC
     /* private key helpers */
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function reads in an ECC private key from the input buffer, input, parses the private key, and uses it to generate an ecc_key object, which it stores in key.
     
@@ -1110,7 +1106,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
     WOLFSSL_API int wc_EccPrivateKeyDecode(const byte*, word32*,
                                            ecc_key*, word32);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function writes a private ECC key to der format.
     
@@ -1149,7 +1145,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
 
     /* public key helper */
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief Decodes an ECC public key from an input buffer.  It will parse an ASN sequence to retrieve the ECC key.
     
@@ -1181,7 +1177,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
                                               ecc_key*, word32);
     #if (defined(WOLFSSL_CERT_GEN) || defined(WOLFSSL_KEY_GEN))
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function converts the ECC public key to DER format. It returns the size of buffer used. The public ECC key in DER format is stored in output buffer. with_AlgCurve is a flag for when to include a header that has the Algorithm and Curve information.
     
@@ -1239,7 +1235,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
 
 /* DER encode signature */
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function encodes a digital signature into the output buffer, and returns the size of the encoded signature created.
     
@@ -1268,7 +1264,7 @@ WOLFSSL_API int wc_SetKeyUsage(Cert *cert, const char *value);
 WOLFSSL_API word32 wc_EncodeSignature(byte* out, const byte* digest,
                                       word32 digSz, int hashOID);
 /*!
-    \ingroup asn
+    \ingroup ASN
     
     \brief This function returns the hash OID that corresponds to a hashing type. For example, when given the type: SHA512, this function returns the identifier corresponding to a SHA512 hash, SHA512h.
     

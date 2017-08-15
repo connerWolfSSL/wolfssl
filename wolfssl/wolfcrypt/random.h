@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup random_number_gen
-*/
-
 #ifndef WOLF_CRYPT_RANDOM_H
 #define WOLF_CRYPT_RANDOM_H
 
@@ -167,7 +163,7 @@ int wc_GenerateSeed(OS_Seed* os, byte* seed, word32 sz);
 #ifdef HAVE_WNR
     /* Whitewood netRandom client library */
 /*!
-    \ingroup random_number_gen
+    \ingroup Random
     
     \brief Init global Whitewood netRandom context
     
@@ -194,7 +190,7 @@ int wc_GenerateSeed(OS_Seed* os, byte* seed, word32 sz);
 */
     WOLFSSL_API int  wc_InitNetRandom(const char*, wnr_hmac_key, int);
 /*!
-    \ingroup random_number_gen
+    \ingroup Random
     
     \brief Free global Whitewood netRandom context.
     
@@ -219,7 +215,7 @@ int wc_GenerateSeed(OS_Seed* os, byte* seed, word32 sz);
 
 
 /*!
-    \ingroup random_number_gen
+    \ingroup Random
     
     \brief Gets the seed (from OS) and key cipher for rng.  rng->drbg (deterministic random bit generator) allocated (should be deallocated with wc_FreeRng).  This is a blocking operation.
     
@@ -261,7 +257,7 @@ int wc_GenerateSeed(OS_Seed* os, byte* seed, word32 sz);
 WOLFSSL_API int  wc_InitRng(WC_RNG*);
 WOLFSSL_API int  wc_InitRng_ex(WC_RNG* rng, void* heap, int devId);
 /*!
-    \ingroup random_number_gen
+    \ingroup Random
     
     \brief Copies a sz bytes of pseudorandom data to output. Will reseed rng if needed (blocking).
     
@@ -298,7 +294,7 @@ WOLFSSL_API int  wc_InitRng_ex(WC_RNG* rng, void* heap, int devId);
 */
 WOLFSSL_API int  wc_RNG_GenerateBlock(WC_RNG*, byte*, word32 sz);
 /*!
-    \ingroup random_number_gen
+    \ingroup Random
     
     \brief Calls wc_RNG_GenerateBlock to copy a byte of pseudorandom data to b. Will reseed rng if needed.
     
@@ -335,7 +331,7 @@ WOLFSSL_API int  wc_RNG_GenerateBlock(WC_RNG*, byte*, word32 sz);
 */
 WOLFSSL_API int  wc_RNG_GenerateByte(WC_RNG*, byte*);
 /*!
-    \ingroup random_number_gen
+    \ingroup Random
     
     \brief Should be called when RNG no longer needed in order to securely free drgb.  Zeros and XFREEs rng-drbg.
     
@@ -370,7 +366,7 @@ WOLFSSL_API int  wc_FreeRng(WC_RNG*);
 
 #ifdef HAVE_HASHDRBG
 /*!
-    \ingroup random_number_gen
+    \ingroup Random
     
     \brief Creates and tests functionality of drbg.
     

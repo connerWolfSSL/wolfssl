@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup wolfCrypt A seperate group for wolfCrypt API
-*/
-
 #ifndef WOLF_CRYPT_PORT_H
 #define WOLF_CRYPT_PORT_H
 
@@ -211,6 +207,26 @@ WOLFSSL_API int wc_UnLockMutex(wolfSSL_Mutex*);
     \endcode
 */
 WOLFSSL_API int wolfCrypt_Init(void);
+/*!
+    \ingroup wolfCrypt
+    
+    \brief Used to clean up resources used by wolfCrypt.
+    
+    \return 0 upon success.
+    \return <0 upon failure of cleaning up resources.
+    
+    \param none No parameters.
+    
+    _Example_
+    \code
+    ...
+    if (wolfCrypt_Cleanup() != 0) {
+        WOLFSSL_MSG("Error with wolfCrypt_Cleanup call");
+    }
+    \endcode
+    
+    \sa wolfCrypt_Init
+*/
 WOLFSSL_API int wolfCrypt_Cleanup(void);
 
 /* filesystem abstraction layer, used by ssl.c */

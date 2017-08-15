@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup Rabbit
-*/
-
 #ifndef WOLF_CRYPT_RABBIT_H
 #define WOLF_CRYPT_RABBIT_H
 

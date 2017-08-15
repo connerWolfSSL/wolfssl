@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup curve25519
-*/
-
 #ifndef WOLF_CRYPT_CURVE25519_H
 #define WOLF_CRYPT_CURVE25519_H
 
@@ -80,7 +76,7 @@ enum {
 };
 
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function generates a curve25519 key using the given random number generator, rng, of the size given (keysize), and stores it in the given curve25519_key structure. It should be called after the key structure has been initialized through wc_curve25519_init.
     
@@ -110,7 +106,7 @@ WOLFSSL_API
 int wc_curve25519_make_key(WC_RNG* rng, int keysize, curve25519_key* key);
 
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function computes a shared secret key given a secret private key and a received public key. It stores the generated secret key in the buffer out and assigns the variable of the secret key to outlen. Only supports big endian.
     
@@ -145,7 +141,7 @@ int wc_curve25519_shared_secret(curve25519_key* private_key,
                                 byte* out, word32* outlen);
 
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function computes a shared secret key given a secret private key and a received public key. It stores the generated secret key in the buffer out and assigns the variable of the secret key to outlen. Supports both big and little endian.
     
@@ -182,7 +178,7 @@ int wc_curve25519_shared_secret_ex(curve25519_key* private_key,
                                    byte* out, word32* outlen, int endian);
 
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function initializes a curve25519 key. It should be called before generating a key for the structure with wc_curve25519_init and before using the key to encrypt data.
     
@@ -203,7 +199,7 @@ WOLFSSL_API
 int wc_curve25519_init(curve25519_key* key);
 
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function frees a curve 25519 object.
     
@@ -227,7 +223,7 @@ void wc_curve25519_free(curve25519_key* key);
 
 /* raw key helpers */
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function imports a curve25519 private key only. (Big endian).
     
@@ -258,7 +254,7 @@ WOLFSSL_API
 int wc_curve25519_import_private(const byte* priv, word32 privSz,
                                  curve25519_key* key);
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief curve25519 private key import only. (Big or Little endian).
     
@@ -293,7 +289,7 @@ int wc_curve25519_import_private_ex(const byte* priv, word32 privSz,
                                     curve25519_key* key, int endian);
 
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function imports a public-private key pair into a curve25519_key structure.  Big endian only.
 
@@ -333,7 +329,7 @@ WOLFSSL_API
 int wc_curve25519_import_private_raw(const byte* priv, word32 privSz,
                             const byte* pub, word32 pubSz, curve25519_key* key);
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function imports a public-private key pair into a curve25519_key structure.  Supports both big and little endian.
     
@@ -375,7 +371,7 @@ int wc_curve25519_import_private_raw_ex(const byte* priv, word32 privSz,
                                         const byte* pub, word32 pubSz,
                                         curve25519_key* key, int endian);
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function exports a private key from a curve25519_key structure and stores it in the given out buffer. It also sets outLen to be the size of the exported key. Big Endian only.
     
@@ -411,7 +407,7 @@ WOLFSSL_API
 int wc_curve25519_export_private_raw(curve25519_key* key, byte* out,
                                      word32* outLen);
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function exports a private key from a curve25519_key structure and stores it in the given out buffer. It also sets outLen to be the size of the exported key.  Can specify whether it's big or little endian.
     
@@ -450,7 +446,7 @@ int wc_curve25519_export_private_raw_ex(curve25519_key* key, byte* out,
                                         word32* outLen, int endian);
 
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function imports a public key from the given in buffer and stores it in the  curve25519_key structure.
     
@@ -488,7 +484,7 @@ WOLFSSL_API
 int wc_curve25519_import_public(const byte* in, word32 inLen,
                                 curve25519_key* key);
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function imports a public key from the given in buffer and stores it in the  curve25519_key structure.
     
@@ -527,7 +523,7 @@ int wc_curve25519_import_public_ex(const byte* in, word32 inLen,
                                    curve25519_key* key, int endian);
 
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function exports a public key from the given key structure and stores the result in the out buffer. Big endian only.
     
@@ -558,7 +554,7 @@ int wc_curve25519_import_public_ex(const byte* in, word32 inLen,
 WOLFSSL_API
 int wc_curve25519_export_public(curve25519_key* key, byte* out, word32* outLen);
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function exports a public key from the given key structure and stores the result in the out buffer. Supports both big and little endian.
     
@@ -594,7 +590,7 @@ int wc_curve25519_export_public_ex(curve25519_key* key, byte* out,
                                    word32* outLen, int endian);
 
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief Export curve25519 key pair.  Big endian only.
     
@@ -634,7 +630,7 @@ int wc_curve25519_export_key_raw(curve25519_key* key,
                                  byte* priv, word32 *privSz,
                                  byte* pub, word32 *pubSz);
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief Export curve25519 key pair.  Big or little endian.
     
@@ -678,7 +674,7 @@ int wc_curve25519_export_key_raw_ex(curve25519_key* key,
                                     int endian);
 /* size helper */
 /*!
-    \ingroup curve25519
+    \ingroup Curve25519
     
     \brief This function returns the key size of the given key structure.
     

@@ -18,11 +18,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
-
-/*!
-    \defgroup SRP
-*/
-
+ 
 #ifdef WOLFCRYPT_HAVE_SRP
 
 #ifndef WOLFCRYPT_SRP_H

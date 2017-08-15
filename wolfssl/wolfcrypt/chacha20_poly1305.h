@@ -55,7 +55,7 @@ enum {
      */
 
 /*!
-    \ingroup chacha20
+    \ingroup ChaCha20Poly1305
     
     \brief This function encrypts an input message, inPlaintext, using the ChaCha20 stream cipher, into the output buffer, outCiphertext. It also performs Poly-1305 authentication (on the cipher text), and stores the generated authentication tag in the output buffer, outAuthTag.
     
@@ -103,7 +103,7 @@ int wc_ChaCha20Poly1305_Encrypt(
                 byte outAuthTag[CHACHA20_POLY1305_AEAD_AUTHTAG_SIZE]);
 
 /*!
-    \ingroup chacha20    
+    \ingroup ChaCha20Poly1305    
     
     \brief This function decrypts input ciphertext, inCiphertext, using the ChaCha20 stream cipher, into the output buffer, outPlaintext. It also performs Poly-1305 authentication, comparing the given inAuthTag to an authentication generated with the inAAD (arbitrary length additional authentication data). Note: If the generated authentication tag does not match the supplied authentication tag, the text is not decrypted.
     

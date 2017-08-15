@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup MD5
-*/
-
 #ifndef WOLF_CRYPT_MD5_H
 #define WOLF_CRYPT_MD5_H
 

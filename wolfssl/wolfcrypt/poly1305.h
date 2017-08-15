@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup poly1305
-*/
-
 #ifndef WOLF_CRYPT_POLY1305_H
 #define WOLF_CRYPT_POLY1305_H
 
@@ -84,7 +80,7 @@ typedef struct Poly1305 {
 /* does init */
 
 /*!
-    \ingroup poly1305
+    \ingroup Poly1305
     
     \brief This function sets the key for a Poly1305 context structure, initializing it for hashing. Note: A new key should be set after generating a message hash with wc_Poly1305Final to ensure security.
     
@@ -107,7 +103,7 @@ typedef struct Poly1305 {
 */
 WOLFSSL_API int wc_Poly1305SetKey(Poly1305* poly1305, const byte* key, word32 kySz);
 /*!
-    \ingroup poly1305
+    \ingroup Poly1305
     
     \brief This function updates the message to hash with the Poly1305 structure.
     
@@ -136,7 +132,7 @@ WOLFSSL_API int wc_Poly1305SetKey(Poly1305* poly1305, const byte* key, word32 ky
 */
 WOLFSSL_API int wc_Poly1305Update(Poly1305* poly1305, const byte*, word32);
 /*!
-    \ingroup poly1305
+    \ingroup Poly1305
     
     \brief This function calculates the hash of the input messages and stores the result in mac. After this is called, the key should be reset.
     
@@ -167,7 +163,7 @@ WOLFSSL_API int wc_Poly1305Update(Poly1305* poly1305, const byte*, word32);
 */
 WOLFSSL_API int wc_Poly1305Final(Poly1305* poly1305, byte* tag);
 /*!
-    \ingroup poly1305
+    \ingroup Poly1305
     
     \brief Takes in an initialized Poly1305 struct that has a key loaded and creates a MAC (tag) using recent TLS AEAD padding scheme.
     

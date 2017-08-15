@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup coding
-*/
-
 #ifndef WOLF_CRYPT_CODING_H
 #define WOLF_CRYPT_CODING_H
 
@@ -34,7 +30,7 @@
 
 
 /*!
-    \ingroup coding
+    \ingroup Base_Encoding
     
     \brief This function decodes the given Base64 encoded input, in, and stores the result in the output buffer out. It also sets the size written to the output buffer in the variable outLen.
     
@@ -83,7 +79,7 @@ WOLFSSL_API int Base64_Decode(const byte* in, word32 inLen, byte* out,
 
     /* encode isn't */
 /*!
-    \ingroup coding
+    \ingroup Base_Encoding
     
     \brief This function encodes the given input, in, and stores the Base64 encoded result in the output buffer out. It writes the data with the traditional ‘\n’ line endings, instead of escaped %0A line endings. Upon successfully completing, this function also sets outLen to the number of bytes written to the output buffer.
     
@@ -116,7 +112,7 @@ WOLFSSL_API int Base64_Decode(const byte* in, word32 inLen, byte* out,
                                   word32* outLen);
     WOLFSSL_API
 /*!
-    \ingroup coding
+    \ingroup Base_Encoding
     
     \brief This function encodes the given input, in, and stores the Base64 encoded result in the output buffer out. It writes the data with %0A escaped line endings instead of ‘\n’ line endings. Upon successfully completing, this function also sets outLen to the number of bytes written to the output buffer.
     
@@ -148,7 +144,7 @@ WOLFSSL_API int Base64_Decode(const byte* in, word32 inLen, byte* out,
     int Base64_EncodeEsc(const byte* in, word32 inLen, byte* out,
                                   word32* outLen);
 /*!
-    \ingroup coding
+    \ingroup Base_Encoding
     
     \brief This function encodes the given input, in, and stores the Base64 encoded result in the output buffer out. It writes the data with no new lines. Upon successfully completing, this function also sets outLen to the number of bytes written to the output buffer
     
@@ -183,7 +179,7 @@ WOLFSSL_API int Base64_Decode(const byte* in, word32 inLen, byte* out,
 #if defined(OPENSSL_EXTRA) || defined(HAVE_WEBSERVER) || defined(HAVE_FIPS) \
                            || defined(HAVE_ECC_CDH)
 /*!
-    \ingroup coding
+    \ingroup Base_Encoding
     
     \brief This function decodes the given Base16 encoded input, in, and stores the result in the output buffer out. It also sets the size written to the output buffer in the variable outLen.
     
@@ -214,7 +210,7 @@ WOLFSSL_API int Base64_Decode(const byte* in, word32 inLen, byte* out,
     WOLFSSL_API
     int Base16_Decode(const byte* in, word32 inLen, byte* out, word32* outLen);
 /*!
-    \ingroup coding
+    \ingroup Base_Encoding
     
     \brief Encode input to base16 output.
     

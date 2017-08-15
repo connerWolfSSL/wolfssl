@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup des3
-*/ 
-
 #ifndef WOLF_CRYPT_DES3_H
 #define WOLF_CRYPT_DES3_H
 
@@ -93,7 +89,7 @@ typedef struct Des3 {
 
 
 /*!
-    \ingroup des3
+    \ingroup 3DES
     
     \brief This function sets the key and initialization vector (iv) for the Des structure given as argument. It also initializes and allocates space for the buffers needed for encryption and decryption, if these have not yet been initialized. Note: If no iv is provided (i.e. iv == NULL) the initialization vector defaults to an iv of 0.
     
@@ -123,7 +119,7 @@ typedef struct Des3 {
 WOLFSSL_API int  wc_Des_SetKey(Des* des, const byte* key,
                                const byte* iv, int dir);
 /*!
-    \ingroup des3
+    \ingroup 3DES
     
     \brief This function sets the initialization vector (iv) for the Des structure given as argument. When passed a NULL iv, it sets the initialization vector to 0.
     
@@ -145,7 +141,7 @@ WOLFSSL_API int  wc_Des_SetKey(Des* des, const byte* key,
 */
 WOLFSSL_API void wc_Des_SetIV(Des* des, const byte* iv);
 /*!
-    \ingroup des3
+    \ingroup 3DES
     
     \brief This function encrypts the input message, in, and stores the result in the output buffer, out. It uses DES encryption with cipher block chaining (CBC) mode.
     
@@ -175,7 +171,7 @@ WOLFSSL_API void wc_Des_SetIV(Des* des, const byte* iv);
 WOLFSSL_API int  wc_Des_CbcEncrypt(Des* des, byte* out,
                                    const byte* in, word32 sz);
 /*!
-    \ingroup des3
+    \ingroup 3DES
     
     \brief This function decrypts the input ciphertext, in, and stores the resulting plaintext in the output buffer, out. It uses DES encryption with cipher block chaining (CBC) mode.
     
@@ -205,7 +201,7 @@ WOLFSSL_API int  wc_Des_CbcEncrypt(Des* des, byte* out,
 WOLFSSL_API int  wc_Des_CbcDecrypt(Des* des, byte* out,
                                    const byte* in, word32 sz);
 /*!
-    \ingroup des3
+    \ingroup 3DES
     
     \brief This function encrypts the input message, in, and stores the result in the output buffer, out. It uses Des encryption with Electronic Codebook (ECB) mode.
     
@@ -234,7 +230,7 @@ WOLFSSL_API int  wc_Des_CbcDecrypt(Des* des, byte* out,
 WOLFSSL_API int  wc_Des_EcbEncrypt(Des* des, byte* out,
                                    const byte* in, word32 sz);
 /*!
-    \ingroup des3
+    \ingroup 3DES
     
     \brief This function encrypts the input message, in, and stores the result in the output buffer, out. It uses Des3 encryption with Electronic Codebook (ECB) mode. Warning: In nearly all use cases ECB mode is considered to be less secure. Please avoid using ECB API’s directly whenever possible.
     
@@ -268,7 +264,7 @@ WOLFSSL_API int wc_Des3_EcbEncrypt(Des3* des, byte* out,
 #define wc_Des3_EcbDecrypt wc_Des3_EcbEncrypt
 
 /*!
-    \ingroup des3
+    \ingroup 3DES
     
     \brief This function sets the key and initialization vector (iv) for the Des3 structure given as argument. It also initializes and allocates space for the buffers needed for encryption and decryption, if these have not yet been initialized. Note: If no iv is provided (i.e. iv == NULL) the initialization vector defaults to an iv of 0.
     
@@ -299,7 +295,7 @@ WOLFSSL_API int wc_Des3_EcbEncrypt(Des3* des, byte* out,
 WOLFSSL_API int  wc_Des3_SetKey(Des3* des, const byte* key,
                                 const byte* iv,int dir);
 /*!
-    \ingroup des3
+    \ingroup 3DES
     
     \brief This function sets the initialization vector (iv) for the Des3 structure given as argument. When passed a NULL iv, it sets the initialization vector to 0.
     
@@ -323,7 +319,7 @@ WOLFSSL_API int  wc_Des3_SetKey(Des3* des, const byte* key,
 */
 WOLFSSL_API int  wc_Des3_SetIV(Des3* des, const byte* iv);
 /*!
-    \ingroup des3
+    \ingroup 3DES
     
     \brief This function encrypts the input message, in, and stores the result in the output buffer, out. It uses Triple Des (3DES) encryption with cipher block chaining (CBC) mode.
     
@@ -353,7 +349,7 @@ WOLFSSL_API int  wc_Des3_SetIV(Des3* des, const byte* iv);
 WOLFSSL_API int  wc_Des3_CbcEncrypt(Des3* des, byte* out,
                                     const byte* in,word32 sz);
 /*!
-    \ingroup des3
+    \ingroup 3DES
     
     \brief This function decrypts the input ciphertext, in, and stores the resulting plaintext in the output buffer, out. It uses Triple Des (3DES) encryption with cipher block chaining (CBC) mode.
     

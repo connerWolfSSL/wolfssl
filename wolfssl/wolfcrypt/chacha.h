@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup chacha
-*/
-
 #ifndef WOLF_CRYPT_CHACHA_H
 #define WOLF_CRYPT_CHACHA_H
 
@@ -55,7 +51,7 @@ typedef struct ChaCha {
   * counter is for what value the block counter should start ... usually 0
   */
 /*!
-    \ingroup chacha
+    \ingroup ChaCha
     
     \brief This function sets the initialization vector (nonce) for a ChaCha object, initializing it for use as a cipher. It should be called after the key has been set, using wc_Chacha_SetKey. A difference nonce should be used for each round of encryption.
     
@@ -83,7 +79,7 @@ typedef struct ChaCha {
 WOLFSSL_API int wc_Chacha_SetIV(ChaCha* ctx, const byte* inIv, word32 counter);
 
 /*!
-    \ingroup chacha
+    \ingroup ChaCha
     
     \brief This function processes the text from the buffer input, encrypts or decrypts it, and stores the result in the buffer output.
     
@@ -113,7 +109,7 @@ WOLFSSL_API int wc_Chacha_SetIV(ChaCha* ctx, const byte* inIv, word32 counter);
 WOLFSSL_API int wc_Chacha_Process(ChaCha* ctx, byte* cipher, const byte* plain,
                               word32 msglen);
 /*!
-    \ingroup chacha
+    \ingroup ChaCha
     
     \brief This function sets the key for a ChaCha object, initializing it for use as a cipher. It should be called before setting the nonce with wc_Chacha_SetIV, and before using it for encryption with wc_Chacha_Process.
     

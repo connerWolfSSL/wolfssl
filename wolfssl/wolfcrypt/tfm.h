@@ -32,7 +32,6 @@
  *  to fit CyaSSL's needs.
  */
 
-
 #ifndef WOLF_CRYPT_TFM_H
 #define WOLF_CRYPT_TFM_H
 
@@ -719,7 +718,7 @@ MP_API int  mp_mod_d(fp_int* a, fp_digit b, fp_digit* c);
 MP_API int  mp_lshd (mp_int * a, int b);
 
 /*!
-    \ingroup types
+    \ingroup Math
     
     \brief This function checks the runtime fastmath settings for the maximum size of an integer. It is important when a user is using a wolfCrypt library independently, as the FP_SIZE must match for each library in order for math to work correctly. This check is defined as CheckFastMathSettings(), which simply compares CheckRunTimeFastMath and FP_SIZE, returning 0 if there is a mismatch, or 1 if they match.
     

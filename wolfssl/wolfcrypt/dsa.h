@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup dsa
-*/
-
 #ifndef WOLF_CRYPT_DSA_H
 #define WOLF_CRYPT_DSA_H
 
@@ -60,7 +56,7 @@ typedef struct DsaKey {
 } DsaKey;
 
 /*!
-    \ingroup dsa
+    \ingroup DSA
     
     \brief This function initializes a DsaKey object in order to use it for authentication via the Digital Signature Algorithm (DSA).
     
@@ -81,7 +77,7 @@ typedef struct DsaKey {
 WOLFSSL_API int wc_InitDsaKey(DsaKey* key);
 WOLFSSL_API int wc_InitDsaKey_h(DsaKey* key, void* h);
 /*!
-    \ingroup dsa
+    \ingroup DSA
     
     \brief This function frees a DsaKey object after it has been used.
     
@@ -101,7 +97,7 @@ WOLFSSL_API int wc_InitDsaKey_h(DsaKey* key, void* h);
 */
 WOLFSSL_API void wc_FreeDsaKey(DsaKey* key);
 /*!
-    \ingroup dsa
+    \ingroup DSA
     
     \brief This function signs the input digest and stores the result in the output buffer, out.
     
@@ -144,7 +140,7 @@ WOLFSSL_API void wc_FreeDsaKey(DsaKey* key);
 WOLFSSL_API int wc_DsaSign(const byte* digest, byte* out,
                            DsaKey* key, WC_RNG* rng);
 /*!
-    \ingroup dsa
+    \ingroup DSA
     
     \brief This function verifies the signature of a digest, given a private key. It stores whether the key properly verifies in the answer parameter, with 1 corresponding to a successful verification, and 0 corresponding to failed verification.
     
@@ -188,7 +184,7 @@ WOLFSSL_API int wc_DsaSign(const byte* digest, byte* out,
 WOLFSSL_API int wc_DsaVerify(const byte* digest, const byte* sig,
                              DsaKey* key, int* answer);
 /*!
-    \ingroup dsa
+    \ingroup DSA
     
     \brief This function decodes a DER formatted certificate buffer containing a DSA public key, and stores the key in the given DsaKey structure. It also sets the inOutIdx parameter according to the length of the input read.
     
@@ -220,7 +216,7 @@ WOLFSSL_API int wc_DsaVerify(const byte* digest, const byte* sig,
 WOLFSSL_API int wc_DsaPublicKeyDecode(const byte* input, word32* inOutIdx,
                                       DsaKey*, word32);
 /*!
-    \ingroup dsa
+    \ingroup DSA
     
     \brief This function decodes a DER formatted certificate buffer containing a DSA private key, and stores the key in the given DsaKey structure. It also sets the inOutIdx parameter according to the length of the input read.
     
@@ -252,7 +248,7 @@ WOLFSSL_API int wc_DsaPublicKeyDecode(const byte* input, word32* inOutIdx,
 WOLFSSL_API int wc_DsaPrivateKeyDecode(const byte* input, word32* inOutIdx,
                                        DsaKey*, word32);
 /*!
-    \ingroup dsa
+    \ingroup DSA
     
     \brief Convert DsaKey key to DER format, write to output (inLen), return bytes written.
     
@@ -286,7 +282,7 @@ WOLFSSL_API int wc_DsaKeyToDer(DsaKey* key, byte* output, word32 inLen);
 
 #ifdef WOLFSSL_KEY_GEN
 /*!
-    \ingroup dsa
+    \ingroup DSA
     
     \brief Create a DSA key.
     
@@ -316,7 +312,7 @@ WOLFSSL_API int wc_DsaKeyToDer(DsaKey* key, byte* output, word32 inLen);
 */
 WOLFSSL_API int wc_MakeDsaKey(WC_RNG *rng, DsaKey *dsa);
 /*!
-    \ingroup dsa
+    \ingroup DSA
     
     \brief FIPS 186-4 defines valid for modulus_size values as (1024, 160) (2048, 256) (3072, 256)
     

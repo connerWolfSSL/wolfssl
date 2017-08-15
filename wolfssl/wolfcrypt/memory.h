@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup memory
-*/
-
 /* submitted by eof */
 
 
@@ -42,7 +38,7 @@
         typedef void (*wolfSSL_Free_cb)(void *ptr, void* heap, int type, const char* func, unsigned int line);
         typedef void *(*wolfSSL_Realloc_cb)(void *ptr, size_t size, void* heap, int type, const char* func, unsigned int line);
 /*!
-    \ingroup memory
+    \ingroup Memory
     
     \brief This function calls the custom malloc function, if one has been defined, or simply calls the default C malloc function if no custom function exists. It is not called directly by wolfSSL, but instead generally called by using XMALLOC, which may be replaced by wolfSSL_Malloc during preprocessing.
     
@@ -64,7 +60,7 @@
 */
         WOLFSSL_API void* wolfSSL_Malloc(size_t size, void* heap, int type, const char* func, unsigned int line);
 /*!
-    \ingroup memory
+    \ingroup Memory
     
     \brief This function calls a custom free function, if one has been defined, or simply calls the default C free function if no custom function exists. It is not called directly by wolfSSL, but instead generally called by using XFREE, which may be replaced by wolfSSL_Free during preprocessing.
     
@@ -90,7 +86,7 @@
 */
         WOLFSSL_API void  wolfSSL_Free(void *ptr, void* heap, int type, const char* func, unsigned int line);
 /*!
-    \ingroup memory
+    \ingroup Memory
     
     \brief This function calls a custom realloc function, if one has been defined, or simply calls the default C realloc function if no custom function exists. It is not called directly by wolfSSL, but instead generally called by using XREALLOC, which may be replaced by wolfSSL_Realloc during preprocessing.
     
@@ -118,7 +114,7 @@
         typedef void (*wolfSSL_Free_cb)(void *ptr, void* heap, int type);
         typedef void *(*wolfSSL_Realloc_cb)(void *ptr, size_t size, void* heap, int type);
 /*!
-    \ingroup wolfCrypt
+    \ingroup Memory
     
     \brief This function is similar to malloc(), but calls the memory allocation function which wolfSSL has been configured to use.  By default, wolfSSL uses malloc().  This can be changed using the wolfSSL memory abstraction layer - see wolfSSL_SetAllocators().
     
@@ -144,7 +140,7 @@
         WOLFSSL_API void* wolfSSL_Malloc(size_t size, void* heap, int type);
         WOLFSSL_API void  wolfSSL_Free(void *ptr, void* heap, int type);
 /*!
-    \ingroup wolfCrypt
+    \ingroup Memory
     
     \brief This function is similar to realloc(), but calls the memory re-allocation function which wolfSSL has been configured to use.  By default, wolfSSL uses realloc().  This can be changed using the wolfSSL memory abstraction layer - see wolfSSL_SetAllocators().
     
@@ -180,7 +176,7 @@
         /* Public in case user app wants to use XMALLOC/XFREE */
         WOLFSSL_API void* wolfSSL_Malloc(size_t size, const char* func, unsigned int line);
 /*!
-    \ingroup wolfCrypt
+    \ingroup Memory
     
     \brief This function is similar to free(), but calls the memory free function which wolfSSL has been configured to use. By default, wolfSSL uses free(). This can be changed using the wolfSSL memory abstraction layer - see wolfSSL_SetAllocators().
     
@@ -214,7 +210,7 @@
 
 /* Public get/set functions */
 /*!
-    \ingroup memory
+    \ingroup Memory
     
     \brief This function registers the allocation functions used by wolfSSL. By default, if the system supports it, malloc/free and realloc are used. Using this function allows the user at runtime to install their own memory handlers.
     
@@ -364,7 +360,7 @@ WOLFSSL_API int wolfSSL_GetAllocators(wolfSSL_Malloc_cb*,
     WOLFSSL_LOCAL int FreeFixedIO(WOLFSSL_HEAP* heap, wc_Memory** io);
 
 /*!
-    \ingroup memory
+    \ingroup Memory
     
     \brief This function is available when static memory feature is used (--enable-staticmemory). It gives the optimum buffer size for memory “buckets”. This allows for a way to compute buffer size so that no extra unused memory is left at the end after it has been partitioned. The returned value, if positive, is the computed buffer size to use. 
     
@@ -391,7 +387,7 @@ WOLFSSL_API int wolfSSL_GetAllocators(wolfSSL_Malloc_cb*,
 */
     WOLFSSL_API int wolfSSL_StaticBufferSz(byte* buffer, word32 sz, int flag);
 /*!
-    \ingroup memory
+    \ingroup Memory
     
     \brief This function is available when static memory feature is used (--enable-staticmemory). It gives the size of padding needed for each partition of memory. This padding size will be the size needed to contain a memory management structure along with any extra for memory alignment.
     

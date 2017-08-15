@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup password_based
-*/
-
 #ifndef WOLF_CRYPT_PWDBASED_H
 #define WOLF_CRYPT_PWDBASED_H
 
@@ -45,7 +41,7 @@
  * wolfssl/wolfcrypt/asn.h line 173 in enum Oid_Types
  */
 /*!
-    \ingroup password_based
+    \ingroup Password
     
     \brief This function implements the Password Based Key Derivation Function 1 (PBKDF1), converting an input password with a concatenated salt  into a more secure key, which it stores in output. It allows the user to select between SHA and MD5 as hash functions.
     
@@ -82,7 +78,7 @@ WOLFSSL_API int wc_PBKDF1(byte* output, const byte* passwd, int pLen,
                       const byte* salt, int sLen, int iterations, int kLen,
                       int typeH);
 /*!
-    \ingroup password_based
+    \ingroup Password
     
     \brief This function implements the Password Based Key Derivation Function 2 (PBKDF2), converting an input password with a concatenated salt into a more secure key, which it stores in output. It allows the user to select any of the supported HMAC hash functions, including: MD5, SHA, SHA256, SHA384, SHA512, and BLAKE2B
     
@@ -120,7 +116,7 @@ WOLFSSL_API int wc_PBKDF2(byte* output, const byte* passwd, int pLen,
                       const byte* salt, int sLen, int iterations, int kLen,
                       int typeH);
 /*!
-    \ingroup password_based
+    \ingroup Password
     
     \brief This function implements the Password Based Key Derivation Function (PBKDF) described in RFC 7292 Appendix B. This function converts an input password with a concatenated salt into a more secure key, which it stores in output. It allows the user to select any of the supported HMAC hash functions, including: MD5, SHA, SHA256, SHA384, SHA512, and BLAKE2B.
     

@@ -19,10 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-/*!
-    \defgroup ecc
-*/
-
 #ifndef WOLF_CRYPT_ECC_H
 #define WOLF_CRYPT_ECC_H
 
@@ -329,7 +325,7 @@ ECC_API int ecc_projective_dbl_point(ecc_point* P, ecc_point* R, mp_int* a,
 #endif
 
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function generates a new ecc_key and stores it in key.
     
@@ -371,7 +367,7 @@ WOLFSSL_API
 int wc_ecc_make_key_ex(WC_RNG* rng, int keysize, ecc_key* key,
     int curve_id);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Perform sanity checks on ecc key validity.
     
@@ -410,7 +406,7 @@ int wc_ecc_is_point(ecc_point* ecp, mp_int* a, mp_int* b, mp_int* prime);
 
 #ifdef HAVE_ECC_DHE
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function generates a new secret key using a local private key and a received public key. It stores this shared secret key in the buffer out and updates outlen to hold the number of bytes written to the output buffer.
     
@@ -464,7 +460,7 @@ WOLFSSL_LOCAL
 int wc_ecc_shared_secret_gen(ecc_key* private_key, ecc_point* point,
                              byte* out, word32 *outlen);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Create an ECC shared secret between private key and public point.
     
@@ -509,7 +505,7 @@ int wc_ecc_shared_secret_ex(ecc_key* private_key, ecc_point* point,
 
 #ifdef HAVE_ECC_SIGN
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function signs a message digest using an ecc_key object to guarantee authenticity.
     
@@ -559,7 +555,7 @@ WOLFSSL_API
 int wc_ecc_sign_hash(const byte* in, word32 inlen, byte* out, word32 *outlen,
                      WC_RNG* rng, ecc_key* key);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Sign a message digest.
     
@@ -615,7 +611,7 @@ int wc_ecc_sign_hash_ex(const byte* in, word32 inlen, WC_RNG* rng,
 
 #ifdef HAVE_ECC_VERIFY
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function verifies the ECC signature of a hash to ensure authenticity. It returns the answer through stat, with 1 corresponding to a valid signature, and 0 corresponding to an invalid signature.
     
@@ -664,7 +660,7 @@ WOLFSSL_API
 int wc_ecc_verify_hash(const byte* sig, word32 siglen, const byte* hash,
                     word32 hashlen, int* stat, ecc_key* key);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Verify an ECC signature.  Result is written to stat.  1 is valid, 0 is invalid.
 Note: Do not use the return value to test for valid.  Only use stat.
@@ -702,7 +698,7 @@ int wc_ecc_verify_hash_ex(mp_int *r, mp_int *s, const byte* hash,
 #endif /* HAVE_ECC_VERIFY */
 
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function initializes an ecc_key object for future use with message verification or key negotiation.
     
@@ -725,7 +721,7 @@ int wc_ecc_init(ecc_key* key);
 WOLFSSL_API
 int wc_ecc_init_ex(ecc_key* key, void* heap, int devId);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function frees an ecc_key object after it has been used.
     
@@ -747,7 +743,7 @@ void wc_ecc_free(ecc_key* key);
 WOLFSSL_API
 int wc_ecc_set_flags(ecc_key* key, word32 flags);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function frees the fixed-point cache, which can be used with ecc to speed up computation times. To use this functionality, FP_ECC (fixed-point ecc), should be defined.
     
@@ -773,7 +769,7 @@ WOLFSSL_API
 int wc_ecc_set_curve(ecc_key* key, int keysize, int curve_id);
 
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Checks if an ECC idx is valid.
     
@@ -828,7 +824,7 @@ int wc_ecc_get_curve_id_from_params(int fieldSize,
 #ifndef WOLFSSL_ATECC508A
 
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Allocate a new ECC point.
     
@@ -857,7 +853,7 @@ ecc_point* wc_ecc_new_point(void);
 WOLFSSL_API
 ecc_point* wc_ecc_new_point_h(void* h);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Free an ECC point from memory.
     
@@ -886,7 +882,7 @@ void wc_ecc_del_point(ecc_point* p);
 WOLFSSL_API
 void wc_ecc_del_point_h(ecc_point* p, void* h);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Copy the value of one point to another one.
     
@@ -918,7 +914,7 @@ void wc_ecc_del_point_h(ecc_point* p, void* h);
 WOLFSSL_API
 int wc_ecc_copy_point(ecc_point* p, ecc_point *r);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Compare the value of a point with another one.
     
@@ -959,7 +955,7 @@ int wc_ecc_copy_point(ecc_point* p, ecc_point *r);
 WOLFSSL_API
 int wc_ecc_cmp_point(ecc_point* a, ecc_point *b);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Checks if a point is at infinity.  Returns 1 if point is at infinity, 0 if not, < 0 on error
 
@@ -998,7 +994,7 @@ int wc_ecc_cmp_point(ecc_point* a, ecc_point *b);
 WOLFSSL_API
 int wc_ecc_point_is_at_infinity(ecc_point *p);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Perform ECC Fixed Point multiplication.
     
@@ -1043,7 +1039,7 @@ int wc_ecc_mulmod_ex(mp_int* k, ecc_point *G, ecc_point *R,
 #ifdef HAVE_ECC_KEY_EXPORT
 /* ASN key helpers */
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function exports the ECC key from the ecc_key structure, storing the result in out. The key will be stored in ANSI X9.63 format. It stores the bytes written to the output buffer in outLen.
     
@@ -1088,7 +1084,7 @@ int wc_ecc_mulmod_ex(mp_int* k, ecc_point *G, ecc_point *R,
 WOLFSSL_API
 int wc_ecc_export_x963(ecc_key*, byte* out, word32* outLen);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function exports the ECC key from the ecc_key structure, storing the result in out. The key will be stored in ANSI X9.63 format. It stores the bytes written to the output buffer in outLen. This function allows the additional option of compressing the certificate through the compressed parameter. When this parameter is true, the key will be stored in ANSI X9.63 compressed format.
     
@@ -1138,7 +1134,7 @@ int wc_ecc_export_x963_ex(ecc_key*, byte* out, word32* outLen, int compressed);
 
 #ifdef HAVE_ECC_KEY_IMPORT
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function imports a public ECC key from a buffer containing the key stored in ANSI X9.63 format. This function will handle both compressed and uncompressed keys, as long as compressed keys are enabled at compile time through the HAVE_COMP_KEY option.
     
@@ -1187,7 +1183,7 @@ WOLFSSL_API
 int wc_ecc_import_x963_ex(const byte* in, word32 inLen, ecc_key* key,
                           int curve_id);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function imports a public/private ECC key pair from a buffer containing the raw private key, and a second buffer containing the ANSI X9.63 formatted public key. This function will handle both compressed and uncompressed keys, as long as compressed keys are enabled at compile time through the HAVE_COMP_KEY option.
     
@@ -1239,7 +1235,7 @@ WOLFSSL_API
 int wc_ecc_import_private_key_ex(const byte* priv, word32 privSz,
                 const byte* pub, word32 pubSz, ecc_key* key, int curve_id);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function converts the R and S portions of an ECC signature into a DER-encoded ECDSA signature. This function also stores the length written to the output buffer, out, in outlen.
     
@@ -1288,7 +1284,7 @@ WOLFSSL_API
 int wc_ecc_sig_to_rs(const byte* sig, word32 sigLen, byte* r, word32* rLen,
                    byte* s, word32* sLen);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function fills an ecc_key structure with the raw components of an ECC signature.
     
@@ -1341,7 +1337,7 @@ int wc_ecc_import_raw_ex(ecc_key* key, const char* qx, const char* qy,
 
 #ifdef HAVE_ECC_KEY_EXPORT
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function exports only the private key from an ecc_key structure. It stores the private key in the buffer out, and sets the bytes written to this buffer in outLen.
     
@@ -1394,7 +1390,7 @@ int wc_ecc_export_private_raw(ecc_key* key, byte* qx, word32* qxLen,
 #ifdef HAVE_ECC_KEY_EXPORT
 
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Export point to der.
     
@@ -1428,7 +1424,7 @@ int wc_ecc_export_point_der(const int curve_idx, ecc_point* point,
 
 #ifdef HAVE_ECC_KEY_IMPORT
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief Import point from der format.
     
@@ -1460,7 +1456,7 @@ int wc_ecc_import_point_der(byte* in, word32 inLen, const int curve_idx,
 
 /* size helper */
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function returns the key size of an ecc_key structure in octets.
     
@@ -1485,7 +1481,7 @@ int wc_ecc_import_point_der(byte* in, word32 inLen, const int curve_idx,
 WOLFSSL_API
 int wc_ecc_size(ecc_key* key);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function returns the worst case size for an ECC signature, given by: keySz * 2 + SIG_HEADER_SZ + 4 The actual signature size can be computed with wc_ecc_sign_hash.
     
@@ -1555,7 +1551,7 @@ enum ecFlags {
 typedef struct ecEncCtx ecEncCtx;
 
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function allocates and initializes space for a new ECC context object to allow secure message exchange with ECC.
     
@@ -1584,7 +1580,7 @@ ecEncCtx* wc_ecc_ctx_new(int flags, WC_RNG* rng);
 WOLFSSL_API
 ecEncCtx* wc_ecc_ctx_new_ex(int flags, WC_RNG* rng, void* heap);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function frees the ecEncCtx object used for encrypting and decrypting messages.
     
@@ -1608,7 +1604,7 @@ ecEncCtx* wc_ecc_ctx_new_ex(int flags, WC_RNG* rng, void* heap);
 WOLFSSL_API
 void wc_ecc_ctx_free(ecEncCtx*);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function resets an ecEncCtx structure to avoid having to free and allocate a new context object.
     
@@ -1637,7 +1633,7 @@ WOLFSSL_API
 int wc_ecc_ctx_reset(ecEncCtx*, WC_RNG*);  /* reset for use again w/o alloc/free */
 
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function returns the salt of an ecEncCtx object. This function should only be called when the ecEncCtx's state is ecSRV_INIT or ecCLI_INIT.
     
@@ -1665,7 +1661,7 @@ int wc_ecc_ctx_reset(ecEncCtx*, WC_RNG*);  /* reset for use again w/o alloc/free
 WOLFSSL_API
 const byte* wc_ecc_ctx_get_own_salt(ecEncCtx*);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function sets the peer salt of an ecEncCtx object. 
     
@@ -1697,7 +1693,7 @@ const byte* wc_ecc_ctx_get_own_salt(ecEncCtx*);
 WOLFSSL_API
 int wc_ecc_ctx_set_peer_salt(ecEncCtx*, const byte* salt);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function can optionally be called before or after wc_ecc_ctx_set_peer_salt. It sets optional information for an ecEncCtx object.
 
@@ -1724,7 +1720,7 @@ WOLFSSL_API
 int wc_ecc_ctx_set_info(ecEncCtx*, const byte* info, int sz);
 
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function encrypts the given input message from msg to out. This function takes an optional ctx object as parameter. When supplied, encryption proceeds based on the ecEncCtx's encAlgo, kdfAlgo, and macAlgo. If ctx is not supplied, processing completes with the default algorithms, ecAES_128_CBC, ecHKDF_SHA256 and ecHMAC_SHA256. This function requires that the messages are padded according to the encryption type specified by ctx.
     
@@ -1767,7 +1763,7 @@ WOLFSSL_API
 int wc_ecc_encrypt(ecc_key* privKey, ecc_key* pubKey, const byte* msg,
                 word32 msgSz, byte* out, word32* outSz, ecEncCtx* ctx);
 /*!
-    \ingroup ecc
+    \ingroup ECC
     
     \brief This function decrypts the ciphertext from msg to out. This function takes an optional ctx object as parameter. When supplied, encryption proceeds based on the ecEncCtx's encAlgo, kdfAlgo, and macAlgo. If ctx is not supplied, processing completes with the default algorithms, ecAES_128_CBC, ecHKDF_SHA256 and ecHMAC_SHA256. This function requires that the messages are padded according to the encryption type specified by ctx.
     

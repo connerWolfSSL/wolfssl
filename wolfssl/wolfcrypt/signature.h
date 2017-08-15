@@ -19,7 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
-
 #ifndef WOLF_CRYPT_SIGNATURE_H
 #define WOLF_CRYPT_SIGNATURE_H
 
@@ -39,7 +38,7 @@ enum wc_SignatureType {
 };
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup Signature
     
     \brief This function returns the maximum size of the resulting signature.
     
@@ -70,7 +69,7 @@ WOLFSSL_API int wc_SignatureGetSize(enum wc_SignatureType sig_type,
     const void* key, word32 key_len);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup Signature
     
     \brief This function validates a signature by hashing the data and using the resulting hash and key to verify the signature.
     
@@ -116,7 +115,7 @@ WOLFSSL_API int wc_SignatureVerify(
     const void* key, word32 key_len);
 
 /*!
-    \ingroup wolfCrypt
+    \ingroup Signature
     
     \brief This function generates a signature from the data using a key. It first creates a hash of the data then signs the hash using the key.
 
