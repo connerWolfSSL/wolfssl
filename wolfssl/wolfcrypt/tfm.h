@@ -1,6 +1,6 @@
 /* tfm.h
  *
- * Copyright (C) 2006-2016 wolfSSL Inc.
+ * Copyright (C) 2006-2017 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -63,6 +63,10 @@
    #define MAX(x,y) ((x)>(y)?(x):(y))
 #endif
 
+#ifdef WOLFSSL_NO_ASM
+   #undef  TFM_NO_ASM
+   #define TFM_NO_ASM
+#endif
 
 #ifndef NO_64BIT
 /* autodetect x86-64 and make sure we are using 64-bit digits with x86-64 asm */
@@ -413,6 +417,8 @@ void fp_init_copy(fp_int *a, fp_int *b);
 
 /* clamp digits */
 #define fp_clamp(a)   { while ((a)->used && (a)->dp[(a)->used-1] == 0) --((a)->used); (a)->sign = (a)->used ? (a)->sign : FP_ZPOS; }
+#define mp_clamp(a)   fp_clamp(a)
+#define mp_grow(a,s)  MP_OKAY
 
 /* negate and absolute */
 #define fp_neg(a, b)  { fp_copy(a, b); (b)->sign ^= 1; fp_clamp(b); }
@@ -603,8 +609,6 @@ void fp_sqr_comba32(fp_int *a, fp_int *b);
 void fp_sqr_comba48(fp_int *a, fp_int *b);
 void fp_sqr_comba64(fp_int *a, fp_int *b);
 
-/*extern const char *fp_s_rmap;*/
-
 
 /**
  * Used by wolfSSL
@@ -631,10 +635,22 @@ typedef fp_int mp_int;
 #define MP_MASK FP_MASK
 
 /* Prototypes */
-#define mp_zero(a)  fp_zero(a)
+#define mp_zero(a)   fp_zero(a)
 #define mp_isone(a)  fp_isone(a)
-#define mp_iseven(a)  fp_iseven(a)
-#define mp_isneg(a)   fp_isneg(a)
+#define mp_iseven(a) fp_iseven(a)
+#define mp_isneg(a)  fp_isneg(a)
+
+#define MP_RADIX_BIN  2
+#define MP_RADIX_OCT  8
+#define MP_RADIX_DEC  10
+#define MP_RADIX_HEX  16
+#define MP_RADIX_MAX  64
+
+#define mp_tobinary(M, S)  mp_toradix((M), (S), MP_RADIX_BIN)
+#define mp_tooctal(M, S)   mp_toradix((M), (S), MP_RADIX_OCT)
+#define mp_todecimal(M, S) mp_toradix((M), (S), MP_RADIX_DEC)
+#define mp_tohex(M, S)     mp_toradix((M), (S), MP_RADIX_HEX)
+
 MP_API int  mp_init (mp_int * a);
 MP_API void mp_clear (mp_int * a);
 MP_API void mp_free (mp_int * a);

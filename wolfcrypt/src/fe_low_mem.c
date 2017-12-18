@@ -1,6 +1,6 @@
 /* fe_low_mem.c
  *
- * Copyright (C) 2006-2016 wolfSSL Inc.
+ * Copyright (C) 2006-2017 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -40,7 +40,6 @@
     #include <wolfcrypt/src/misc.c>
 #endif
 
-
 void fprime_copy(byte *x, const byte *a)
 {
     int i;
@@ -58,6 +57,12 @@ void lm_copy(byte* x, const byte* a)
 
 
 #ifdef CURVE25519_SMALL
+#ifndef FREESCALE_LTC_ECC
+void fe_init()
+{
+}
+#endif
+
 /* Double an X-coordinate */
 static void xc_double(byte *x3, byte *z3,
 		      const byte *x1, const byte *z1)

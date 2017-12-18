@@ -1,6 +1,6 @@
 /* integer.c
  *
- * Copyright (C) 2006-2016 wolfSSL Inc.
+ * Copyright (C) 2006-2017 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -212,7 +212,9 @@ void mp_forcezero(mp_int * a)
     if (a->dp != NULL) {
       /* force zero the used digits */
       ForceZero(a->dp, a->used * sizeof(mp_digit));
-
+#ifdef HAVE_WOLF_BIGINT
+      wc_bigint_zero(&a->raw);
+#endif
       /* free ram */
       mp_free(a);
 
@@ -323,10 +325,15 @@ int mp_init_copy (mp_int * a, mp_int * b)
 {
   int     res;
 
-  if ((res = mp_init (a)) != MP_OKAY) {
+  if ((res = mp_init_size (a, b->used)) != MP_OKAY) {
     return res;
   }
-  return mp_copy (b, a);
+
+  if((res = mp_copy (b, a)) != MP_OKAY) {
+    mp_clear(a);
+  }
+
+  return res;
 }
 
 
@@ -484,9 +491,6 @@ void mp_zero (mp_int * a)
 
   a->sign = MP_ZPOS;
   a->used = 0;
-#ifdef HAVE_WOLF_BIGINT
-  wc_bigint_zero(&a->raw);
-#endif
 
   tmp = a->dp;
   for (n = 0; n < a->alloc; n++) {
@@ -930,13 +934,15 @@ int mp_invmod (mp_int * a, mp_int * b, mp_int * c)
 
 #ifdef BN_FAST_MP_INVMOD_C
   /* if the modulus is odd we can use a faster routine instead */
-  if (mp_isodd (b) == MP_YES) {
+  if ((mp_isodd(b) == MP_YES) && (mp_cmp_d(b, 1) != MP_EQ)) {
     return fast_mp_invmod (a, b, c);
   }
 #endif
 
 #ifdef BN_MP_INVMOD_SLOW_C
   return mp_invmod_slow(a, b, c);
+#else
+  return MP_VAL;
 #endif
 }
 
@@ -1044,7 +1050,7 @@ top:
 
   /* if not zero goto step 4 */
   if (mp_iszero (&u) == MP_NO) {
-    if (++loop_check > 4096) {
+    if (++loop_check > MAX_INVMOD_SZ) {
         res = MP_VAL;
         goto LBL_ERR;
     }
@@ -1380,7 +1386,7 @@ int mp_mod (mp_int * a, mp_int * b, mp_int * c)
   mp_int  t;
   int     res;
 
-  if ((res = mp_init (&t)) != MP_OKAY) {
+  if ((res = mp_init_size (&t, b->used)) != MP_OKAY) {
     return res;
   }
 
@@ -1389,11 +1395,11 @@ int mp_mod (mp_int * a, mp_int * b, mp_int * c)
     return res;
   }
 
-  if (t.sign != b->sign) {
-    res = mp_add (b, &t, c);
-  } else {
+  if ((mp_iszero(&t) != MP_NO) || (t.sign == b->sign)) {
     res = MP_OKAY;
     mp_exch (&t, c);
+  } else {
+    res = mp_add (b, &t, c);
   }
 
   mp_clear (&t);
@@ -1892,7 +1898,7 @@ int mp_exptmod_fast (mp_int * G, mp_int * X, mp_int * P, mp_int * Y,
 
   /* init M array */
   /* init first cell */
-  if ((err = mp_init(&M[1])) != MP_OKAY) {
+  if ((err = mp_init_size(&M[1], P->alloc)) != MP_OKAY) {
 #ifdef WOLFSSL_SMALL_STACK
      XFREE(M, NULL, DYNAMIC_TYPE_TMP_BUFFER);
 #endif
@@ -1902,7 +1908,7 @@ int mp_exptmod_fast (mp_int * G, mp_int * X, mp_int * P, mp_int * Y,
 
   /* now init the second half of the array */
   for (x = 1<<(winsize-1); x < (1 << winsize); x++) {
-    if ((err = mp_init(&M[x])) != MP_OKAY) {
+    if ((err = mp_init_size(&M[x], P->alloc)) != MP_OKAY) {
       for (y = 1<<(winsize-1); y < x; y++) {
         mp_clear (&M[y]);
       }
@@ -1968,7 +1974,7 @@ int mp_exptmod_fast (mp_int * G, mp_int * X, mp_int * P, mp_int * Y,
   }
 
   /* setup result */
-  if ((err = mp_init (&res)) != MP_OKAY) {
+  if ((err = mp_init_size (&res, P->alloc)) != MP_OKAY) {
     goto LBL_M;
   }
 
@@ -1985,15 +1991,15 @@ int mp_exptmod_fast (mp_int * G, mp_int * X, mp_int * P, mp_int * Y,
      if ((err = mp_montgomery_calc_normalization (&res, P)) != MP_OKAY) {
        goto LBL_RES;
      }
-#else
-     err = MP_VAL;
-     goto LBL_RES;
-#endif
 
      /* now set M[1] to G * R mod m */
      if ((err = mp_mulmod (G, &res, P, &M[1])) != MP_OKAY) {
        goto LBL_RES;
      }
+#else
+     err = MP_VAL;
+     goto LBL_RES;
+#endif
   } else {
      if ((err = mp_set(&res, 1)) != MP_OKAY) {
         goto LBL_RES;
@@ -2537,7 +2543,9 @@ top:
    * Each successive "recursion" makes the input smaller and smaller.
    */
   if (mp_cmp_mag (x, n) != MP_LT) {
-    s_mp_sub(x, n, x);
+    if ((err = s_mp_sub(x, n, x)) != MP_OKAY) {
+        return err;
+    }
     goto top;
   }
   return MP_OKAY;
@@ -2574,7 +2582,9 @@ top:
    }
 
    if (mp_cmp_mag(a, n) != MP_LT) {
-      s_mp_sub(a, n, a);
+      if ((res = s_mp_sub(a, n, a)) != MP_OKAY) {
+         goto ERR;
+      }
       goto top;
    }
 
@@ -2712,7 +2722,7 @@ int mp_mulmod (mp_int * a, mp_int * b, mp_int * c, mp_int * d)
   int     res;
   mp_int  t;
 
-  if ((res = mp_init (&t)) != MP_OKAY) {
+  if ((res = mp_init_size (&t, c->used)) != MP_OKAY) {
     return res;
   }
 
@@ -3177,7 +3187,7 @@ int fast_s_mp_mul_digs (mp_int * a, mp_int * b, mp_int * c, int digs)
   {
     mp_digit *tmpc;
     tmpc = c->dp;
-    for (ix = 0; ix < pa+1; ix++) {
+    for (ix = 0; ix < pa; ix++) { /* JRB, +1 could read uninitialized data */
       /* now extract the previous digit [below the carry] */
       *tmpc++ = W[ix];
     }
@@ -3733,7 +3743,9 @@ top:
    }
 
    if (mp_cmp_mag(a, n) != MP_LT) {
-      s_mp_sub(a, n, a);
+      if ((res = s_mp_sub(a, n, a)) != MP_OKAY) {
+         goto ERR;
+      }
       goto top;
    }
 
@@ -3847,6 +3859,10 @@ int fast_s_mp_mul_high_digs (mp_int * a, mp_int * b, mp_int * c, int digs)
 #endif
   mp_word  _W;
 
+  if (a->dp == NULL) { /* JRB, avoid reading uninitialized values */
+      return MP_VAL;
+  }
+
   /* grow the destination as required */
   pa = a->used + b->used;
   if (c->alloc < pa) {
@@ -3867,7 +3883,7 @@ int fast_s_mp_mul_high_digs (mp_int * a, mp_int * b, mp_int * c, int digs)
   /* number of output digits to produce */
   pa = a->used + b->used;
   _W = 0;
-  for (ix = digs; ix < pa && a->dp; ix++) {
+  for (ix = digs; ix < pa; ix++) { /* JRB, have a->dp check at top of function*/
       int      tx, ty, iy;
       mp_digit *tmpx, *tmpy;
 
@@ -4153,7 +4169,8 @@ int mp_sub_d (mp_int * a, mp_digit b, mp_int * c)
 #endif /* defined(HAVE_ECC) || !defined(NO_PWDBASED) */
 
 
-#if defined(WOLFSSL_KEY_GEN) || defined(HAVE_COMP_KEY) || defined(HAVE_ECC)
+#if defined(WOLFSSL_KEY_GEN) || defined(HAVE_COMP_KEY) || defined(HAVE_ECC) || \
+    defined(DEBUG_WOLFSSL)
 
 static const int lnz[16] = {
    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
@@ -4299,7 +4316,7 @@ int mp_mod_d (mp_int * a, mp_digit b, mp_digit * c)
   return mp_div_d(a, b, NULL, c);
 }
 
-#endif /* defined(WOLFSSL_KEY_GEN)||defined(HAVE_COMP_KEY)||defined(HAVE_ECC) */
+#endif /* WOLFSSL_KEY_GEN || HAVE_COMP_KEY || HAVE_ECC || DEBUG_WOLFSSL */
 
 #ifdef WOLFSSL_KEY_GEN
 
@@ -4712,7 +4729,8 @@ LBL_U:mp_clear (&v);
 #endif /* WOLFSSL_KEY_GEN */
 
 
-#if defined(HAVE_ECC) || defined(WOLFSSL_KEY_GEN) || defined(HAVE_COMP_KEY)
+#if defined(HAVE_ECC) || defined(WOLFSSL_KEY_GEN) || defined(HAVE_COMP_KEY) || \
+    defined(WOLFSSL_DEBUG_MATH) || defined(DEBUG_WOLFSSL)
 
 /* chars used in radix conversions */
 const char *mp_s_rmap = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ\
@@ -4730,7 +4748,7 @@ int mp_read_radix (mp_int * a, const char *str, int radix)
   mp_zero(a);
 
   /* make sure the radix is ok */
-  if (radix < 2 || radix > 64) {
+  if (radix < MP_RADIX_BIN || radix > MP_RADIX_MAX) {
     return MP_VAL;
   }
 
@@ -4748,7 +4766,7 @@ int mp_read_radix (mp_int * a, const char *str, int radix)
   mp_zero (a);
 
   /* process each digit of the string */
-  while (*str) {
+  while (*str != '\0') {
     /* if the radix <= 36 the conversion is case insensitive
      * this allows numbers like 1AB and 1ab to represent the same  value
      * [e.g. in hex]
@@ -4777,6 +4795,12 @@ int mp_read_radix (mp_int * a, const char *str, int radix)
     ++str;
   }
 
+  /* if digit in isn't null term, then invalid character was found */
+  if (*str != '\0') {
+     mp_zero (a);
+     return MP_VAL;
+  }
+
   /* set the sign only if a != 0 */
   if (mp_iszero(a) != MP_YES) {
      a->sign = neg;
@@ -4786,7 +4810,7 @@ int mp_read_radix (mp_int * a, const char *str, int radix)
 #endif /* HAVE_ECC */
 
 #if defined(WOLFSSL_KEY_GEN) || defined(HAVE_COMP_KEY) || \
-    defined(WOLFSSL_DEBUG_MATH)
+    defined(WOLFSSL_DEBUG_MATH) || defined(DEBUG_WOLFSSL)
 
 /* returns size of ASCII representation */
 int mp_radix_size (mp_int *a, int radix, int *size)
@@ -4798,13 +4822,13 @@ int mp_radix_size (mp_int *a, int radix, int *size)
     *size = 0;
 
     /* special case for binary */
-    if (radix == 2) {
+    if (radix == MP_RADIX_BIN) {
         *size = mp_count_bits (a) + (a->sign == MP_NEG ? 1 : 0) + 1;
         return MP_OKAY;
     }
 
     /* make sure the radix is in range */
-    if (radix < 2 || radix > 64) {
+    if (radix < MP_RADIX_BIN || radix > MP_RADIX_MAX) {
         return MP_VAL;
     }
 
@@ -4853,7 +4877,7 @@ int mp_toradix (mp_int *a, char *str, int radix)
     char   *_s = str;
 
     /* check range of the radix */
-    if (radix < 2 || radix > 64) {
+    if (radix < MP_RADIX_BIN || radix > MP_RADIX_MAX) {
         return MP_VAL;
     }
 
@@ -4911,7 +4935,7 @@ void mp_dump(const char* desc, mp_int* a, byte verbose)
   printf("%s: ptr=%p, used=%d, sign=%d, size=%d, mpd=%d\n",
     desc, a, a->used, a->sign, size, (int)sizeof(mp_digit));
 
-  mp_toradix(a, buffer, 16);
+  mp_tohex(a, buffer);
   printf("  %s\n  ", buffer);
 
   if (verbose) {

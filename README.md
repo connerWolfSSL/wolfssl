@@ -38,6 +38,116 @@ wolfSSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, 0);
 before calling wolfSSL_new();  Though it's not recommended.
 ```
 
+# wolfSSL (Formerly CyaSSL) Release 3.12.2 (10/23/2017)
+
+## Release 3.12.2 of wolfSSL has bug fixes and new features including:
+
+This release includes many performance improvements with Intel ASM (AVX/AVX2) and AES-NI. New single precision math option to speedup RSA, DH and ECC. Embedded hardware support has been expanded for STM32, PIC32MZ and ATECC508A. AES now supports XTS mode for disk encryption. Certificate improvements for setting serial number, key usage and extended key usage. Refactor of SSL_ and hash types to allow openssl coexistence. Improvements for TLS 1.3. Fixes for OCSP stapling to allow disable and WOLFSSL specific user context for callbacks. Fixes for openssl and MySQL compatibility. Updated Micrium port. Fixes for asynchronous modes.
+
+* Added TLS extension for Supported Point Formats (ec_point_formats)
+* Fix to not send OCSP stapling extensions in client_hello when not enabled
+* Added new API's for disabling OCSP stapling
+* Add check for SIZEOF_LONG with sun and LP64
+* Fixes for various TLS 1.3 disable options (RSA, ECC and ED/Curve 25519).
+* Fix to disallow upgrading to TLS v1.3
+* Fixes for wolfSSL_EVP_CipherFinal() when message size is a round multiple of a block size.
+* Add HMAC benchmark and expanded AES key size benchmarks
+* Added simple GCC ARM Makefile example
+* Add tests for 3072-bit RSA and DH.
+* Fixed DRAFT_18 define and fixed downgrading with TLS v1.3
+* Fixes to allow custom serial number during certificate generation
+* Add method to get WOLFSSL_CTX certificate manager
+* Improvement to `wolfSSL_SetOCSP_Cb` to allow context per WOLFSSL object
+* Alternate certificate chain support `WOLFSSL_ALT_CERT_CHAINS`. Enables checking cert against multiple CA's. 
+* Added new `--disable-oldnames` option to allow for using openssl along-side wolfssl headers (without OPENSSL_EXTRA).
+* Refactor SSL_ and hashing types to use wolf specific prefix (WOLFSSL and WC_) to allow openssl coexistence.
+* Fixes for HAVE_INTEL_MULX
+* Cleanup include paths for MySQL cmake build
+* Added configure option for building library for wolfSSH (--enable-wolfssh)
+* Openssl compatibility layer improvements
+* Expanded API unit tests
+* Fixes for STM32 crypto hardware acceleration
+* Added AES XTS mode (--enable-xts)
+* Added ASN Extended Key Usage Support (see wc_SetExtKeyUsage).
+* Math updates and added TFM_MIPS speedup.
+* Fix for creation of the KeyUsage BitString
+* Fix for 8k keys with MySQL compatibility
+* Fixes for ATECC508A.
+* Fixes for PIC32MZ hashing.
+* Fixes and improvements to asynchronous modes for Intel QuickAssist and Cavium Nitrox V.
+* Update HASH_DRBG Reseed mechanism and add test case
+* Rename the file io.h/io.c to wolfio.h/wolfio.c
+* Cleanup the wolfIO_Send function.
+* OpenSSL Compatibility Additions and Fixes
+* Improvements to Visual Studio DLL project/solution.
+* Added function to generate public ECC key from private key
+* Added async blocking support for sniffer tool.
+* Added wolfCrypt hash tests for empty string and large data.
+* Added ability to use of wolf implementation of `strtok` using `USE_WOLF_STRTOK`.
+* Updated Micrium uC/OS-III Port
+* Updated root certs for OCSP scripts
+* New Single Precision math option for RSA, DH and ECC (off by default). See `--enable-sp`.
+* Speedups for AES GCM with AESNI (--enable-aesni)
+* Speedups for SHA2, ChaCha20/Poly1035 using AVX/AVX2
+
+
+# wolfSSL (Formerly CyaSSL) Release 3.12.0 (8/04/2017)
+
+## Release 3.12.0 of wolfSSL has bug fixes and new features including:
+
+- TLS 1.3 with Nginx! TLS 1.3 with ARMv8! TLS 1.3 with Async Crypto! (--enable-tls13)
+- TLS 1.3 0RTT feature added
+- Added port for using Intel SGX with Linux
+- Update and fix PIC32MZ port
+- Additional unit testing for MD5, SHA, SHA224, SHA256, SHA384, SHA512, RipeMd, HMAC, 3DES, IDEA, ChaCha20, ChaCha20Poly1305 AEAD, Camellia, Rabbit, ARC4, AES, RSA, Hc128
+- AVX and AVX2 assembly for improved ChaCha20 performance
+- Intel QAT fixes for when using --disable-fastmath
+- Update how DTLS handles decryption and MAC failures
+- Update DTLS session export version number for --enable-sessionexport feature
+- Add additional input argument sanity checks to ARMv8 assembly port
+- Fix for making PKCS12 dynamic types match
+- Fixes for potential memory leaks when using --enable-fast-rsa
+- Fix for when using custom ECC curves and add BRAINPOOLP256R1 test
+- Update TI-RTOS port for dependency on new wolfSSL source files
+- DTLS multicast feature added, --enable-mcast
+- Fix for Async crypto with GCC 7.1 and HMAC when not using Intel QuickAssist
+- Improvements and enhancements to Intel QuickAssist support
+- Added Xilinx port
+- Added SHA3 Keccak feature, --enable-sha3
+- Expand wolfSSL Python wrapper to now include a client side implementation
+- Adjust example servers to not treat a peer closed error as a hard error
+- Added more sanity checks to fp_read_unsigned_bin function
+- Add SHA224 and AES key wrap to ARMv8 port
+- Update MQX classics and mmCAU ports
+- Fix for potential buffer over read with wolfSSL_CertPemToDer
+- Add PKCS7/CMS decode support for KARI with IssuerAndSerialNumber
+- Fix ThreadX/NetX warning
+- Fixes for OCSP and CRL non blocking sockets and for incomplete cert chain with OCSP
+- Added RSA PSS sign and verify
+- Fix for STM32F4 AES-GCM
+- Added enable all feature (--enable-all)
+- Added trackmemory feature (--enable-trackmemory)
+- Fixes for AES key wrap and PKCS7 on Windows VS
+- Added benchmark block size argument
+- Support use of staticmemory with PKCS7
+- Fix for Blake2b build with GCC 5.4
+- Fixes for compiling wolfSSL with GCC version 7, most dealing with switch statement fall through warnings.
+- Added warning when compiling without hardened math operations
+
+
+Note:
+There is a known issue with using ChaCha20 AVX assembly on versions of GCC earlier than 5.2. This is encountered with using the wolfSSL enable options --enable-intelasm and --enable-chacha. To avoid this issue ChaCha20 can be enabled with --enable-chacha=noasm.
+If using --enable-intelasm and also using --enable-sha224 or --enable-sha256 there is a known issue with trying to use -fsanitize=address.
+
+This release of wolfSSL fixes 1 low level security vulnerability.
+
+Low level fix for a potential DoS attack on a wolfSSL client. Previously a client would accept many warning alert messages without a limit. This fix puts a limit to the number of warning alert messages received and if this limit is reached a fatal error ALERT_COUNT_E is returned. The max number of warning alerts by default is set to 5 and can be adjusted with the macro WOLFSSL_ALERT_COUNT_MAX. Thanks for the report from Tarun Yadav and Koustav Sadhukhan from Defence Research and Development Organization, INDIA.
+
+
+See INSTALL file for build instructions.
+More info can be found on-line at http://wolfssl.com/wolfSSL/Docs.html
+
+
 # wolfSSL (Formerly CyaSSL) Release 3.11.1 (5/11/2017)
 
 ## Release 3.11.1 of wolfSSL is a TLS 1.3 BETA release, which includes:

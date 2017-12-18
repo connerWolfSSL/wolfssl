@@ -1,6 +1,6 @@
 /* logging.c
  *
- * Copyright (C) 2006-2016 wolfSSL Inc.
+ * Copyright (C) 2006-2017 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -120,6 +120,8 @@ void wolfSSL_Debugging_OFF(void)
 #elif defined(WOLFSSL_SGX)
     /* Declare sprintf for ocall */
     int sprintf(char* buf, const char *fmt, ...);
+#elif defined(MICRIUM)
+    #include <bsp_ser.h>
 #else
     #include <stdio.h>   /* for default printf stuff */
 #endif
@@ -137,9 +139,7 @@ static void wolfssl_log(const int logLevel, const char *const logMessage)
 #if defined(THREADX) && !defined(THREADX_NO_DC_PRINTF)
             dc_log_printf("%s\n", logMessage);
 #elif defined(MICRIUM)
-        #if (NET_SECURE_MGR_CFG_EN == DEF_ENABLED)
-            NetSecure_TraceOut((CPU_CHAR *)logMessage);
-        #endif
+            BSP_Ser_Printf("%s\r\n", logMessage);
 #elif defined(WOLFSSL_MDK_ARM)
             fflush(stdout) ;
             printf("%s\n", logMessage);
@@ -207,8 +207,8 @@ void WOLFSSL_BUFFER(const byte* buffer, word32 length)
 void WOLFSSL_ENTER(const char* msg)
 {
     if (loggingEnabled) {
-        char buffer[80];
-        sprintf(buffer, "wolfSSL Entering %s", msg);
+        char buffer[WOLFSSL_MAX_ERROR_SZ];
+        XSNPRINTF(buffer, sizeof(buffer), "wolfSSL Entering %s", msg);
         wolfssl_log(ENTER_LOG , buffer);
     }
 }
@@ -217,8 +217,9 @@ void WOLFSSL_ENTER(const char* msg)
 void WOLFSSL_LEAVE(const char* msg, int ret)
 {
     if (loggingEnabled) {
-        char buffer[80];
-        sprintf(buffer, "wolfSSL Leaving %s, return %d", msg, ret);
+        char buffer[WOLFSSL_MAX_ERROR_SZ];
+        XSNPRINTF(buffer, sizeof(buffer), "wolfSSL Leaving %s, return %d",
+                msg, ret);
         wolfssl_log(LEAVE_LOG , buffer);
     }
 }
@@ -241,18 +242,20 @@ void WOLFSSL_ERROR(int error)
     if (loggingEnabled && error != WC_PENDING_E)
     #endif
     {
-        char buffer[80];
+        char buffer[WOLFSSL_MAX_ERROR_SZ];
         #if defined(OPENSSL_EXTRA) || defined(DEBUG_WOLFSSL_VERBOSE)
             (void)usrCtx; /* a user ctx for future flexibility */
             (void)func;
 
             if (wc_LockMutex(&debug_mutex) != 0) {
                 WOLFSSL_MSG("Lock debug mutex failed");
-                sprintf(buffer, "wolfSSL error occurred, error = %d", error);
+                XSNPRINTF(buffer, sizeof(buffer),
+                        "wolfSSL error occurred, error = %d", error);
             }
             else {
                 if (error < 0) error = error - (2*error); /*get absolute value*/
-                sprintf(buffer, "wolfSSL error occurred, error = %d line:%d file:%s",
+                XSNPRINTF(buffer, sizeof(buffer),
+                        "wolfSSL error occurred, error = %d line:%d file:%s",
                     error, line, file);
                 if (wc_AddErrorNode(error, line, buffer, (char*)file) != 0) {
                     WOLFSSL_MSG("Error creating logging node");
@@ -263,7 +266,8 @@ void WOLFSSL_ERROR(int error)
                 wc_UnLockMutex(&debug_mutex);
             }
         #else
-            sprintf(buffer, "wolfSSL error occurred, error = %d", error);
+            XSNPRINTF(buffer, sizeof(buffer),
+                    "wolfSSL error occurred, error = %d", error);
         #endif
         #ifdef DEBUG_WOLFSSL
         wolfssl_log(ERROR_LOG , buffer);
@@ -303,7 +307,8 @@ int wc_LoggingCleanup(void)
 }
 
 
-#if defined(DEBUG_WOLFSSL) || defined(WOLFSSL_NGINX) || defined(WOLFSSL_HAPROXY)
+#if defined(DEBUG_WOLFSSL) || defined(WOLFSSL_NGINX) || \
+    defined(WOLFSSL_HAPROXY) || defined(WOLFSSL_MYSQL_COMPATIBLE)
 /* peek at an error node
  *
  * idx : if -1 then the most recent node is looked at, otherwise search
