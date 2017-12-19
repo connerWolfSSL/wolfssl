@@ -277,7 +277,7 @@ WOLFSSL_API int wc_DhSetKey(DhKey* key, const byte* p, word32 pSz, const byte* g
 
     _Example_
     \code
-    byte dhCert[] = { /* initialize with DER formatted certificate /* };
+    byte dhCert[] = { initialize with DER formatted certificate };
     byte p[MAX_DH_SIZE];
     byte g[MAX_DH_SIZE];
     word32 pSz = MAX_DH_SIZE;

@@ -178,7 +178,7 @@ WOLFSSL_API int wc_ShaUpdate(wc_Sha*, const byte*, word32);
     _Example_
     \code
     Sha sha[1];
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { Data to be hashed };
     word32 len = sizeof(data);
 
     if ((ret = wc_InitSha(sha)) != 0) {

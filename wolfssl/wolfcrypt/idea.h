@@ -66,7 +66,7 @@ typedef struct Idea {
 
     _Example_
     \code
-    byte v_key[IDEA_KEY_SIZE] = { /* Some Key }
+    byte v_key[IDEA_KEY_SIZE] = { }; // Some Key
     Idea idea;
     int ret = wc_IdeaSetKey(&idea v_key, IDEA_KEY_SIZE, NULL, IDEA_ENCRYPTION);
     if (ret != 0)
@@ -95,7 +95,7 @@ WOLFSSL_API int wc_IdeaSetKey(Idea *idea, const byte* key, word16 keySz,
     Idea idea;
     // Initialize idea
 
-    byte iv[] = { /* Some IV }
+    byte iv[] = { }; // Some IV
     int ret = wc_IdeaSetIV(&idea, iv);
     if(ret != 0)
     {
@@ -120,8 +120,8 @@ WOLFSSL_API int wc_IdeaSetIV(Idea *idea, const byte* iv);
 
     _Example_
     \code
-    byte v_key[IDEA_KEY_SIZE] = { /* Some Key }
-    byte data[IDEA_BLOCK_SIZE] = { /* Some encrypted data }
+    byte v_key[IDEA_KEY_SIZE] = { }; // Some Key
+    byte data[IDEA_BLOCK_SIZE] = { }; // Some encrypted data
     Idea idea;
     wc_IdeaSetKey(&idea, v_key, IDEA_KEY_SIZE, NULL, IDEA_DECRYPTION);
     int ret = wc_IdeaCipher(&idea, data, data);

@@ -723,7 +723,7 @@ WOLFSSL_API int  wc_RsaPrivateDecryptInline_ex(byte* in, word32 inLen,
     _Example_
     \code
     Rsa key; // A valid RSA key.
-    byte e[ /* buffer sz. E.g. 256 ];
+    byte e[ buffer sz E.g. 256 ];
     byte n[256];
     int ret;
     word32 eSz = sizeof(e);

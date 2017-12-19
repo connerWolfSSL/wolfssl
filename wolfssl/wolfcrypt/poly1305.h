@@ -113,7 +113,7 @@ typedef struct Poly1305 {
     _Example_
     \code
     Poly1305 enc;
-    byte key[] = { /* initialize with 32 byte key to use for hashing };
+    byte key[] = { initialize with 32 byte key to use for hashing };
     wc_Poly1305SetKey(&enc, key, sizeof(key));
     \endcode
     
@@ -137,9 +137,9 @@ WOLFSSL_API int wc_Poly1305SetKey(Poly1305* poly1305, const byte* key,
     _Example_
     \code
     Poly1305 enc;
-    byte key[] = { /* initialize with 32 byte key to use for encryption };
+    byte key[] = { }; // initialize with 32 byte key to use for encryption
 
-    byte msg[] = { /* initialize with message to hash };
+    byte msg[] = { }; // initialize with message to hash
     wc_Poly1305SetKey(&enc, key, sizeof(key));
 
     if( wc_Poly1305Update(key, msg, sizeof(msg)) != 0 ) {
@@ -167,9 +167,9 @@ WOLFSSL_API int wc_Poly1305Update(Poly1305* poly1305, const byte*, word32);
     Poly1305 enc;
     byte mac[POLY1305_DIGEST_SIZE]; // space for a 16 byte mac
 
-    byte key[] = { /* initialize with 32 byte key to use for encryption };
+    byte key[] = { }; // initialize with 32 byte key to use for encryption
 
-    byte msg[] = { /* initialize with message to hash };
+    byte msg[] = { }; // initialize with message to hash
     wc_Poly1305SetKey(&enc, key, sizeof(key));
     wc_Poly1305Update(key, msg, sizeof(msg));
 
@@ -201,9 +201,9 @@ WOLFSSL_API int wc_Poly1305Final(Poly1305* poly1305, byte* tag);
     _Example_
     \code
     Poly1305 ctx;
-    byte key[] = { /* initialize with 32 byte key to use for hashing };
-    byte additional[] = { /* initialize with additional data }
-    byte msg[] = { /* initialize with message }
+    byte key[] = { }; // initialize with 32 byte key to use for hashing
+    byte additional[] = { }; // initialize with additional data 
+    byte msg[] = { }; // initialize with message
     byte tag[16];
 
     wc_Poly1305SetKey(&ctx, key, sizeof(key));

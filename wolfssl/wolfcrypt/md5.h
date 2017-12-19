@@ -139,7 +139,7 @@ WOLFSSL_API int wc_InitMd5_ex(wc_Md5*, void*, int);
     _Example_
     \code
     Md5 md5;
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { Data to be hashed };
     word32 len = sizeof(data);
 
     if ((ret = wc_InitMd5(&md5)) != 0) {
@@ -176,7 +176,7 @@ WOLFSSL_API int wc_Md5Update(wc_Md5*, const byte*, word32);
     _Example_
     \code
     md5 md5[1];
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { Data to be hashed };
     word32 len = sizeof(data);
 
     if ((ret = wc_InitMd5(md5)) != 0) {
@@ -211,7 +211,7 @@ WOLFSSL_API int wc_Md5Final(wc_Md5*, byte*);
     _Example_
     \code
     Md5 md5;
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { Data to be hashed };
     word32 len = sizeof(data);
 
     if ((ret = wc_InitMd5(&md5)) != 0) {

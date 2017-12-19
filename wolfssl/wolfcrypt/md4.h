@@ -88,7 +88,7 @@ WOLFSSL_API void wc_InitMd4(Md4*);
     _Example_
     \code
     md4 md4[1];
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { }; // Data to be hashed
     word32 len = sizeof(data);
 
     if ((ret = wc_InitMd4(md4)) != 0) {

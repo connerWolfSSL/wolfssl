@@ -143,7 +143,7 @@ WOLFSSL_API int wc_InitSha512_ex(wc_Sha512*, void*, int);
     _Example_
     \code
     Sha512 sha512[1];
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { Data to be hashed };
     word32 len = sizeof(data);
 
     if ((ret = wc_InitSha512(sha512)) != 0) {
@@ -173,7 +173,7 @@ WOLFSSL_API int wc_Sha512Update(wc_Sha512*, const byte*, word32);
     _Example_
     \code
     Sha512 sha512[1];
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { Data to be hashed };
     word32 len = sizeof(data);
 
     if ((ret = wc_InitSha512(sha512)) != 0) {
@@ -259,7 +259,7 @@ WOLFSSL_API int wc_InitSha384_ex(wc_Sha384*, void*, int);
     _Example_
     \code
     Sha384 sha384[1];
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { Data to be hashed };
     word32 len = sizeof(data);
 
     if ((ret = wc_InitSha384(sha384)) != 0) {
@@ -289,7 +289,7 @@ WOLFSSL_API int wc_Sha384Update(wc_Sha384*, const byte*, word32);
     _Example_
     \code
     Sha384 sha384[1];
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { Data to be hashed };
     word32 len = sizeof(data);
 
     if ((ret = wc_InitSha384(sha384)) != 0) {

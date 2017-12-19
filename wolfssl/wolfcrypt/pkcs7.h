@@ -162,7 +162,7 @@ WOLFSSL_API int  wc_PKCS7_Init(PKCS7* pkcs7, void* heap, int devId);
     _Example_
     \code
     PKCS7 pkcs7;
-    byte derBuff[] = { /* initialize with DER-encoded certificate };
+    byte derBuff[] = { }; // initialize with DER-encoded certificate
     if ( wc_PKCS7_InitWithCert(&pkcs7, derBuff, sizeof(derBuff)) != 0 ) {
     	// error parsing certificate into pkcs7 format
     }
@@ -208,7 +208,7 @@ WOLFSSL_API void wc_PKCS7_Free(PKCS7* pkcs7);
     PKCS7 pkcs7;
     int ret;
 
-    byte derBuff[] = { /* initialize with DER-encoded certificate };
+    byte derBuff[] = { }; // initialize with DER-encoded certificate
     byte pkcs7Buff[FOURK_BUF];
 
     wc_PKCS7_InitWithCert(&pkcs7, derBuff, sizeof(derBuff));
@@ -261,7 +261,7 @@ WOLFSSL_API int  wc_PKCS7_EncodeData(PKCS7* pkcs7, byte* output,
     PKCS7 pkcs7;
     int ret;
 
-    byte derBuff[] = { /* initialize with DER-encoded certificate };
+    byte derBuff[] = { }; // initialize with DER-encoded certificate
     byte pkcs7Buff[FOURK_BUF];
 
     wc_PKCS7_InitWithCert(&pkcs7, derBuff, sizeof(derBuff));
@@ -318,7 +318,7 @@ WOLFSSL_API int  wc_PKCS7_EncodeSignedData(PKCS7* pkcs7,
     PKCS7 pkcs7;
     int ret;
 
-    byte derBuff[] = { /* initialize with DER-encoded certificate };
+    byte derBuff[] = { }; // initialize with DER-encoded certificate
     byte pkcs7Buff[FOURK_BUF];
 
     wc_PKCS7_InitWithCert(&pkcs7, derBuff, sizeof(derBuff));
@@ -362,7 +362,7 @@ WOLFSSL_API int  wc_PKCS7_VerifySignedData(PKCS7* pkcs7,
     PKCS7 pkcs7;
     int ret;
 
-    byte derBuff[] = { /* initialize with DER-encoded certificate };
+    byte derBuff[] = { }; // initialize with DER-encoded certificate
     byte pkcs7Buff[FOURK_BUF];
 
     wc_PKCS7_InitWithCert(&pkcs7, derBuff, sizeof(derBuff));
@@ -419,7 +419,7 @@ WOLFSSL_API int  wc_PKCS7_EncodeEnvelopedData(PKCS7* pkcs7,
     _Example_
     \code
     PKCS7 pkcs7;
-    byte received[] = { /* initialize with received enveloped message };
+    byte received[] = { }; // initialize with received enveloped message
     byte decoded[FOURK_BUF];
     int decodedSz;
 

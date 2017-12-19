@@ -276,9 +276,9 @@ wc_SrpSetUsername.
     byte username[] = "user";
     word32 usernameSize = 4;
 
-    byte N[] = { /* Contents of byte array N };
-    byte g[] = { /* Contents of byte array g };
-    byte salt[] = { /* Contents of byte array salt };
+    byte N[] = { }; // Contents of byte array N
+    byte g[] = { }; // Contents of byte array g
+    byte salt[] = { }; // Contents of byte array salt
 
     wc_SrpInit(&srp, SRP_TYPE_SHA, SRP_CLIENT_SIDE);
     wc_SrpSetUsername(&srp, username, usernameSize);
@@ -335,9 +335,9 @@ WOLFSSL_API int wc_SrpSetParams(Srp* srp, const byte* N,    word32 nSz,
     byte password[] = "password";
     word32 passwordSize = 8;
 
-    byte N[] = { /* Contents of byte array N };
-    byte g[] = { /* Contents of byte array g };
-    byte salt[] = { /* Contents of byte array salt };
+    byte N[] = { }; // Contents of byte array N
+    byte g[] = { }; // Contents of byte array g
+    byte salt[] = { }; // Contents of byte array salt
 
     wc_SrpInit(&srp, SRP_TYPE_SHA, SRP_CLIENT_SIDE);
     wc_SrpSetUsername(&srp, username, usernameSize);
@@ -387,13 +387,13 @@ WOLFSSL_API int wc_SrpSetPassword(Srp* srp, const byte* password, word32 size);
     byte username[] = "user";
     word32 usernameSize = 4;
 
-    byte N[] = { /* Contents of byte array N };
-    byte g[] = { /* Contents of byte array g };
-    byte salt[] = { /* Contents of byte array salt };
+    byte N[] = { }; // Contents of byte array N
+    byte g[] = { }; // Contents of byte array g
+    byte salt[] = { }; // Contents of byte array salt
     wc_SrpInit(&srp, SRP_TYPE_SHA, SRP_SERVER_SIDE);
     wc_SrpSetUsername(&srp, username, usernameSize);
     wc_SrpSetParams(&srp, N, sizeof(N), g, sizeof(g), salt, sizeof(salt))
-    byte verifier[] = { /* Contents of some verifier };
+    byte verifier[] = { }; // Contents of some verifier
 
     if(wc_SrpSetVerifier(&srp, verifier, sizeof(verifier)) != 0)
     {
@@ -425,7 +425,8 @@ WOLFSSL_API int wc_SrpSetVerifier(Srp* srp, const byte* verifier, word32 size);
 /*!
     \ingroup SRP
     
-    \brief Gets the verifier. The client calculates the verifier with v = g ^ x % N.  This function MAY be called after wc_SrpSetPassword and is CLIENT SIDE ONLY.
+    \brief Gets the verifier. The client calculates the verifier with v = g ^ x % N.
+    This function MAY be called after wc_SrpSetPassword and is CLIENT SIDE ONLY.
         
     \return 0 Success
     \return BAD_FUNC_ARG Returned if srp, verifier or size is null or if srp->side is not SRP_CLIENT_SIDE.
@@ -444,9 +445,9 @@ WOLFSSL_API int wc_SrpSetVerifier(Srp* srp, const byte* verifier, word32 size);
     byte password[] = "password";
     word32 passwordSize = 8;
 
-    byte N[] = { /* Contents of byte array N };
-    byte g[] = { /* Contents of byte array g };
-    byte salt[] = { /* Contents of byte array salt };
+    byte N[] = { }; // Contents of byte array N
+    byte g[] = { }; // Contents of byte array g
+    byte salt[] = { }; // Contents of byte array salt
     byte v[64];
     word32 vSz = 0;
     vSz = sizeof(v);
@@ -490,7 +491,8 @@ WOLFSSL_API int wc_SrpGetVerifier(Srp* srp, byte* verifier, word32* size);
     \brief Sets the private ephemeral value. The private ephemeral value is known as:
     a at the client side. a = random()
     b at the server side. b = random()
-    This function is handy for unit test cases or if the developer wants to use an external random source to set the ephemeral value. This function MAY be called before wc_SrpGetPublic.
+    This function is handy for unit test cases or if the developer wants to use an external
+    random source to set the ephemeral value. This function MAY be called before wc_SrpGetPublic.
     
     \return 0 Success
     \return BAD_FUNC_ARG Returned if srp, private, or size is null.
@@ -507,16 +509,16 @@ WOLFSSL_API int wc_SrpGetVerifier(Srp* srp, byte* verifier, word32* size);
     byte username[] = "user";
     word32 usernameSize = 4;
 
-    byte N[] = { /* Contents of byte array N };
-    byte g[] = { /* Contents of byte array g };
-    byte salt[] = { /* Contents of byte array salt };
-    byte verifier = { /* Contents of some verifier };
+    byte N[] = { }; // Contents of byte array N
+    byte g[] = { }; // Contents of byte array g
+    byte salt[] = { }; // Contents of byte array salt
+    byte verifier = { }; // Contents of some verifier
     wc_SrpInit(&srp, SRP_TYPE_SHA, SRP_SERVER_SIDE);
     wc_SrpSetUsername(&srp, username, usernameSize);
     wc_SrpSetParams(&srp, N, sizeof(N), g, sizeof(g), salt, sizeof(salt))
     wc_SrpSetVerifier(&srp, verifier, sizeof(verifier))
 
-    byte b[] = { /* Some ephemeral value }
+    byte b[] = { }; // Some ephemeral value
     if( wc_SrpSetPrivate(&srp, b, sizeof(b)) != 0)
     {
         // Error setting private ephemeral
@@ -550,7 +552,8 @@ WOLFSSL_API int wc_SrpSetPrivate(Srp* srp, const byte* priv, word32 size);
     \brief Gets the public ephemeral value.  The public ephemeral value is known as:
     A at the client side. A = g ^ a % N
     B at the server side. B = (k * v + (g ˆ b % N)) % N
-    This function MUST be called after wc_SrpSetPassword or wc_SrpSetVerifier.  The function wc_SrpSetPrivate may be called before wc_SrpGetPublic.
+    This function MUST be called after wc_SrpSetPassword or wc_SrpSetVerifier.
+    The function wc_SrpSetPrivate may be called before wc_SrpGetPublic.
     
     \return 0 Success
     \return BAD_FUNC_ARG Returned if srp, pub, or size is null.
@@ -570,9 +573,9 @@ WOLFSSL_API int wc_SrpSetPrivate(Srp* srp, const byte* priv, word32 size);
     byte password[] = "password";
     word32 passwordSize = 8;
 
-    byte N[] = { /* Contents of byte array N };
-    byte g[] = { /* Contents of byte array g };
-    byte salt[] = { /* Contents of byte array salt };
+    byte N[] = { }; // Contents of byte array N
+    byte g[] = { }; // Contents of byte array g
+    byte salt[] = { }; // Contents of byte array salt
     wc_SrpInit(&srp, SRP_TYPE_SHA, SRP_CLIENT_SIDE);
     wc_SrpSetUsername(&srp, username, usernameSize);
     wc_SrpSetParams(&srp, N, sizeof(N), g, sizeof(g), salt, sizeof(salt));
@@ -633,11 +636,11 @@ WOLFSSL_API int wc_SrpGetPublic(Srp* srp, byte* pub, word32* size);
         word32 usernameSize = 4;
     byte password[] = "password";
     word32 passwordSize = 8;
-    byte N[] = { /* Contents of byte array N };
-    byte g[] = { /* Contents of byte array g };
-    byte salt[] = { /* Contents of byte array salt };
-    byte verifier[] = { /* Contents of some verifier };
-    byte serverPubKey[] = { /* Contents of server pub key };
+    byte N[] = { }; // Contents of byte array N
+    byte g[] = { }; // Contents of byte array g
+    byte salt[] = { }; // Contents of byte array salt
+    byte verifier[] = { }; // Contents of some verifier
+    byte serverPubKey[] = { }; // Contents of server pub key
     word32 serverPubKeySize = sizeof(serverPubKey);
     byte clientPubKey[64];
     word32 clientPubKeySize = 64;

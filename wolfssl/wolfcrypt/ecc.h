@@ -594,7 +594,7 @@ int wc_ecc_sign_hash(const byte* in, word32 inlen, byte* out, word32 *outlen,
 
     byte sig[512]; // will hold generated signature
     sigSz = sizeof(sig);
-    byte digest[] = { /* initialize with message hash };
+    byte digest[] = { initialize with message hash };
     wc_InitRng(&rng); // initialize rng
     wc_ecc_init(&key); // initialize key
     wc_ecc_make_key(&rng, 32, &key); // make public/private key pair
@@ -645,8 +645,8 @@ int wc_ecc_sign_hash_ex(const byte* in, word32 inlen, WC_RNG* rng,
     ecc_key key;
     int ret, verified = 0;
 
-    byte sig[1024] { // initialize with received signature };
-    byte digest[] = { // initialize with message hash };
+    byte sig[1024] { initialize with received signature };
+    byte digest[] = { initialize with message hash };
     // initialize key with received public key
     ret = wc_ecc_verify_hash(sig, sizeof(sig), digest,sizeof(digest), &verified, &key);
     if ( ret != 0 ) {
@@ -684,7 +684,7 @@ Note: Do not use the return value to test for valid.  Only use stat.
     mp_int r;
     mp_int s;
     int stat;
-    byte hash[] = { // Some hash }
+    byte hash[] = { Some hash }
     ecc_key key;
 
     if(wc_ecc_verify_hash_ex(&r, &s, hash, hashlen, &stat, &key) == MP_OKAY)
@@ -1166,7 +1166,7 @@ int wc_ecc_export_x963_ex(ecc_key*, byte* out, word32* outLen, int compressed);
     _Example_
     \code
     int ret;
-    byte buff[] = { // initialize with ANSI X9.63 formatted key };
+    byte buff[] = { initialize with ANSI X9.63 formatted key };
 
     ecc_key pubKey;
     wc_ecc_init_key(&pubKey);
@@ -1217,8 +1217,8 @@ NOT_COMPILED_IN Returned if the HAVE_COMP_KEY was not enabled at compile time, b
     _Example_
     \code
     int ret;
-    byte pub[] = { // initialize with ANSI X9.63 formatted key };
-    byte priv[] = { // initialize with the raw private key };
+    byte pub[] = { initialize with ANSI X9.63 formatted key };
+    byte priv[] = { initialize with the raw private key };
 
     ecc_key key;
     wc_ecc_init_key(&key);
@@ -1267,8 +1267,8 @@ int wc_ecc_import_private_key_ex(const byte* priv, word32 privSz,
     ecc_key key;
     // initialize key, generate R and S
 
-    char r[] = { // initialize with R };
-    char s[] = { // initialize with S };
+    char r[] = { initialize with R };
+    char s[] = { initialize with S };
     byte sig[wc_ecc_sig_size(key)]; 
     // signature size will be 2 * ECC key size + ~10 bytes for ASN.1 overhead
     word32 sigSz = sizeof(sig);
@@ -1319,9 +1319,9 @@ int wc_ecc_sig_to_rs(const byte* sig, word32 sigLen, byte* r, word32* rLen,
     ecc_key key;
     wc_ecc_init(&key);
 
-    char qx[] = { // initialize with x component of base point };
-    char qy[] = { // initialize with y component of base point };
-    char d[]  = { // initialize with private key };
+    char qx[] = { initialize with x component of base point };
+    char qy[] = { initialize with y component of base point };
+    char d[]  = { initialize with private key };
     ret = wc_ecc_import_raw(&key,qx, qy, d, "ECC-256");
     if ( ret != 0) {
     	// error initializing key with given inputs
@@ -1710,7 +1710,7 @@ int wc_ecc_ctx_set_peer_salt(ecEncCtx*, const byte* salt);
     _Example_
     \code
     ecEncCtx* ctx;
-    byte info[] = { // initialize with information };
+    byte info[] = { initialize with information };
     // initialize ctx, get salt,
     if(wc_ecc_ctx_set_info(&ctx, info, sizeof(info))) {
 	    // error setting info
@@ -1743,7 +1743,7 @@ int wc_ecc_ctx_set_info(ecEncCtx*, const byte* info, int sz);
 
     _Example_
     \code
-    byte msg[] = { // initialize with msg to encrypt. Ensure padded to block size };
+    byte msg[] = { initialize with msg to encrypt. Ensure padded to block size };
     byte out[sizeof(msg)];
     word32 outSz = sizeof(out);
     int ret;
@@ -1786,7 +1786,7 @@ int wc_ecc_encrypt(ecc_key* privKey, ecc_key* pubKey, const byte* msg,
     
     _Example_
     \code
-    byte cipher[] = { // initialize with ciphertext to decrypt. Ensure padded to block size };
+    byte cipher[] = { initialize with ciphertext to decrypt. Ensure padded to block size };
     byte plain[sizeof(cipher)];
     word32 plainSz = sizeof(plain);
     int ret;

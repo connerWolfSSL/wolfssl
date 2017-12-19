@@ -62,8 +62,8 @@
     \code
     int ret;
     byte key[MD5_DIGEST_SIZE];
-    byte pass[] = { /* initialize with password };
-    byte salt[] = { /* initialize with salt };
+    byte pass[] = { }; // initialize with password 
+    byte salt[] = { }; // initialize with salt
 
     ret = wc_PBKDF1(key, pass, sizeof(pass), salt, sizeof(salt), 1000, sizeof(key), MD5);
     if ( ret != 0 ) {
@@ -99,8 +99,8 @@ WOLFSSL_API int wc_PBKDF1(byte* output, const byte* passwd, int pLen,
     \code
     int ret;
     byte key[64];
-    byte pass[] = { /* initialize with password };
-    byte salt[] = { /* initialize with salt };
+    byte pass[] = { }; // initialize with password
+    byte salt[] = { }; // initialize with salt
 
     ret = wc_PBKDF2(key, pass, sizeof(pass), salt, sizeof(salt), 2048, sizeof(key), 
     SHA512);
@@ -149,8 +149,8 @@ WOLFSSL_API int wc_PBKDF2(byte* output, const byte* passwd, int pLen,
     \code
     int ret;
     byte key[64];
-    byte pass[] = { /* initialize with password };
-    byte salt[] = { /* initialize with salt };
+    byte pass[] = { }; // initialize with password 
+    byte salt[] = { }; // initialize with salt
 
     ret = wc_PKCS512_PBKDF(key, pass, sizeof(pass), salt, sizeof(salt), 2048, 
     sizeof(key), SHA512, 1);

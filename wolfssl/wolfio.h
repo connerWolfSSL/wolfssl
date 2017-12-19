@@ -20,7 +20,7 @@
  */
 
 /*!
-    \file io.h
+    \file wolfio.h
 */
 
 #ifndef WOLFSSL_IO_H
@@ -549,7 +549,7 @@ typedef int (*CallbackIOSend)(WOLFSSL *ssl, char *buf, int sz, void *ctx);
     wolfSSL_SetIORecv(ctx, MyEmbedReceive);
     int MyEmbedReceive(WOLFSSL* ssl, char* buf, int sz, void* ctx)                   
     {
-	// custom EmbedReceive function
+	    // custom EmbedReceive function
     }
     \endcode
     
@@ -682,7 +682,7 @@ WOLFSSL_API void* wolfSSL_GetIOWriteCtx(WOLFSSL* ssl);
 */
 WOLFSSL_API void wolfSSL_SetIOReadFlags( WOLFSSL* ssl, int flags);
 /*!
-    \brief This function sets the flags for the send callback to use for the given SSL session.  The send callback could be either the default wolfSSL EmbedSend callback, or a custom callback specified by the user (see  wolfSSL_SetIOSend). The default flag value is set internally by wolfSSL to the value of 0. The default wolfSSL send callback uses the send() function to send data from the socket.  From the send() man page: “The flags parameter may include one or more of the following: #define MSG_OOB        0x1  /* process out-of-band data, #define MSG_DONTROUTE  0x4  /* bypass routing, use direct interface. The flag MSG_OOB is used to send ``out-of-band'' data on sockets that support this notion (e.g.  SOCK_STREAM); the underlying protocol must also support ``out-of-band'' data.  MSG_DONTROUTE is usually used only by diagnostic or routing programs.”
+    \brief This function sets the flags for the send callback to use for the given SSL session.  The send callback could be either the default wolfSSL EmbedSend callback, or a custom callback specified by the user (see  wolfSSL_SetIOSend). The default flag value is set internally by wolfSSL to the value of 0. The default wolfSSL send callback uses the send() function to send data from the socket.  From the send() man page: “The flags parameter may include one or more of the following: #define MSG_OOB        0x1  // process out-of-band data, #define MSG_DONTROUTE  0x4  // bypass routing, use direct interface. The flag MSG_OOB is used to send ``out-of-band'' data on sockets that support this notion (e.g.  SOCK_STREAM); the underlying protocol must also support ``out-of-band'' data.  MSG_DONTROUTE is usually used only by diagnostic or routing programs.”
 
     \return none No returns.
     

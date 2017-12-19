@@ -89,7 +89,7 @@ WOLFSSL_API void wc_InitMd2(Md2*);
     _Example_
     \code
     md2 md2[1];
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { }; // Data to be hashed
     word32 len = sizeof(data);
 
     if ((ret = wc_InitMd2(md2)) != 0) {
@@ -119,7 +119,7 @@ WOLFSSL_API void wc_Md2Update(Md2*, const byte*, word32);
     _Example_
     \code
     md2 md2[1];
-    byte data[] = { /* Data to be hashed };
+    byte data[] = { }; // Data to be hashed
     word32 len = sizeof(data);
 
     if ((ret = wc_InitMd2(md2)) != 0) {

@@ -20,7 +20,7 @@
  */
 
 /*!
-    \file ssl.h
+    \file ../wolfssl/ssl.h
     \brief Header file containing key wolfSSL API
 
 *************************
@@ -568,7 +568,7 @@ WOLFSSL_API WOLFSSL_METHOD *wolfTLSv1_client_method(void);
 
     method = wolfTLSv1_1_server_method();
     if (method == NULL) {
-	    unable to get method
+        // unable to get method
     }
 
     ctx = wolfSSL_CTX_new(method);
@@ -600,7 +600,7 @@ WOLFSSL_API WOLFSSL_METHOD *wolfTLSv1_1_server_method(void);
 
     method = wolfTLSv1_1_client_method();
     if (method == NULL) {
-	    unable to get method
+        // unable to get method
     }
 
     ctx = wolfSSL_CTX_new(method);
@@ -632,7 +632,7 @@ WOLFSSL_API WOLFSSL_METHOD *wolfTLSv1_1_client_method(void);
 
     method = wolfTLSv1_2_server_method();
     if (method == NULL) {
-	    unable to get method
+	    // unable to get method
     }
 
     ctx = wolfSSL_CTX_new(method);
@@ -664,7 +664,7 @@ WOLFSSL_API WOLFSSL_METHOD *wolfTLSv1_2_server_method(void);
 
     method = wolfTLSv1_2_client_method();
     if (method == NULL) {
-	    unable to get method
+	    // unable to get method
     }
 
     ctx = wolfSSL_CTX_new(method);
@@ -700,7 +700,7 @@ WOLFSSL_API WOLFSSL_METHOD *wolfTLSv1_2_client_method(void);
 
     method = wolfDTLSv1_client_method();
     if (method == NULL) {
-	    unable to get method
+	    // unable to get method
     }
 
     ctx = wolfSSL_CTX_new(method);
@@ -730,7 +730,7 @@ WOLFSSL_API WOLFSSL_METHOD *wolfTLSv1_2_client_method(void);
 
     method = wolfDTLSv1_server_method();
     if (method == NULL) {
-	    unable to get method
+	    // unable to get method
     }
 
     ctx = wolfSSL_CTX_new(method);
@@ -998,7 +998,7 @@ WOLFSSL_API int wolfSSL_CTX_load_static_memory(WOLFSSL_CTX** ctx,
     ret = wolfSSL_CTX_is_static_memory(ctx, &mem_stats);
     if (ret == 1) {
         // handle case of is using static memory
-         // print out or inspect elements of mem_stats
+        // print out or inspect elements of mem_stats
     }
     if (ret == 0) {
         //handle case of ctx not using static memory
@@ -1029,8 +1029,8 @@ WOLFSSL_API int wolfSSL_CTX_is_static_memory(WOLFSSL_CTX* ctx,
     ...
     ret = wolfSSL_is_static_memory(ssl, mem_stats);
     if (ret == 1) {
-    // handle case when is static memory
-    // investigate elements in mem_stats if WOLFMEM_TRACK_STATS flag
+        // handle case when is static memory
+        // investigate elements in mem_stats if WOLFMEM_TRACK_STATS flag
     }
     ...
     \endcode
@@ -1556,12 +1556,12 @@ WOLFSSL_API WOLFSSL_CTX* wolfSSL_CTX_new(WOLFSSL_METHOD*);
 
     ctx = wolfSSL_CTX_new(method);
     if (ctx == NULL) {
-	    context creation failed
+	    // context creation failed
     }
 
     ssl = wolfSSL_new(ctx);
     if (ssl == NULL) {
-	    SSL object creation failed
+	    // SSL object creation failed
     }
     \endcode
     
@@ -1961,7 +1961,7 @@ WOLFSSL_API void wolfSSL_free(WOLFSSL*);
     ...
     ret = wolfSSL_shutdown(ssl);
     if (ret != 0) {
-	    failed to shut down SSL connection
+	    // failed to shut down SSL connection
     }
     \endcode
     
@@ -2174,7 +2174,7 @@ WOLFSSL_API void       wolfSSL_flush_sessions(WOLFSSL_CTX *ctx, long tm);
     int ret = wolfSSL_SetServerID(ssl, id, len, newSession);
 
     if(ret){
-	// The Id was successfully set
+	    // The Id was successfully set
     }
     \endcode
     
@@ -9599,7 +9599,7 @@ enum {
     \return MEMORY_E is the error returned when there is not enough memory.
     
     \param ssl pointer to a SSL object, created with wolfSSL_new().
-    \param mfl indicates witch is the Maximum Fragment Length requested for the session. The available options are: enum { WOLFSSL_MFL_2_9  = 1, /*  512 bytes WOLFSSL_MFL_2_10 = 2, /* 1024 bytes WOLFSSL_MFL_2_11 = 3, /* 2048 bytes WOLFSSL_MFL_2_12 = 4, /* 4096 bytes WOLFSSL_MFL_2_13 = 5  /* 8192 bytes /* wolfSSL ONLY!!! };
+    \param mfl indicates witch is the Maximum Fragment Length requested for the session. The available options are: enum { WOLFSSL_MFL_2_9  = 1, 512 bytes WOLFSSL_MFL_2_10 = 2, 1024 bytes WOLFSSL_MFL_2_11 = 3, 2048 bytes WOLFSSL_MFL_2_12 = 4, 4096 bytes WOLFSSL_MFL_2_13 = 5, 8192 bytes wolfSSL ONLY!!! };
     
     _Example_
     \code
@@ -9632,7 +9632,7 @@ WOLFSSL_API int wolfSSL_UseMaxFragment(WOLFSSL* ssl, unsigned char mfl);
     \return MEMORY_E is the error returned when there is not enough memory.
     
     \param ctx pointer to a SSL context, created with wolfSSL_CTX_new().
-    \param mfl indicates which is the Maximum Fragment Length requested for the session. The available options are: enum { WOLFSSL_MFL_2_9  = 1, /* 512 bytes WOLFSSL_MFL_2_10 = 2, /* 1024 bytes WOLFSSL_MFL_2_11 = 3, /* 2048 bytes WOLFSSL_MFL_2_12 = 4, /* 4096 bytes WOLFSSL_MFL_2_13 = 5  /* 8192 bytes/* wolfSSL ONLY!!! };
+    \param mfl indicates which is the Maximum Fragment Length requested for the session. The available options are: enum { WOLFSSL_MFL_2_9  = 1, 512 bytes WOLFSSL_MFL_2_10 = 2, 1024 bytes WOLFSSL_MFL_2_11 = 3, 2048 bytes WOLFSSL_MFL_2_12 = 4, 4096 bytes WOLFSSL_MFL_2_13 = 5, 8192 bytes wolfSSL ONLY!!! };
     
     _Example_
     \code

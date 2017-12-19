@@ -953,7 +953,7 @@ WOLFSSL_API int wc_SetExtKeyUsage(Cert *cert, const char *value);
 
     if(wolfSSL_PemPubKeyToDer(some_file, der, sizeof(der)) != 0)
     {
-        /* Handle Error
+        //Handle Error
     }
     \endcode
     
@@ -980,7 +980,7 @@ WOLFSSL_API int wc_SetExtKeyUsage(Cert *cert, const char *value);
     
     _Example_
     \code
-    byte some_pem[] = { /* Initialize with PEM key }
+    byte some_pem[] = { Initialize with PEM key }
     unsigned char out_buffer[1024]; // Ensure buffer is large enough to fit DER
 
     if(wolfSSL_PubKeyPemToDer(some_pem, sizeof(some_pem), out_buffer, 

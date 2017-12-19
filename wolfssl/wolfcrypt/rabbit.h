@@ -72,12 +72,12 @@ typedef struct Rabbit {
     \code
     int ret;
     Rabbit enc;
-    byte key[] = { /* initialize with 16 byte key };
-    byte iv[]  = { /* initialize with 8 byte iv };
+    byte key[] = { }; // initialize with 16 byte key
+    byte iv[]  = { }; // initialize with 8 byte iv
 
     wc_RabbitSetKey(&enc, key, iv);
 
-    byte message[] = { /* initialize with plaintext message };
+    byte message[] = { }; // initialize with plaintext message
     byte ciphertext[sizeof(message)];
 
     wc_RabbitProcess(enc, ciphertext, message, sizeof(message));
@@ -101,8 +101,8 @@ WOLFSSL_API int wc_RabbitProcess(Rabbit*, byte*, const byte*, word32);
     \code
     int ret;
     Rabbit enc;
-    byte key[] = { /* initialize with 16 byte key };
-    byte iv[]  = { /* initialize with 8 byte iv };
+    byte key[] = { }; // initialize with 16 byte key
+    byte iv[]  = { }; // initialize with 8 byte iv
 
     wc_RabbitSetKey(&enc, key, iv)
     \endcode
