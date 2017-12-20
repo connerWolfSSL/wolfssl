@@ -6874,6 +6874,7 @@ byte GetEntropy(ENTROPY_CMD cmd, byte* out)
         static const char* eccCaKeyPemFile  = CERT_PREFIX "ecc-key.pem";
         static const char* eccPubKeyDerFile = CERT_PREFIX "ecc-public-key.der";
         static const char* eccCaKeyTempFile = CERT_PREFIX "ecc-key.der";
+        static const char* eccPkcs8KeyDerFile = CERT_PREFIX "ecc-key-pkcs8.der";
     #endif
     #if defined(WOLFSSL_CERT_GEN) || \
             (defined(WOLFSSL_CERT_EXT) && defined(WOLFSSL_TEST_CERT))
@@ -11143,6 +11144,9 @@ static int ecc_test_make_pub(WC_RNG* rng)
     /* make public key for shared secret */
     wc_ecc_init(&pub);
     ret = wc_ecc_make_key(rng, 32, &pub);
+#if defined(WOLFSSL_ASYNC_CRYPT)
+    ret = wc_AsyncWait(ret, &pub.asyncDev, WC_ASYNC_FLAG_CALL_AGAIN);
+#endif
     if (ret != 0) {
         ERROR_OUT(-6830, done);
     }
@@ -11173,10 +11177,11 @@ done:
 #ifdef WOLFSSL_KEY_GEN
 static int ecc_test_key_gen(WC_RNG* rng, int keySize)
 {
-    int   ret = 0;
-    int   derSz;
-    byte* der;
-    byte* pem;
+    int    ret = 0;
+    int    derSz;
+    word32 pkcs8Sz;
+    byte*  der;
+    byte*  pem;
     ecc_key userA;
 
     der = (byte*)XMALLOC(FOURK_BUF, HEAP_HINT, DYNAMIC_TYPE_TMP_BUFFER);
@@ -11226,6 +11231,23 @@ static int ecc_test_key_gen(WC_RNG* rng, int keySize)
 
     ret = SaveDerAndPem(der, derSz, NULL, 0, eccPubKeyDerFile,
         NULL, 0, -6515);
+    if (ret != 0) {
+        goto done;
+    }
+
+    /* test export of PKCS#8 unecrypted private key */
+    pkcs8Sz = FOURK_BUF;
+    derSz = wc_EccPrivateKeyToPKCS8(&userA, der, &pkcs8Sz);
+    if (derSz < 0) {
+        ERROR_OUT(derSz, done);
+    }
+
+    if (derSz == 0) {
+        ERROR_OUT(-6516, done);
+    }
+
+    ret = SaveDerAndPem(der, derSz, NULL, 0, eccPkcs8KeyDerFile,
+                        NULL, 0, -6517);
     if (ret != 0) {
         goto done;
     }
@@ -11974,6 +11996,9 @@ static int ecc_def_curve_test(WC_RNG *rng)
     wc_ecc_init(&key);
 
     ret = wc_ecc_make_key(rng, 32, &key);
+#if defined(WOLFSSL_ASYNC_CRYPT)
+    ret = wc_AsyncWait(ret, &key.asyncDev, WC_ASYNC_FLAG_CALL_AGAIN);
+#endif
     if (ret != 0) {
         ret = -6643;
         goto done;
@@ -12277,6 +12302,9 @@ static int ecc_test_cert_gen(WC_RNG* rng)
     }
 
     ret = wc_ecc_make_key(rng, 32, &certPubKey);
+#if defined(WOLFSSL_ASYNC_CRYPT)
+    ret = wc_AsyncWait(ret, &certPubKey.asyncDev, WC_ASYNC_FLAG_CALL_AGAIN);
+#endif
     if (ret != 0) {
         ERROR_OUT(-6726, exit);
     }

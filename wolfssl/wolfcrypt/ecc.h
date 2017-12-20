@@ -19,6 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+
 #ifndef WOLF_CRYPT_ECC_H
 #define WOLF_CRYPT_ECC_H
 
@@ -158,6 +159,10 @@ typedef enum ecc_curve_id {
 #ifdef HAVE_X448
     ECC_X448,
 #endif
+
+#ifdef WOLFSSL_CUSTOM_CURVES
+    ECC_CURVE_CUSTOM,
+#endif
 } ecc_curve_id;
 
 #ifdef HAVE_OID_ENCODING
@@ -280,12 +285,11 @@ struct ecc_key {
     const ecc_set_type* dp;     /* domain parameters, either points to NIST
                                    curves (idx >= 0) or user supplied */
     void* heap;         /* heap hint */
-#ifdef WOLFSSL_ATECC508A
-    int  slot;        /* Key Slot Number (-1 unknown) */
-    byte pubkey[PUB_KEY_SIZE];
-#else
     ecc_point pubkey;   /* public key */
     mp_int    k;        /* private key */
+#ifdef WOLFSSL_ATECC508A
+    int  slot;        /* Key Slot Number (-1 unknown) */
+    byte pubkey_raw[PUB_KEY_SIZE];
 #endif
 #ifdef WOLFSSL_ASYNC_CRYPT
     mp_int* r;          /* sign/verify temps */
@@ -824,7 +828,6 @@ int wc_ecc_get_curve_id_from_params(int fieldSize,
         const byte* Bf, word32 BfSz, const byte* order, word32 orderSz,
         const byte* Gx, word32 GxSz, const byte* Gy, word32 GySz, int cofactor);
 
-#ifndef WOLFSSL_ATECC508A
 
 /*!
     \ingroup ECC
@@ -1021,15 +1024,10 @@ int wc_ecc_point_is_at_infinity(ecc_point *p);
     mp_int multiplicand;
     mp_int modulus;
     int map;
-
-    if(wc_ecc_mulmod(&multiplicand, base, destination, &modulus, map) == MP_OKAY)
-    {
-        // Successful operation
-    }
-    \endcode
     
     \sa none
 */
+#ifndef WOLFSSL_ATECC508A
 WOLFSSL_API
 int wc_ecc_mulmod(mp_int* k, ecc_point *G, ecc_point *R,
                   mp_int* a, mp_int* modulus, int map);

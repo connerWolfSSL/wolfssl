@@ -71,6 +71,9 @@ ASN Options:
     #include <wolfcrypt/src/misc.c>
 #endif
 
+#ifndef NO_PWDBASED
+    #include <wolfssl/wolfcrypt/aes.h>
+#endif
 #ifndef NO_RC4
     #include <wolfssl/wolfcrypt/arc4.h>
 #endif
@@ -645,10 +648,9 @@ static int CheckBitString(const byte* input, word32* inOutIdx, int* len,
     return 0;
 }
 
-#if defined(WOLFSSL_CERT_GEN) || defined(WOLFSSL_KEY_GEN)
-
-#if (!defined(NO_RSA) && !defined(HAVE_USER_RSA)) || \
-    defined(HAVE_ECC) || defined(HAVE_ED25519)
+#if (!defined(NO_RSA) && !defined(HAVE_USER_RSA) && \
+     (defined(WOLFSSL_CERT_GEN) || defined(WOLFSSL_KEY_GEN))) || \
+     defined(HAVE_ECC) || defined(HAVE_ED25519)
 /* Set the DER/BER encoding of the ASN.1 BIT_STRING header.
  *
  * len         Length of data to encode.
@@ -668,6 +670,12 @@ static word32 SetBitString(word32 len, byte unusedBits, byte* output)
 
     return idx;
 }
+#endif /* !NO_RSA || HAVE_ECC || HAVE_ED25519 */
+
+#if defined(WOLFSSL_CERT_GEN) || defined(WOLFSSL_KEY_GEN)
+
+#if (!defined(NO_RSA) && !defined(HAVE_USER_RSA)) || \
+    defined(HAVE_ECC) || defined(HAVE_ED25519)
 
 #ifdef WOLFSSL_CERT_EXT
 /* Set the DER/BER encoding of the ASN.1 BIT_STRING with a 16-bit value.
@@ -716,6 +724,12 @@ static const byte hashSha224hOid[] = {96, 134, 72, 1, 101, 3, 4, 2, 4};
 static const byte hashSha256hOid[] = {96, 134, 72, 1, 101, 3, 4, 2, 1};
 static const byte hashSha384hOid[] = {96, 134, 72, 1, 101, 3, 4, 2, 2};
 static const byte hashSha512hOid[] = {96, 134, 72, 1, 101, 3, 4, 2, 3};
+
+/* hmacType */
+static const byte hmacSha224Oid[] = {42, 134, 72, 134, 247, 13, 2, 8};
+static const byte hmacSha256Oid[] = {42, 134, 72, 134, 247, 13, 2, 9};
+static const byte hmacSha384Oid[] = {42, 134, 72, 134, 247, 13, 2, 10};
+static const byte hmacSha512Oid[] = {42, 134, 72, 134, 247, 13, 2, 11};
 
 /* sigType */
 #ifndef NO_DSA
@@ -1185,6 +1199,27 @@ static const byte* OidFromId(word32 id, word32 type, word32* oidSz)
             }
             break;
 
+        case oidHmacType:
+            switch (id) {
+                case HMAC_SHA224_OID:
+                    oid = hmacSha224Oid;
+                    *oidSz = sizeof(hmacSha224Oid);
+                    break;
+                case HMAC_SHA256_OID:
+                    oid = hmacSha256Oid;
+                    *oidSz = sizeof(hmacSha256Oid);
+                    break;
+                case HMAC_SHA384_OID:
+                    oid = hmacSha384Oid;
+                    *oidSz = sizeof(hmacSha384Oid);
+                    break;
+                case HMAC_SHA512_OID:
+                    oid = hmacSha512Oid;
+                    *oidSz = sizeof(hmacSha512Oid);
+                    break;
+            }
+            break;
+
         case oidIgnoreType:
         default:
             break;
@@ -1394,7 +1429,7 @@ int GetObjectId(const byte* input, word32* inOutIdx, word32* oid,
         const byte* checkOid = NULL;
         word32 checkOidSz;
     #ifdef ASN_DUMP_OID
-        int i;
+        word32 i;
     #endif
 
         if (oidType != oidIgnoreType) {
@@ -1871,11 +1906,14 @@ static int CheckAlgo(int first, int second, int* id, int* version)
 static int CheckAlgoV2(int oid, int* id)
 {
     switch (oid) {
-    case 69:
+    case DESb:
         *id = PBE_SHA1_DES;
         return 0;
-    case 652:
+    case DES3b:
         *id = PBE_SHA1_DES3;
+        return 0;
+    case AES256CBCb:
+        *id = PBE_AES256_CBC;
         return 0;
     default:
         return ALGO_ID_E;
@@ -1891,7 +1929,6 @@ static int DecryptKey(const char* password, int passwordSz, byte* salt,
 {
     int typeH;
     int derivedLen;
-    int decryptionType;
     int ret = 0;
 #ifdef WOLFSSL_SMALL_STACK
     byte* key;
@@ -1906,25 +1943,26 @@ static int DecryptKey(const char* password, int passwordSz, byte* salt,
         case PBE_MD5_DES:
             typeH = WC_MD5;
             derivedLen = 16;           /* may need iv for v1.5 */
-            decryptionType = DES_TYPE;
             break;
 
         case PBE_SHA1_DES:
             typeH = WC_SHA;
             derivedLen = 16;           /* may need iv for v1.5 */
-            decryptionType = DES_TYPE;
             break;
 
         case PBE_SHA1_DES3:
             typeH = WC_SHA;
             derivedLen = 32;           /* may need iv for v1.5 */
-            decryptionType = DES3_TYPE;
             break;
 
         case PBE_SHA1_RC4_128:
             typeH = WC_SHA;
             derivedLen = 16;
-            decryptionType = RC4_TYPE;
+            break;
+
+        case PBE_AES256_CBC:
+            typeH = WC_SHA256;
+            derivedLen = 32;
             break;
 
         default:
@@ -1966,7 +2004,7 @@ static int DecryptKey(const char* password, int passwordSz, byte* salt,
 
         ret =  wc_PKCS12_PBKDF(key, unicodePasswd, idx, salt, saltSz,
                             iterations, derivedLen, typeH, 1);
-        if (decryptionType != RC4_TYPE)
+        if (id != PBE_SHA1_RC4_128)
             ret += wc_PKCS12_PBKDF(cbcIv, unicodePasswd, idx, salt, saltSz,
                                 iterations, 8, typeH, 2);
     }
@@ -1984,9 +2022,10 @@ static int DecryptKey(const char* password, int passwordSz, byte* salt,
         return ret;
     }
 
-    switch (decryptionType) {
+    switch (id) {
 #ifndef NO_DES3
-        case DES_TYPE:
+        case PBE_MD5_DES:
+        case PBE_SHA1_DES:
         {
             Des    dec;
             byte*  desIv = key + 8;
@@ -2006,7 +2045,7 @@ static int DecryptKey(const char* password, int passwordSz, byte* salt,
             break;
         }
 
-        case DES3_TYPE:
+        case PBE_SHA1_DES3:
         {
             Des3   dec;
             byte*  desIv = key + 24;
@@ -2039,7 +2078,7 @@ static int DecryptKey(const char* password, int passwordSz, byte* salt,
         }
 #endif
 #ifndef NO_RC4
-        case RC4_TYPE:
+        case PBE_SHA1_RC4_128:
         {
             Arc4    dec;
 
@@ -2048,19 +2087,36 @@ static int DecryptKey(const char* password, int passwordSz, byte* salt,
             break;
         }
 #endif
+#ifndef NO_AES
+        case PBE_AES256_CBC:
+        {
+            Aes dec;
+            ret = wc_AesInit(&dec, NULL, INVALID_DEVID);
+            if (ret == 0)
+                ret = wc_AesSetKey(&dec, key, derivedLen,
+                                   cbcIv, AES_DECRYPTION);
+            if (ret == 0)
+                ret = wc_AesCbcDecrypt(&dec, input, input, length);
+            if (ret != 0) {
+#ifdef WOLFSSL_SMALL_STACK
+                XFREE(key, NULL, DYNAMIC_TYPE_TMP_BUFFER);
+#endif
+                return ret;
+            }
+            ForceZero(&dec, sizeof(Aes));
+            break;
+        }
+#endif
 
         default:
-#ifdef WOLFSSL_SMALL_STACK
-            XFREE(key, NULL, DYNAMIC_TYPE_TMP_BUFFER);
-#endif
-            return ALGO_ID_E;
+            ret = ALGO_ID_E;
     }
 
 #ifdef WOLFSSL_SMALL_STACK
     XFREE(key, NULL, DYNAMIC_TYPE_TMP_BUFFER);
 #endif
 
-    return 0;
+    return ret;
 }
 
 
@@ -2164,9 +2220,9 @@ int wc_GetKeyOID(byte* key, word32 keySz, const byte** curveOID, word32* oidSz,
    of input */
 int ToTraditionalEnc(byte* input, word32 sz,const char* password,int passwordSz)
 {
-    word32 inOutIdx = 0, oid;
+    word32 inOutIdx = 0, seqEnd, oid;
     int    ret = 0, first, second, length = 0, version, saltSz, id;
-    int    iterations = 0;
+    int    iterations = 0, keySz = 0;
 #ifdef WOLFSSL_SMALL_STACK
     byte*  salt = NULL;
     byte*  cbcIv = NULL;
@@ -2207,6 +2263,9 @@ int ToTraditionalEnc(byte* input, word32 sz,const char* password,int passwordSz)
     if (GetSequence(input, &inOutIdx, &length, sz) <= 0) {
         ERROR_OUT(ASN_PARSE_E, exit_tte);
     }
+    /* Find the end of this SEQUENCE so we can check for the OPTIONAL and
+     * DEFAULT items. */
+    seqEnd = inOutIdx + length;
 
     ret = GetOctetString(input, &inOutIdx, &saltSz, sz);
     if (ret < 0)
@@ -2230,6 +2289,20 @@ int ToTraditionalEnc(byte* input, word32 sz,const char* password,int passwordSz)
         ERROR_OUT(ASN_PARSE_E, exit_tte);
     }
 
+    /* OPTIONAL key length */
+    if (seqEnd > inOutIdx && input[inOutIdx] == ASN_INTEGER) {
+        if (GetShortInt(input, &inOutIdx, &keySz, sz) < 0) {
+            ERROR_OUT(ASN_PARSE_E, exit_tte);
+        }
+    }
+
+    /* DEFAULT HMAC is SHA-1 */
+    if (seqEnd > inOutIdx) {
+        if (GetAlgoId(input, &inOutIdx, &oid, oidHmacType, sz) < 0) {
+            ERROR_OUT(ASN_PARSE_E, exit_tte);
+        }
+    }
+
 #ifdef WOLFSSL_SMALL_STACK
     cbcIv = (byte*)XMALLOC(MAX_IV_SIZE, NULL, DYNAMIC_TYPE_TMP_BUFFER);
     if (cbcIv == NULL) {
@@ -2239,7 +2312,6 @@ int ToTraditionalEnc(byte* input, word32 sz,const char* password,int passwordSz)
 
     if (version == PKCS5v2) {
         /* get encryption algo */
-        /* JOHN: New type. Need a little more research. */
         if (GetAlgoId(input, &inOutIdx, &oid, oidBlkType, sz) < 0) {
             ERROR_OUT(ASN_PARSE_E, exit_tte);
         }
@@ -2284,10 +2356,10 @@ exit_tte:
 /* decrypt PKCS */
 int DecryptContent(byte* input, word32 sz,const char* password,int passwordSz)
 {
-    word32 inOutIdx = 0, oid;
+    word32 inOutIdx = 0, seqEnd, oid;
     int    ret = 0;
     int    first, second, length = 0, version, saltSz, id;
-    int    iterations = 0;
+    int    iterations = 0, keySz = 0;
 #ifdef WOLFSSL_SMALL_STACK
     byte*  salt = NULL;
     byte*  cbcIv = NULL;
@@ -2324,6 +2396,9 @@ int DecryptContent(byte* input, word32 sz,const char* password,int passwordSz)
     if (GetSequence(input, &inOutIdx, &length, sz) <= 0) {
         ERROR_OUT(ASN_PARSE_E, exit_dc);
     }
+    /* Find the end of this SEQUENCE so we can check for the OPTIONAL and
+     * DEFAULT items. */
+    seqEnd = inOutIdx + length;
 
     ret = GetOctetString(input, &inOutIdx, &saltSz, sz);
     if (ret < 0)
@@ -2347,6 +2422,20 @@ int DecryptContent(byte* input, word32 sz,const char* password,int passwordSz)
         ERROR_OUT(ASN_PARSE_E, exit_dc);
     }
 
+    /* OPTIONAL key length */
+    if (seqEnd > inOutIdx && input[inOutIdx] == ASN_INTEGER) {
+        if (GetShortInt(input, &inOutIdx, &keySz, sz) < 0) {
+            ERROR_OUT(ASN_PARSE_E, exit_dc);
+        }
+    }
+
+    /* DEFAULT HMAC is SHA-1 */
+    if (seqEnd > inOutIdx) {
+        if (GetAlgoId(input, &inOutIdx, &oid, oidHmacType, sz) < 0) {
+            ERROR_OUT(ASN_PARSE_E, exit_dc);
+        }
+    }
+
 #ifdef WOLFSSL_SMALL_STACK
     cbcIv = (byte*)XMALLOC(MAX_IV_SIZE, NULL, DYNAMIC_TYPE_TMP_BUFFER);
     if (cbcIv == NULL) {
@@ -2356,7 +2445,6 @@ int DecryptContent(byte* input, word32 sz,const char* password,int passwordSz)
 
     if (version == PKCS5v2) {
         /* get encryption algo */
-        /* JOHN: New type. Need a little more research. */
         if (GetAlgoId(input, &inOutIdx, &oid, oidBlkType, sz) < 0) {
             ERROR_OUT(ASN_PARSE_E, exit_dc);
         }
@@ -2368,6 +2456,10 @@ int DecryptContent(byte* input, word32 sz,const char* password,int passwordSz)
         ret = GetOctetString(input, &inOutIdx, &length, sz);
         if (ret < 0)
             goto exit_dc;
+
+        if (length > MAX_IV_SIZE) {
+            ERROR_OUT(ASN_PARSE_E, exit_dc);
+        }
 
         XMEMCPY(cbcIv, &input[inOutIdx], length);
         inOutIdx += length;
@@ -3906,7 +3998,7 @@ WOLFSSL_LOCAL word32 SetExplicit(byte number, word32 len, byte* output)
 }
 
 
-#if defined(HAVE_ECC) && (defined(WOLFSSL_CERT_GEN) || defined(WOLFSSL_KEY_GEN))
+#if defined(HAVE_ECC)
 
 static int SetCurve(ecc_key* key, byte* output)
 {
@@ -3945,7 +4037,7 @@ static int SetCurve(ecc_key* key, byte* output)
     return idx;
 }
 
-#endif /* HAVE_ECC && (WOLFSSL_CERT_GEN || WOLFSSL_KEY_GEN) */
+#endif /* HAVE_ECC */
 
 
 static INLINE int IsSigAlgoECDSA(int algoOID)
@@ -6756,7 +6848,7 @@ static word32 SetUTF8String(word32 len, byte* output)
 
 #endif /*WOLFSSL_CERT_GEN */
 
-#if defined(HAVE_ECC) && (defined(WOLFSSL_CERT_GEN) || defined(WOLFSSL_KEY_GEN))
+#if defined(HAVE_ECC)
 
 /* Write a public ECC key to output */
 static int SetEccPublicKey(byte* output, ecc_key* key, int with_header)
@@ -6887,7 +6979,7 @@ int wc_EccPublicKeyToDer(ecc_key* key, byte* output, word32 inLen,
 
     return SetEccPublicKey(output, key, with_AlgCurve);
 }
-#endif /* HAVE_ECC && (WOLFSSL_CERT_GEN || WOLFSSL_KEY_GEN) */
+#endif /* HAVE_ECC */
 
 #if defined(HAVE_ED25519) && (defined(WOLFSSL_CERT_GEN) || \
                               defined(WOLFSSL_KEY_GEN))
@@ -9877,8 +9969,6 @@ int wc_EccPublicKeyDecode(const byte* input, word32* inOutIdx,
 }
 
 
-#ifdef WOLFSSL_KEY_GEN
-
 /* build DER formatted ECC key, include optional public key if requested,
  * return length on success, negative on error */
 static int wc_BuildEccKeyDer(ecc_key* key, byte* output, word32 inLen,
@@ -10012,7 +10102,74 @@ int wc_EccPrivateKeyToDer(ecc_key* key, byte* output, word32 inLen)
     return wc_BuildEccKeyDer(key, output, inLen, 0);
 }
 
-#endif /* WOLFSSL_KEY_GEN */
+/* Write only private ecc key to unencrypted PKCS#8 format.
+ *
+ * If output is NULL, places required PKCS#8 buffer size in outLen and
+ * returns LENGTH_ONLY_E.
+ *
+ * return length on success else < 0 */
+int wc_EccPrivateKeyToPKCS8(ecc_key* key, byte* output, word32* outLen)
+{
+    int ret, tmpDerSz;
+    int algoID = 0;
+    word32 oidSz = 0;
+    word32 pkcs8Sz = 0;
+    const byte* curveOID = NULL;
+    byte* tmpDer = NULL;
+
+    if (key == NULL || outLen == NULL)
+        return BAD_FUNC_ARG;
+
+    /* set algoID, get curve OID */
+    algoID = ECDSAk;
+    ret = wc_ecc_get_oid(key->dp->oidSum, &curveOID, &oidSz);
+    if (ret < 0)
+        return ret;
+
+    /* temp buffer for plain DER key */
+    tmpDer = (byte*)XMALLOC(ECC_BUFSIZE, key->heap, DYNAMIC_TYPE_TMP_BUFFER);
+    if (tmpDer == NULL)
+        return MEMORY_E;
+
+    XMEMSET(tmpDer, 0, ECC_BUFSIZE);
+
+    tmpDerSz = wc_BuildEccKeyDer(key, tmpDer, ECC_BUFSIZE, 0);
+    if (tmpDerSz < 0) {
+        XFREE(tmpDer, key->heap, DYNAMIC_TYPE_TMP_BUFFER);
+        return tmpDerSz;
+    }
+
+    /* get pkcs8 expected output size */
+    ret = wc_CreatePKCS8Key(NULL, &pkcs8Sz, tmpDer, tmpDerSz, algoID,
+                            curveOID, oidSz);
+    if (ret != LENGTH_ONLY_E) {
+        XFREE(tmpDer, key->heap, DYNAMIC_TYPE_TMP_BUFFER);
+        return ret;
+    }
+
+    if (output == NULL) {
+        XFREE(tmpDer, key->heap, DYNAMIC_TYPE_TMP_BUFFER);
+        *outLen = pkcs8Sz;
+        return LENGTH_ONLY_E;
+
+    } else if (*outLen < pkcs8Sz) {
+        XFREE(tmpDer, key->heap, DYNAMIC_TYPE_TMP_BUFFER);
+        WOLFSSL_MSG("Input buffer too small for ECC PKCS#8 key");
+        return BUFFER_E;
+    }
+
+    ret = wc_CreatePKCS8Key(output, &pkcs8Sz, tmpDer, tmpDerSz,
+                            algoID, curveOID, oidSz);
+    if (ret < 0) {
+        XFREE(tmpDer, key->heap, DYNAMIC_TYPE_TMP_BUFFER);
+        return ret;
+    }
+
+    XFREE(tmpDer, key->heap, DYNAMIC_TYPE_TMP_BUFFER);
+
+    *outLen = ret;
+    return ret;
+}
 
 #endif  /* HAVE_ECC */
 

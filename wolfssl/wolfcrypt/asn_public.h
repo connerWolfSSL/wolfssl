@@ -19,6 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
  */
 
+
+
 #ifndef WOLF_CRYPT_ASN_PUBLIC_H
 #define WOLF_CRYPT_ASN_PUBLIC_H
 
@@ -1150,6 +1152,8 @@ WOLFSSL_API int wc_SetExtKeyUsage(Cert *cert, const char *value);
     WOLFSSL_API int wc_EccKeyToDer(ecc_key*, byte* output, word32 inLen);
     WOLFSSL_API int wc_EccPrivateKeyToDer(ecc_key* key, byte* output,
                                           word32 inLen);
+    WOLFSSL_API int wc_EccPrivateKeyToPKCS8(ecc_key* key, byte* output,
+                                            word32* outLen);
 
     /* public key helper */
 /*!
@@ -1183,7 +1187,6 @@ WOLFSSL_API int wc_SetExtKeyUsage(Cert *cert, const char *value);
 */
     WOLFSSL_API int wc_EccPublicKeyDecode(const byte*, word32*,
                                               ecc_key*, word32);
-    #if (defined(WOLFSSL_CERT_GEN) || defined(WOLFSSL_KEY_GEN))
 /*!
     \ingroup ASN
     
@@ -1218,9 +1221,8 @@ WOLFSSL_API int wc_SetExtKeyUsage(Cert *cert, const char *value);
     \sa wc_EccKeyToDer
     \sa wc_EccPrivateKeyDecode
 */
-        WOLFSSL_API int wc_EccPublicKeyToDer(ecc_key*, byte* output,
-                                               word32 inLen, int with_AlgCurve);
-    #endif
+    WOLFSSL_API int wc_EccPublicKeyToDer(ecc_key*, byte* output,
+                                         word32 inLen, int with_AlgCurve);
 #endif
 
 #ifdef HAVE_ED25519

@@ -1582,8 +1582,13 @@ THREAD_RETURN WOLFSSL_THREAD client_test(void* args)
             wolfSSL_CTX_EnableOCSP(ctx, WOLFSSL_OCSP_NO_NONCE
                                                     | WOLFSSL_OCSP_URL_OVERRIDE);
         }
-        else
-            wolfSSL_CTX_EnableOCSP(ctx, 0);
+        else {
+            wolfSSL_CTX_EnableOCSP(ctx, WOLFSSL_OCSP_CHECKALL);
+        }
+
+    #ifdef WOLFSSL_NONBLOCK_OCSP
+        wolfSSL_CTX_SetOCSP_Cb(ctx, OCSPIOCb, OCSPRespFreeCb, NULL);
+    #endif
     }
 #endif
 
